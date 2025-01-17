@@ -10,6 +10,7 @@ import { lightTheme } from '@/src/ui/themes/lightTheme';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+
   const [loaded] = useFonts({
     Jost_400Regular,
     Jost_600SemiBold

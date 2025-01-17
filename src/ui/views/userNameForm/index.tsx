@@ -4,7 +4,7 @@ import { TextComponent } from "../../components/text";
 import { EnumTextVariant } from "../../components/text/@types";
 import { TextInputComponent } from "../../components/textInput";
 import * as Styles from "./styles";
-import { AplicUser } from "@/src/application/user";
+import { AplicUser } from "@/src/application/applications/user";
 import { LocalStorageImplementation } from "@/src/infra/implementations/LocalStorage";
 import { User } from "@/src/domain/models/User";
 import { useNavigation } from "expo-router";
@@ -29,7 +29,7 @@ export function UserNameForm() {
             title: "Prontinho",
             subtitle: "Agora vamos começar a cuidar das suas \n plantinhas com muito cuidado.",
             buttonTitle: "Começar",
-            nextScreen: "UserNameForm",
+            nextScreen: "Dashboard",
             emoji: "😄"
         });
     }

@@ -1,5 +1,5 @@
 import { User } from '@/src/domain/models/User';
-import { ILocalStorageImplementation } from '../../infra/implementations/LocalStorage';
+import { ILocalStorageImplementation } from '../../../infra/implementations/LocalStorage';
 
 export class AplicUser {
     private readonly localStorage: ILocalStorageImplementation<User>;
