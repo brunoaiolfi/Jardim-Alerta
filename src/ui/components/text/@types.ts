@@ -4,6 +4,7 @@ export interface ITextProps {
     textAlign?: string;
     color?: string;
     fontSize?: string;
+    fontWeight?: string;
 }
 
 export enum EnumTextVariant {

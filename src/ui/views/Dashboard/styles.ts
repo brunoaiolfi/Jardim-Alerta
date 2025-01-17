@@ -2,19 +2,16 @@ import styled from "styled-components/native"
 
 export const Container = styled.View`
     flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    gap: 40px;
-    align-items: center;
+
+    padding: 20px;
+
     background-color: ${({ theme }) => theme.colors.background};
 `;
 
-export const Ilustration = styled.Image`
-    width: 292px;
-    height: 284px;
+export const Header = styled.View`
+    align-items: flex-start;
 `;
 
-export const TextWrapper = styled.View`
-    flex-direction: column;
-    gap: 16px;
+export const Subheading = styled.View`
+    margin-top: 40px;
 `;

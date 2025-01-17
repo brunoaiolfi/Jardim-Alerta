@@ -6,17 +6,23 @@ import * as Styles from "./styles";
 import { AplicUser } from "@/src/application/applications/user";
 import { LocalStorageImplementation } from "@/src/infra/implementations/LocalStorage";
 import { User } from "@/src/domain/models/User";
+import { useUser } from "@/src/application/hooks/useUser";
 
 export function Welcome() {
     
     const aplicUser = new AplicUser(new LocalStorageImplementation<User>());
-
     const navigation = useNavigation();
-    
+    const { saveUser } = useUser();
+
     async function handleContinue() {
         const user = await aplicUser.getUser();
-        const nextview = user?.name ? "Dashboard" : "UserNameForm";
-        navigate(nextview);
+
+        if (!!user) {
+            saveUser(user);
+            navigate("Dashboard");
+        } else {
+            navigate("UserNameForm");
+        }
     }
  
     function navigate(view: "UserNameForm" | "Dashboard") {

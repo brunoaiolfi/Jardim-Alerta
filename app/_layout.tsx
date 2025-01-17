@@ -5,6 +5,7 @@ import { useFonts, Jost_400Regular, Jost_600SemiBold } from '@expo-google-fonts/
 import { Routes } from '@/src/ui/routes';
 import { ThemeProvider } from 'styled-components/native';
 import { lightTheme } from '@/src/ui/themes/lightTheme';
+import { UserProvider } from '@/src/application/context/userContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -24,7 +25,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <Routes />
+      <UserProvider>
+        <Routes />
+      </UserProvider>
     </ThemeProvider>
   );
 }
