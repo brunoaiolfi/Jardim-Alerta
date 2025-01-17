@@ -1,6 +1,11 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "target": "ES2020", // ou superior
+    "module": "CommonJS", // ou ESNext, dependendo do ambiente
     "strict": true,
     "paths": {
       "@/*": [

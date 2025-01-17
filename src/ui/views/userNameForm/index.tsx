@@ -8,9 +8,11 @@ import { AplicUser } from "@/src/application/applications/user";
 import { LocalStorageImplementation } from "@/src/infra/implementations/LocalStorage";
 import { User } from "@/src/domain/models/User";
 import { useNavigation } from "expo-router";
+import { useUser } from "@/src/application/hooks/useUser";
 
 export function UserNameForm() {
 
+    const { saveUser } = useUser();
     const navigation = useNavigation();
     const aplicUser = new AplicUser(new LocalStorageImplementation<User>());
 
@@ -21,6 +23,7 @@ export function UserNameForm() {
 
     async function handleSaveUserName(name: string) {
         await aplicUser.saveUser({ name });
+        saveUser({ name });
         navigateToConfirmation();
     }
 
