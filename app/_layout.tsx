@@ -7,8 +7,8 @@ import { Routes } from '@/src/ui/routes';
 import { ThemeProvider } from 'styled-components/native';
 import { lightTheme } from '@/src/ui/themes/lightTheme';
 import { UserProvider } from '@/src/application/context/userContext';
-import { AppDataSource } from "@/src/infra/database/dataSource";
-import { Alert } from "react-native";
+import { Alert, Text, TouchableOpacity } from "react-native";
+import { database } from "@/src/infra/database";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -16,6 +16,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
 
   const [isDatabaseInitialized, setIsDatabaseInitialized] = useState(false);
+  const [a, setA] = useState<any[]>([])
 
   const [loaded] = useFonts({
     Jost_400Regular,
@@ -34,17 +35,36 @@ export default function RootLayout() {
 
   async function initializeDatabase() {
     try {
-      await AppDataSource.initialize();
       setIsDatabaseInitialized(true);
     } catch (error: any) {
       Alert.alert("Could not initialize database", error.message);
     }
   }
 
+  async function add() {
+    await database.get("environments").create((environment: any) => {
+      environment.title = "Teste";
+    })
+  }
+  async function refresh() {
+    const environmentsCollections = database.get("environments");
+
+    const all = await environmentsCollections.query().fetch();
+    setA(all);
+  }
   return (
     <ThemeProvider theme={lightTheme}>
       <UserProvider>
-        <Routes />
+        {/* <Routes /> */}
+        {a.map((item) => {
+          return <Text key={item.id}>{item.title}</Text>
+        })}
+        <TouchableOpacity onPress={add}>
+          <Text>Add</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={refresh}>
+          <Text>refresh</Text>
+        </TouchableOpacity>
       </UserProvider>
     </ThemeProvider>
   );
