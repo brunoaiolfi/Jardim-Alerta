@@ -1,8 +1,7 @@
-import { View } from "react-native";
 import { TextComponent } from "../../components/text";
 import { EnumTextVariant } from "../../components/text/@types";
 import * as Styles from "./styles";
-import { useUser } from "@/src/application/hooks/useUser";
+import { useUser } from "../../../application/hooks/useUser";
 
 export function Dashboard() {
     const { user } = useUser();

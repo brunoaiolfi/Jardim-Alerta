@@ -4,11 +4,11 @@ import { TextComponent } from "../../components/text";
 import { EnumTextVariant } from "../../components/text/@types";
 import { TextInputComponent } from "../../components/textInput";
 import * as Styles from "./styles";
-import { AplicUser } from "@/src/application/applications/user";
-import { LocalStorageImplementation } from "@/src/infra/implementations/LocalStorage";
-import { User } from "@/src/domain/models/User";
-import { useNavigation } from "expo-router";
-import { useUser } from "@/src/application/hooks/useUser";
+import { AplicUser } from "../../../application/applications/user";
+import { LocalStorageImplementation } from "../../../infra/implementations/LocalStorage";
+import { User } from "../../../domain/models/User";
+import { useUser } from "../../../application/hooks/useUser";
+import { useNavigation } from "@react-navigation/native";
 
 export function UserNameForm() {
 

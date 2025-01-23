@@ -1,8 +1,8 @@
-import AntDesign from "@expo/vector-icons/AntDesign"
 import { TextComponent } from "../text"
 import { EnumTextVariant } from "../text/@types"
 import { IButtonProps } from "./@types"
 import * as Styles from "./styles"
+import AntDesign from "react-native-vector-icons/AntDesign"
 
 export function ButtonComponent({ text, icon, isDisabled, width, onPress }: IButtonProps) {
     return (

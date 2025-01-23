@@ -1,24 +1,10 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true,
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false,
-    "target": "ES2020", // ou superior
-    "module": "CommonJS", // ou ESNext, dependendo do ambiente
-    "strict": true,
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "styled.d.ts",
-    "./styled.d.ts"
-  ]
+    "experimentalDecorators": true,
+    "skipLibCheck": true
+  }
 }
