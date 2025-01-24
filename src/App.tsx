@@ -5,64 +5,38 @@ import { Routes } from './ui/routes';
 import { ThemeProvider } from 'styled-components/native';
 import { lightTheme } from './ui/themes/lightTheme';
 import { UserProvider } from './application/context/userContext';
-import { Alert, Text, TouchableOpacity } from "react-native";
-import { database } from "./infra/database";
-
-// Keep the splash screen visible while we fetch resources
-// SplashScreen.preventAutoHideAsync();
+import { Alert } from "react-native";
+import { AppDataSource } from "./infra/database";
+import { LoadingView } from "./ui/views/loading";
 
 export default function App() {
 
-//   const [isDatabaseInitialized, setIsDatabaseInitialized] = useState(false);
-//   const [a, setA] = useState<any[]>([])
+  const [isLoading, setIsloading] = useState(true);
 
-//   const [loaded] = useFonts({
-//     Jost_400Regular,
-//     Jost_600SemiBold
-//   });
+  useEffect(() => {
+    initializeDatabase();
+  }, [])
 
-//   useEffect(() => {
-//     initializeDatabase();
-//   }, [])
+  async function initializeDatabase() {
+    try {
+      if (AppDataSource.isInitialized) return;
 
-//   useEffect(() => {
-//     if (loaded && isDatabaseInitialized) {
-//       SplashScreen.hide();
-//     }
-//   }, [loaded, isDatabaseInitialized]);
+      await AppDataSource.initialize();
+    } catch (error: any) {
+      Alert.alert("Could not initialize database", error.message);
+    } finally {
+      setIsloading(false);
+    }
+  }
 
-//   async function initializeDatabase() {
-//     try {
-//       setIsDatabaseInitialized(true);
-//     } catch (error: any) {
-//       Alert.alert("Could not initialize database", error.message);
-//     }
-//   }
+  if (isLoading) {
+    return <LoadingView />
+  }
 
-//   async function add() {
-//     await database.get("environments").create((environment: any) => {
-//       environment.title = "Teste";
-//     })
-//   }
-//   async function refresh() {
-//     const environmentsCollections = database.get("environments");
-
-//     const all = await environmentsCollections.query().fetch();
-//     setA(all);
-//   }
   return (
     <ThemeProvider theme={lightTheme}>
       <UserProvider>
         <Routes />
-        {/* {a.map((item) => {
-          return <Text key={item.id}>{item.title}</Text>
-        })}
-        <TouchableOpacity onPress={add}>
-          <Text>Add</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={refresh}>
-          <Text>refresh</Text>
-        </TouchableOpacity> */}
       </UserProvider>
     </ThemeProvider>
   );

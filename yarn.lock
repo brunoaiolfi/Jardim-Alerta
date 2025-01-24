@@ -6477,6 +6477,10 @@ react-native-signature-canvas@^4.5.1:
   resolved "https://registry.npmjs.org/react-native-signature-canvas/-/react-native-signature-canvas-4.5.1.tgz"
   integrity sha512-YCiyIMWXiv9fn1JdKAb++b3AkKG5R1GQIXh+cAipxHV1GGZXKVuBukVo5WQ2rL1P9NOGpIOpWyeq0NXdGk41Rw==
 
+"react-native-splash-screen@file:../../../AppData/Roaming/npm/node_modules/react-native-splash-screen":
+  version "3.3.0"
+  resolved "file:../../../AppData/Roaming/npm/node_modules/react-native-splash-screen"
+
 react-native-sqlite-storage@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/react-native-sqlite-storage/-/react-native-sqlite-storage-6.0.1.tgz"

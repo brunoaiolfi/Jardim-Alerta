@@ -1,4 +1,4 @@
-import { User } from '@/src/domain/models/User';
+import { User } from '../../../domain/models/User';
 import { ILocalStorageImplementation } from '../../../infra/implementations/LocalStorage';
 
 export class AplicUser {

@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Welcome } from "../views/welcome";
 import { UserNameForm } from "../views/userNameForm";
 import { Confirmation } from '../views/confirmation';
-import { Dashboard } from '../views/Dashboard';
+import { Dashboard } from '../views/dashboard';
 import { NavigationContainer } from '@react-navigation/native';
 
 const StackRoutes = createStackNavigator();

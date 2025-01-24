@@ -1,30 +1,14 @@
-import { dataBaseSchema } from './schema/index';
-import { Alert, Platform } from 'react-native'
-import { Database } from '@nozbe/watermelondb'
-import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
-import { databaseMigrations } from './migrations';
-import Environment from './models/Environment';
+import "reflect-metadata"
+import { DataSource } from "typeorm"
+import { Environments } from "./entities/Environments"
+import { CreateEnvironments1737719894845 } from "./migrations/1737719894845-CreateEnvironments"
 
-// import Post from './model/Post' // ⬅️ You'll import your Models here
-
-// First, create the adapter to the underlying database:
-const adapter = new SQLiteAdapter({
-    schema: dataBaseSchema,
-    migrations: databaseMigrations,
-    jsi: false,
-    // (optional, but you should implement this method)
-    onSetUpError: error => {
-        // Database failed to load -- offer the user to reload the app or log out
-        Alert.alert(error.message);
-    }
+export const AppDataSource = new DataSource({
+    type: "react-native",
+    database: "JardimAlerta.db3",
+    location: "default",
+    entities: [Environments],
+    synchronize: false,
+    migrations: [CreateEnvironments1737719894845],
+    migrationsRun: true
 })
-
-// Then, make a Watermelon database from it!
-const database = new Database({
-    adapter,
-    modelClasses: [
-        Environment
-    ],
-});
-
-export { database }
