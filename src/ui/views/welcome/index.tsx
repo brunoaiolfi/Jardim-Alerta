@@ -2,15 +2,13 @@ import { ButtonComponent } from "../../components/button";
 import { TextComponent } from "../../components/text";
 import { EnumTextVariant } from "../../components/text/@types";
 import * as Styles from "./styles";
-import { AplicUser } from "../../../application/applications/user";
-import { LocalStorageImplementation } from "../../../infra/implementations/LocalStorage";
-import { User } from "../../../domain/models/User";
 import { useUser } from "../../../application/hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
+import { getAplicUser } from "../../../application/applications/user/factory";
 
 export function Welcome() {
     
-    const aplicUser = new AplicUser(new LocalStorageImplementation<User>());
+    const aplicUser = getAplicUser();
     const navigation = useNavigation();
     const { saveUser } = useUser();
 

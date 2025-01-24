@@ -4,12 +4,15 @@ import 'react-native-reanimated';
 import { Routes } from './ui/routes';
 import { ThemeProvider } from 'styled-components/native';
 import { lightTheme } from './ui/themes/lightTheme';
-import { UserProvider } from './application/context/userContext';
+import { UserProvider } from './application/contexts/userContext';
 import { Alert } from "react-native";
 import { AppDataSource } from "./infra/database";
 import { LoadingView } from "./ui/views/loading";
+import { getDatabaseContextImplementation } from "./infra/implementations/database/context/factory";
 
 export default function App() {
+
+  const databaseContext = getDatabaseContextImplementation();
 
   const [isLoading, setIsloading] = useState(true);
 
@@ -21,7 +24,7 @@ export default function App() {
     try {
       if (AppDataSource.isInitialized) return;
 
-      await AppDataSource.initialize();
+      await databaseContext.initialize();
     } catch (error: any) {
       Alert.alert("Could not initialize database", error.message);
     } finally {
