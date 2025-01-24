@@ -1,9 +1,8 @@
 import { Repository } from "typeorm";
-import { Environments } from "../../../database/entities/Environments";
-import { DatabaseRepositoryImplementation, IModel } from "./DatabaseRepository";
+import { DatabaseRepositoryImplementation, IEntity } from "./DatabaseRepository";
 
 export class FactoryDatabaseRepositoryImplementation {
-    public static getDatabaseRepositoryImplementation<T extends IModel>(repository: Repository<T>) {
+    public static getDatabaseRepositoryImplementation<T extends IEntity>(repository: Repository<T>) {
         return new DatabaseRepositoryImplementation<T>(repository);
     }
         

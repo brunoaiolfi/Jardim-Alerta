@@ -1,9 +1,9 @@
-import { IFindOptions, IModel } from "../../../infra/implementations/database/repository/DatabaseRepository";
+import { IFindOptions, IEntity } from "../../../infra/implementations/database/repository/DatabaseRepository";
 import { IRepBase } from "../../repositories/base/RepBase";
 
 interface IAplicBase<T> {
     get: (options?: IFindOptions<T>) => Promise<T[]>;
-    save: (model: IModel) => Promise<void>;
+    save: (model: IEntity) => Promise<void>;
 }
 
 export class AplicBase<T> implements IAplicBase<T> {
@@ -17,7 +17,7 @@ export class AplicBase<T> implements IAplicBase<T> {
         return await this.repository.select(options);
     }
 
-    public async save(model: IModel): Promise<void> {
+    public async save(model: IEntity): Promise<void> {
         await this.repository.insert(model);
     }
 }

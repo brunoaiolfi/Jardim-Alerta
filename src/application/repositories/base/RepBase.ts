@@ -1,11 +1,11 @@
-import { DatabaseRepositoryImplementation, IDatabaseRepositoryImplementation, IFindOptions, IModel } from "../../../infra/implementations/database/repository/DatabaseRepository";
+import { IDatabaseRepositoryImplementation, IFindOptions, IEntity } from "../../../infra/implementations/database/repository/DatabaseRepository";
 
 export interface IRepBase<T> {
     select(options?: IFindOptions<T>): Promise<T[]>;
-    insert(model: IModel): Promise<void>;
+    insert(model: IEntity): Promise<void>;
 }
 
-export class RepBase<T extends IModel> implements IRepBase<T> {
+export class RepBase<T extends IEntity> implements IRepBase<T> {
     private readonly _db: IDatabaseRepositoryImplementation<T>;
 
     constructor(db: IDatabaseRepositoryImplementation<T>) {

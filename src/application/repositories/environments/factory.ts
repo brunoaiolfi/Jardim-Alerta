@@ -4,8 +4,7 @@ import { RepEnvironments } from "./RepEnvironments";
 import { getDatabaseContextImplementation } from "../../../infra/implementations/database/context/factory";
 
 export function getRepEnvironments() {
-    const dbContext = getDatabaseContextImplementation();
-    const repository = dbContext.getRepository(Environments)
+    const repository = getDatabaseContextImplementation().getRepository(Environments)
     const _db = FactoryDatabaseRepositoryImplementation.getDatabaseRepositoryImplementation<Environments>(repository);
 
     return new RepEnvironments(_db);
