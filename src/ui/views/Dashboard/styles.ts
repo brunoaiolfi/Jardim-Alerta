@@ -15,3 +15,7 @@ export const Header = styled.View`
 export const Subheading = styled.View`
     margin-top: 40px;
 `;
+
+export const EnvironmentsList = styled.FlatList`
+    margin-top: 20px;
+`;

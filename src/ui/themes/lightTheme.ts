@@ -17,6 +17,8 @@ export const lightTheme: DefaultTheme = {
         tabIconSelected: '#2f95dc',
         primary: '#32B768',
         secondary: '#2B7A4B',
-        borderColor: "#CFCFCF"
+        transparent: '#F0F0F0',
+        borderColor: "#CFCFCF",
+        greenLight: "#DAF2E4"
     }
 }
