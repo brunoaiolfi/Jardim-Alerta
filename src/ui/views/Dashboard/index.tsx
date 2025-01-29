@@ -8,15 +8,21 @@ import { Environment } from "../../../domain/models/Environment";
 import { getAplicEnvironments } from "../../../application/applications/environments/factory";
 import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
+import { getAplicPlants } from "../../../application/applications/plants/factory";
+import { Plant } from "../../../domain/models/Plant";
 
 export function Dashboard() {
     const { user } = useUser();
+    
     const aplicEnvironments = getAplicEnvironments();
+    const aplicPlants = getAplicPlants();
+
     const [environments, setEnvironments] = useState<Environment[]>([]);
     const [environmentSelected, setEnvironmentSelected] = useState<Environment>();
 
     useEffect(() => {
         handleGetEnvironments();
+        handleGetPlants();
     }, []);
 
     async function handleGetEnvironments() {
@@ -35,6 +41,19 @@ export function Dashboard() {
 
     function handleSelectEnvironment(environment: Environment) {
         setEnvironmentSelected(environment);
+    }
+
+    async function handleGetPlants() {
+        try {
+            const plants = await getPlants();
+            console.log(plants);
+        } catch (error: any) {
+            Alert.alert("Erro ao buscar plantas", error.message);
+        }
+    }
+    
+    async function getPlants(): Promise<Plant[]> {
+        return await aplicPlants.get();
     }
 
     return (
