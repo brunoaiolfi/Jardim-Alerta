@@ -1,7 +1,7 @@
-import { ITextProps } from "./@types"
+import { EnumTextVariant, ITextProps } from "./@types"
 import * as Styles from "./styles"
 
-export function TextComponent({ text, textAlign, variant, color, fontSize, fontWeight }: ITextProps) {
+export function TextComponent({ text, textAlign, variant = EnumTextVariant.Paragraph, color, fontSize, fontWeight }: ITextProps) {
     return (
         <Styles.Text
             textAlign={textAlign}

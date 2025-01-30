@@ -1,6 +1,6 @@
 export interface ITextProps {
     text: string;
-    variant: EnumTextVariant;
+    variant?: EnumTextVariant;
     textAlign?: string;
     color?: string;
     fontSize?: string;
