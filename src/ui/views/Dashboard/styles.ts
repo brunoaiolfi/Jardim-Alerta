@@ -6,16 +6,22 @@ export const Container = styled.View`
     padding: 20px;
 
     background-color: ${({ theme }) => theme.colors.background};
-`;
+    `;
 
 export const Header = styled.View`
     align-items: flex-start;
-`;
+    `;
 
 export const Subheading = styled.View`
     margin-top: 40px;
-`;
+    `;
 
 export const EnvironmentsList = styled.FlatList`
     margin-top: 20px;
-`;
+    height: 64px;
+    `;
+
+export const PlantsList = styled.FlatList`
+    margin-top: 20px;
+    height: 100%;
+    `;

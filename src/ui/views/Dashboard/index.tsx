@@ -10,6 +10,7 @@ import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
 import { getAplicPlants } from "../../../application/applications/plants/factory";
 import { Plant } from "../../../domain/models/Plant";
+import { CardPlant } from "../../components/cards/plants";
 
 export function Dashboard() {
     const { user } = useUser();
@@ -109,8 +110,18 @@ export function Dashboard() {
                         height="40px"
                         buttonStyle={{
                             marginRight: 10,
-                            marginTop: 10
                         }}
+                    />
+                )}
+            />
+
+            <Styles.PlantsList 
+                data={plants}
+                numColumns={2}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <CardPlant
+                        plant={item}
                     />
                 )}
             />
