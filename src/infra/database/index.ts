@@ -5,6 +5,7 @@ import { CreateEnvironments1737719894845 } from "./migrations/1737719894845-Crea
 import { CreatePlantsAndWaterFrequency1737719894846 } from "./migrations/1737719894846-CreatePlantsAndWaterFrequency"
 import { Plants } from "./entities/Plants"
 import { WaterFrequency } from "./entities/WaterFrequency"
+import { CreatePlantsEnvironmentsRelation1737719894847 } from "./migrations/1737719894847-CreatePlantsEnvironmentsRelation"
 
 export const AppDataSource = new DataSource({
     type: "react-native",
@@ -12,6 +13,6 @@ export const AppDataSource = new DataSource({
     location: "default",
     entities: [Environments, Plants, WaterFrequency],
     synchronize: false,
-    migrations: [CreateEnvironments1737719894845, CreatePlantsAndWaterFrequency1737719894846],
+    migrations: [CreateEnvironments1737719894845, CreatePlantsAndWaterFrequency1737719894846, CreatePlantsEnvironmentsRelation1737719894847],
     migrationsRun: true
 })

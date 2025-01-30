@@ -1,3 +1,4 @@
+import { Environment } from "./Environment";
 import { WaterFrequency } from "./WaterFrequency";
 
 export class Plant {
@@ -7,4 +8,5 @@ export class Plant {
     waterTips: string;
     frequencyTimes: number;
     waterFrequency: WaterFrequency;
+    environments?: Environment[];
 }

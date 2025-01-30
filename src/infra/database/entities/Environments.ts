@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany } from "typeorm"
+import { Plants } from "./Plants"
 
 @Entity()
 export class Environments extends BaseEntity {
@@ -9,4 +10,7 @@ export class Environments extends BaseEntity {
         unique: true,
     })
     name: string
+
+    @ManyToMany(() => Plants, (plants) => plants.environments)
+    plants: Plants[]
 }

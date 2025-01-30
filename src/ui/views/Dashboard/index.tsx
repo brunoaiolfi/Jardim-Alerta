@@ -13,16 +13,17 @@ import { Plant } from "../../../domain/models/Plant";
 
 export function Dashboard() {
     const { user } = useUser();
-    
+
     const aplicEnvironments = getAplicEnvironments();
     const aplicPlants = getAplicPlants();
 
     const [environments, setEnvironments] = useState<Environment[]>([]);
     const [environmentSelected, setEnvironmentSelected] = useState<Environment>();
 
+    const [plants, setPlants] = useState<Plant[]>([]);
+
     useEffect(() => {
         handleGetEnvironments();
-        handleGetPlants();
     }, []);
 
     async function handleGetEnvironments() {
@@ -41,19 +42,29 @@ export function Dashboard() {
 
     function handleSelectEnvironment(environment: Environment) {
         setEnvironmentSelected(environment);
+        handleGetPlantsByEnvironment(environment);
     }
 
-    async function handleGetPlants() {
+    async function handleGetPlantsByEnvironment(environment: Environment) {
         try {
-            const plants = await getPlants();
-            console.log(plants);
+            const { id } = environment;
+            const plants = await getPlantsByEnvironment(id);
+
+            setPlants(plants);
         } catch (error: any) {
             Alert.alert("Erro ao buscar plantas", error.message);
         }
     }
-    
-    async function getPlants(): Promise<Plant[]> {
-        return await aplicPlants.get();
+
+    async function getPlantsByEnvironment(environmentId: number): Promise<Plant[]> {
+        return await aplicPlants.get({
+            relations: ["environments"],
+            where: {
+                environments: {
+                    id: environmentId
+                }
+            }
+        });
     }
 
     return (
@@ -93,7 +104,7 @@ export function Dashboard() {
                 renderItem={({ item }) => (
                     <ButtonComponent
                         onPress={() => handleSelectEnvironment(item)}
-                        text={item.name}
+                        text={`${item.name}`}
                         variant={item.id === environmentSelected?.id ? EnumButtonVariant.Selected : EnumButtonVariant.Secondary}
                         height="40px"
                         buttonStyle={{
@@ -103,7 +114,6 @@ export function Dashboard() {
                     />
                 )}
             />
-
         </Styles.Container>
     );
 }
