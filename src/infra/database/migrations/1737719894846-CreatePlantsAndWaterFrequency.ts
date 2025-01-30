@@ -86,7 +86,6 @@ export class CreatePlantsAndWaterFrequency1737719894846 implements MigrationInte
             (8, 'Orquídea', 'Traz sensação de tranquilidade e paz ao ambiente. Requer pouca manutenção e ótima para quem tem pouco espaço.', 'Regue moderadamente. Reque 4 vezes na semana.', 4,2),
             (9, 'Violeta', 'Com flores delicadas. Elas são ótimas sugestões para decorar o banheiro.', 'Nada de molhar as flores e folhas. Regue o solo 2 vezes na semana.', 2,2),
             (10, 'Hortênsia', 'A hortênsia é uma planta rústica e se adapta a diferentes tipos de solos.', 'Mantenha a terra sempre húmida sem encharcar. Regue 1 vez no dia.', 1,1)`);
-
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

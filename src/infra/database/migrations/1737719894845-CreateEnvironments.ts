@@ -27,7 +27,7 @@ export class CreateEnvironments1737719894845 implements MigrationInterface {
                 ('Sala'),
                 ('Quarto'),
                 ('Cozinha'),
-                ('Banheiro'),
+                ('Banheiro')
             `);
     }
 

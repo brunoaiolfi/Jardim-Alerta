@@ -60,9 +60,6 @@ export class CreatePlantsEnvironmentsRelation1737719894847 implements MigrationI
             (9, 4), 
             (10, 4)
         `);
-
-        const a = await queryRunner.query("SELECT * FROM plants_environments_environments")
-        console.log(a)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

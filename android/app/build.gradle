@@ -88,16 +88,16 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
+            storeFile file('generated.keystore')
             storePassword 'android'
-            keyAlias 'androiddebugkey'
+            keyAlias 'your-key-alias'
             keyPassword 'android'
         } 
         release {
-            storeFile file('release.keystore')
-            storePassword 'usetudo'
-            keyAlias 'my-key-alias'
-            keyPassword 'usetudo'
+            storeFile file('generated.keystore')
+            storePassword 'android'
+            keyAlias 'your-key-alias'
+            keyPassword 'android'
         }
     }
     buildTypes {
