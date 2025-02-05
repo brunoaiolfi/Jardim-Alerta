@@ -1,5 +1,6 @@
 import { Plant } from "../../../../domain/models/Plant";
 
 export interface ICardPlants {
-    plant: Plant
+    plant: Plant,
+    onSelectPlant: (id: number) => void
 }

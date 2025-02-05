@@ -1846,6 +1846,13 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
+"@react-native-community/datetimepicker@^7.2.0", "@react-native-community/datetimepicker@>=6.7.0":
+  version "7.2.0"
+  resolved "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.2.0.tgz"
+  integrity sha512-dO1sQy83M/EvnHE2egto05iwXZX7EYn5f/VDMp6afZFRFXRiRo7CzB3VFg4B55gJRJMNBv06NYMLPM3SlpnEGQ==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/masked-view@^0.1.11":
   version "0.1.11"
   resolved "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
@@ -1945,6 +1952,15 @@
     invariant "^2.2.4"
     nullthrows "^1.1.1"
 
+"@react-navigation/bottom-tabs@^6.3.3":
+  version "6.6.1"
+  resolved "https://registry.npmjs.org/@react-navigation/bottom-tabs/-/bottom-tabs-6.6.1.tgz"
+  integrity sha512-9oD4cypEBjPuaMiu9tevWGiQ4w/d6l3HNhcJ1IjXZ24xvYDSs0mqjUcdt8SWUolCvRrYc/DmNBLlT83bk0bHTw==
+  dependencies:
+    "@react-navigation/elements" "^1.3.31"
+    color "^4.2.3"
+    warn-once "^0.1.0"
+
 "@react-navigation/core@^6.4.9":
   version "6.4.9"
   resolved "https://registry.npmjs.org/@react-navigation/core/-/core-6.4.9.tgz"
@@ -1957,10 +1973,19 @@
     react-is "^16.13.0"
     use-latest-callback "^0.1.5"
 
-"@react-navigation/elements@^1.3.18":
-  version "1.3.18"
-  resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.18.tgz"
-  integrity sha512-/0hwnJkrr415yP0Hf4PjUKgGyfshrvNUKFXN85Mrt1gY49hy9IwxZgrrxlh0THXkPeq8q4VWw44eHDfAcQf20Q==
+"@react-navigation/drawer@6.7.2":
+  version "6.7.2"
+  resolved "https://registry.npmjs.org/@react-navigation/drawer/-/drawer-6.7.2.tgz"
+  integrity sha512-o4g2zgTZa2+oLd+8V33etrSM38KIqu8S/zCBTsdsHUoQyVE7JNRiv3Qgq/jMvEb8PZCqWmm7jHItcgzrBuwyOQ==
+  dependencies:
+    "@react-navigation/elements" "^1.3.31"
+    color "^4.2.3"
+    warn-once "^0.1.0"
+
+"@react-navigation/elements@^1.3.18", "@react-navigation/elements@^1.3.31":
+  version "1.3.31"
+  resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.31.tgz"
+  integrity sha512-bUzP4Awlljx5RKEExw8WYtif8EuQni2glDaieYROKTnaxsu9kEIA515sXQgUDZU4Ob12VoL7+z70uO3qrlfXcQ==
 
 "@react-navigation/native@^6.0.0", "@react-navigation/native@^6.1.7":
   version "6.1.7"
@@ -6404,6 +6429,13 @@ react-native-material-menu@^2.0.0:
   resolved "https://registry.npmjs.org/react-native-material-menu/-/react-native-material-menu-2.0.0.tgz"
   integrity sha512-SmO9PLE3E469EPbVWZqvdu6JGPPZIm7YjqDcWs2PPoY0k7w2V9tFo3BmmLXNzNZDCVCAi+PPSsL7h/5WkfHcSg==
 
+react-native-modal-datetime-picker@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.npmjs.org/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-18.0.0.tgz"
+  integrity sha512-0jdvhhraZQlRACwr7pM6vmZ2kxgzJ4CpnmV6J3TVA6MrXMXK6Zo/upRBKkRp0+fTOiKuNblzesA2U59rYo6SGA==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-modal@^13.0.1:
   version "13.0.1"
   resolved "https://registry.npmjs.org/react-native-modal/-/react-native-modal-13.0.1.tgz"
@@ -6435,7 +6467,7 @@ react-native-push-notification@^8.1.1:
   resolved "https://registry.npmjs.org/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz"
   integrity sha512-XpBtG/w+a6WXTxu6l1dNYyTiHnbgnvjoc3KxPTxYkaIABRmvuJZkFxqruyGvfCw7ELAlZEAJO+dthdTabCe1XA==
 
-react-native-reanimated@^3.4.1:
+react-native-reanimated@^3.4.1, "react-native-reanimated@>= 1.0.0":
   version "3.4.1"
   resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.4.1.tgz"
   integrity sha512-UjEBbWloCoUB/fkehj9GWAhuvfUx2BLYkQ3rP7+nVMJ5K5Ck1K6XFEBGfYdz4ttCBoyTSuzrPxe2XxJl3yRSdA==

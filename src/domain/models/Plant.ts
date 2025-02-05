@@ -7,6 +7,6 @@ export class Plant {
     about: string;
     waterTips: string;
     frequencyTimes: number;
-    waterFrequency: WaterFrequency;
+    water_frequency: WaterFrequency;
     environments?: Environment[];
 }

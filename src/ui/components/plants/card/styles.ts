@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
     width: 45%;
     height: 150px;
     
@@ -10,16 +10,7 @@ export const Container = styled.View`
     margin: 10px;
 
     justify-content: flex-end;
-`;
-
-export const PlantImage = styled.Image`
-    width: 100%;
-    height: 100%;
-    
-    border-radius: 20px;
-    resize-mode: cover;
-
-    position: absolute;
+    overflow: hidden;
 `;
 
 export const Footer = styled.View`

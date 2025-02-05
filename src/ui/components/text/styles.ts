@@ -32,4 +32,5 @@ export const Text = styled.Text<IProps>`
     color: ${({ theme, variant, color }) => color ?? theme.colors[TextColor[variant]]};
     font-weight: ${({ variant, fontWeight }) => fontWeight ?? FontWeight[variant]};
     text-align: ${({ textAlign }) => textAlign ?? "center"};
+    flex-wrap: wrap;
 `;

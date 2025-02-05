@@ -17,6 +17,6 @@ export class WaterFrequency extends BaseEntity {
     })
     frequency: string
 
-    @OneToMany(() => Plants, plant => plant.waterFrequency)
+    @OneToMany(() => Plants, plant => plant.water_frequency)
     plants: Plants[]
 }

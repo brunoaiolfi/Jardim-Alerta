@@ -5,7 +5,7 @@ export class CreatePlantsAndWaterFrequency1737719894846 implements MigrationInte
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "WaterFrequency",
+                name: "water_frequency",
                 columns: [
                     {
                         name: "id",
@@ -63,13 +63,13 @@ export class CreatePlantsAndWaterFrequency1737719894846 implements MigrationInte
             new TableForeignKey({
                 columnNames: ["waterFrequencyId"],
                 referencedColumnNames: ["id"],
-                referencedTableName: "WaterFrequency",
+                referencedTableName: "water_frequency",
                 onDelete: "CASCADE"
             })
         );
 
         await queryRunner.query(`
-                INSERT INTO WaterFrequency (id, frequency) VALUES 
+                INSERT INTO water_frequency (id, frequency) VALUES 
                 (1, 'day'), 
                 (2, 'week'), 
                 (3, 'month')
@@ -90,7 +90,7 @@ export class CreatePlantsAndWaterFrequency1737719894846 implements MigrationInte
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("Plants")
-        await queryRunner.dropTable("WaterFrequency")
+        await queryRunner.dropTable("water_frequency")
     }
 
 }

@@ -10,10 +10,12 @@ import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
 import { getAplicPlants } from "../../../application/applications/plants/factory";
 import { Plant } from "../../../domain/models/Plant";
-import { CardPlant } from "../../components/cards/plants";
+import { CardPlant } from "../../components/plants/card";
+import { useNavigation } from "@react-navigation/native";
 
-export function Dashboard() {
+export function AddPlant() {
     const { user } = useUser();
+    const navigation = useNavigation();
 
     const aplicEnvironments = getAplicEnvironments();
     const aplicPlants = getAplicPlants();
@@ -64,8 +66,18 @@ export function Dashboard() {
                 environments: {
                     id: environmentId
                 }
+            },
+            select: {
+                name: true,
+                id: true,
             }
         });
+    }
+
+    async function handleSelectPlant(id: number) {
+        navigation.navigate("PlantSave", {
+            id,
+        })
     }
 
     return (
@@ -122,6 +134,7 @@ export function Dashboard() {
                 renderItem={({ item }) => (
                     <CardPlant
                         plant={item}
+                        onSelectPlant={handleSelectPlant}
                     />
                 )}
             />

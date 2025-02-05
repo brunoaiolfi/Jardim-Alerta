@@ -5,6 +5,7 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.os.Bundle; // react native navigation
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 
 public class MainActivity extends ReactActivity {
 

@@ -20,7 +20,7 @@ export class Plants extends BaseEntity {
     frequencyTimes: number
 
     @ManyToOne(() => WaterFrequency, (waterFrequency) => waterFrequency.plants)
-    waterFrequency: WaterFrequency
+    water_frequency: WaterFrequency
 
     @Column()
     waterFrequencyId: number

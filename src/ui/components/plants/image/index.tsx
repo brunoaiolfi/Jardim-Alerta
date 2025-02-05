@@ -1,9 +1,6 @@
-import { TextComponent } from "../../text"
-import { ICardPlants } from "./@types"
+import { IPlantImage } from "./@types";
 import * as Styles from "./styles"
-
-export function CardPlant({ plant }: ICardPlants) {
-
+export function PlantImage({ name }: IPlantImage) {
     const images: Record<string, any> = {
         "Aningapara": require('../../../../assets/imgs/Aningapara.jpg'),
         "Espada São Jorge": require('../../../../assets/imgs/EspadaSaoJorge.jpg'),
@@ -17,17 +14,6 @@ export function CardPlant({ plant }: ICardPlants) {
         "Zamioculca": require('../../../../assets/imgs/Zamioculca.jpg'),
     }
 
-    return (
-        <Styles.Container>
-            <Styles.PlantImage
-                source={images[plant.name]}
-            />
-            <Styles.Footer>
-                <TextComponent
-                    text={plant.name}
-                    color="white"
-                />
-            </Styles.Footer>
-        </Styles.Container>
-    )
+
+    return <Styles.PlantImage source={images[name]} />
 }
