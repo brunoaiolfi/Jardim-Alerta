@@ -10,14 +10,47 @@ import { lightTheme } from '../../themes/lightTheme';
 import { TextComponent } from '../../components/text';
 import { EnumTextVariant } from '../../components/text/@types';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { ButtonComponent } from '../../components/button';
+import { EnumButtonVariant } from '../../components/button/@types';
+import * as Yup from "yup";
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const dictDays = {
+    [0]: 'D',
+    [1]: 'S',
+    [2]: 'T',
+    [3]: 'Q',
+    [4]: 'Q',
+    [5]: 'S',
+    [6]: 'S',
+}
+
+interface ISavePlant {
+    days: number[];
+    hours: number;
+    minutes: number;
+}
+
+const schema = Yup.object().shape({
+    days: Yup.array().of(Yup.number()).required("*"),
+    hours: Yup.number().required().min(0).max(23),
+    minutes: Yup.number().required().min(0).max(59),
+})
 
 export function PlantSave() {
     const { params } = useRoute();
     const navigation = useNavigation();
     const aplicPlant = getAplicPlants();
 
+    const { control, setValue, handleSubmit, formState: { errors } } = useForm<ISavePlant>({
+        resolver: yupResolver(schema),
+    })
+
     const [plant, setPlant] = useState<Plant>()
     const [isLoading, setIsLoading] = useState(true);
+
+    const [datesSelected, setDatesSelected] = useState<number[]>([]);
 
     useEffect(() => {
         handleGetPlant(params?.id || -1);
@@ -40,6 +73,36 @@ export function PlantSave() {
                 id
             },
         });
+    }
+
+    function handleSelectDate(date: keyof typeof dictDays) {
+        const tempDatesSelected = [...datesSelected];
+
+        if (tempDatesSelected.includes(date)) {
+            setDatesSelected(tempDatesSelected.filter(d => d !== date));
+            setValue('days', tempDatesSelected.filter(d => d !== date));
+        } else {
+            setDatesSelected([...tempDatesSelected, date]);
+            setValue('days', [...tempDatesSelected, date]);
+        }
+    }
+
+    function handleChangeHours(value: string) {
+        if (Number(value) > 23 || value.length > 2) return setValue('hours', 23);
+        if (Number(value) < 0) return setValue('hours', 0);
+
+        setValue('hours', Number(value));
+    }
+
+    function handleChangeMinutes(value: string) {
+        if (Number(value) > 59 || value.length > 2) return setValue('minutes', 59);
+        if (Number(value) < 0) return setValue('minutes', 0);
+
+        setValue('minutes', Number(value));
+    }
+
+    function handleSavePlant(values: ISavePlant) {
+        console.log(values);
     }
 
     if (isLoading) {
@@ -66,6 +129,7 @@ export function PlantSave() {
                 </Styles.ReturnButton>
                 <PlantImage name={plant?.name || ""} />
             </Styles.Header>
+
             <Styles.Content>
                 <TextComponent
                     text={plant?.name || ""}
@@ -95,7 +159,71 @@ export function PlantSave() {
                         color={"#000000"}
                     />
                 </Styles.Info>
+                <Styles.Info>
+                    <Styles.Wrapper>
+                        {
+                            Object.keys(dictDays).map(key =>
+                                <ButtonComponent
+                                    onPress={() => handleSelectDate(key)}
+                                    text={dictDays[key]}
+                                    width={"40px"}
+                                    height={"40px"}
+                                    variant={datesSelected.find(d => d === key) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
+                                    padding={"0px"}
+                                    borderRadius='999px'
+                                    key={key}
+                                />
+                            )
+                        }
+                        {
+                            errors?.days?.message &&
+                            <TextComponent
+                                text={errors?.days?.message}
+                                color={"#FF0000"}
+                            />
+                        }
+                    </Styles.Wrapper>
+                </Styles.Info>
+                <Styles.Info>
+                    <Styles.Wrapper>
+                        <Controller
+                            name="hours"
+                            control={control}
+                            render={({ field: { value } }) => (
+                                <Styles.InputTime
+                                    value={value?.toString()}
+                                    onChangeText={handleChangeHours}
+                                    maxLength={2}
+                                    hasError={!!errors?.hours?.message}
+                                />
+                            )}
+                        />
+                        <TextComponent
+                            text=':'
+                        />
+                        <Controller
+                            name="minutes"
+                            control={control}
+                            render={({ field: { value } }) => (
+                                <Styles.InputTime
+                                    value={value?.toString()}
+                                    onChangeText={handleChangeMinutes}
+                                    maxLength={2}
+                                    hasError={!!errors?.minutes?.message}
+                                />
+                            )}
+                        />
+                    </Styles.Wrapper>
+                </Styles.Info>
             </Styles.Content>
+
+            <Styles.Footer>
+                <ButtonComponent
+                    onPress={handleSubmit(handleSavePlant)}
+                    text="Salvar lembrete"
+                    variant={EnumButtonVariant.Primary}
+                />
+            </Styles.Footer>
         </Styles.Container>
     )
 }

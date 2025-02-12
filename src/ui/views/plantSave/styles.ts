@@ -68,3 +68,40 @@ export const WaterTip = styled.Text`
     font-size: 16px;
     width: 70%;
 `;
+
+export const Wrapper = styled.View`
+    flex-direction: row;
+    gap: 8px;
+
+    align-items: center;
+    justify-content: center;
+
+`;
+
+interface IInputTime {
+    hasError: boolean;
+}
+
+function getBorderColor(hasError: boolean): string {
+    return hasError ? "#FF0000" : "transparent";
+}
+
+export const InputTime = styled.TextInput<IInputTime>`
+    border-radius: 6px;
+
+    border: 1px solid transparent;
+    border: ${({ hasError }) => `1px solid ${getBorderColor(hasError)}`};
+
+    background: ${({ theme }) => theme.colors.transparent};
+    width: 32px;
+    height: 48px;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0px 8px;
+`;
+
+export const Footer = styled.View`
+    padding: 22px;
+`;

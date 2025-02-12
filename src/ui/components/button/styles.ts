@@ -6,6 +6,8 @@ interface ButtonProps {
     width?: string;
     height?: string;
     variant: EnumButtonVariant;
+    padding?: string;
+    borderRadius?: string;
 }
 
 const dictBackground = {
@@ -18,14 +20,14 @@ export const Button = styled.TouchableOpacity<ButtonProps>`
     width: ${({ width }) => width ?? "auto"};
     height: ${({ height }) => height ?? "56px"};
 
-    background: ${({ theme, variant }) =>  theme.colors[dictBackground[variant]]};
+    background: ${({ theme, variant }) => theme.colors[dictBackground[variant]]};
 
     justify-content: center;
     align-items: center;
 
-    border-radius: ${({ theme }) => theme.borderRadius};
+    border-radius: ${({ theme, borderRadius }) => borderRadius ?? theme.borderRadius};
 
     opacity: ${({ isDisabled }) => isDisabled ? 0.6 : 1};
 
-    padding: 0 22px;
+    padding: ${({ padding }) => padding ?? "0 22px"};
 `;

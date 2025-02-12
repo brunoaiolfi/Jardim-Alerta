@@ -4,7 +4,7 @@ import { EnumButtonVariant, IButtonProps } from "./@types"
 import * as Styles from "./styles"
 import AntDesign from "react-native-vector-icons/AntDesign"
 
-export function ButtonComponent({ text, icon, isDisabled, width, height, onPress, variant = EnumButtonVariant.Primary, buttonStyle }: IButtonProps) {
+export function ButtonComponent({ text, icon, isDisabled, width, height, onPress, variant = EnumButtonVariant.Primary, buttonStyle, padding, borderRadius }: IButtonProps) {
     const dictColor = {
         [EnumButtonVariant.Primary]: "#ffffff",
         [EnumButtonVariant.Secondary]: "#52665A",
@@ -12,7 +12,7 @@ export function ButtonComponent({ text, icon, isDisabled, width, height, onPress
     }
 
     return (
-        <Styles.Button activeOpacity={0.7} onPress={onPress} width={width} height={height} isDisabled={isDisabled} variant={variant} style={buttonStyle}>
+        <Styles.Button activeOpacity={0.7} onPress={onPress} width={width} height={height} isDisabled={isDisabled} variant={variant} padding={padding} borderRadius={borderRadius} style={buttonStyle}>
             {/* @ts-ignore */}
             {icon && <AntDesign name={icon} size={16} color={dictColor[variant]} />}
 

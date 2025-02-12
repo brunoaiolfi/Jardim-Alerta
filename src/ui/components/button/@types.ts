@@ -15,4 +15,6 @@ export interface IButtonProps {
     isDisabled?: boolean;
     variant?: EnumButtonVariant;
     buttonStyle?: StyleProp<ViewStyle>;
+    padding?: string;
+    borderRadius?: string;
 }
