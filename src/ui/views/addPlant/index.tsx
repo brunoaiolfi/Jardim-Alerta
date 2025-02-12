@@ -1,7 +1,7 @@
 import { TextComponent } from "../../components/text";
 import { EnumTextVariant } from "../../components/text/@types";
 import * as Styles from "./styles";
-import { useUser } from "../../../application/hooks/useUser";
+import { useUser } from "../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import { Environment } from "../../../domain/models/Environment";

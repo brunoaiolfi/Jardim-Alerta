@@ -10,9 +10,6 @@ import { lightTheme } from '../../themes/lightTheme';
 import { TextComponent } from '../../components/text';
 import { EnumTextVariant } from '../../components/text/@types';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Platform } from 'react-native';
-import { ButtonComponent } from '../../components/button';
 
 export function PlantSave() {
     const { params } = useRoute();
@@ -21,16 +18,6 @@ export function PlantSave() {
 
     const [plant, setPlant] = useState<Plant>()
     const [isLoading, setIsLoading] = useState(true);
-
-    const [date, setDate] = useState(new Date());
-    const [show, setShow] = useState(false);
-
-    const onChange = (event: any, selectedDate?: Date) => {
-        setShow(Platform.OS === 'ios'); // No iOS, mantém aberto até confirmar
-        if (selectedDate) {
-            setDate(selectedDate);
-        }
-    };
 
     useEffect(() => {
         handleGetPlant(params?.id || -1);
@@ -62,6 +49,7 @@ export function PlantSave() {
     if (!plant?.id) {
         return <TextComponent text="Planta não encontrada!" variant={EnumTextVariant.Heading} />
     }
+
     return (
         <Styles.Container>
 
@@ -106,17 +94,6 @@ export function PlantSave() {
                         fontSize='14px'
                         color={"#000000"}
                     />
-                </Styles.Info>
-                <Styles.Info>
-                    <ButtonComponent 
-                        onPress={() => setShow(true)}
-                    />
-                    {
-                        show && <DateTimePicker
-                            value={new Date()}
-                            display="default"
-                        />
-                    }
                 </Styles.Info>
             </Styles.Content>
         </Styles.Container>
