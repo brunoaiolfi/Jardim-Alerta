@@ -9,6 +9,7 @@ import { Alert } from "react-native";
 import { AppDataSource } from "./infra/database";
 import { LoadingView } from "./infra/ui/views/loading";
 import { getDatabaseContextImplementation } from "./infra/implementations/database/context/factory";
+import notifee from '@notifee/react-native';
 
 export default function App() {
 
@@ -17,8 +18,35 @@ export default function App() {
   const [isLoading, setIsloading] = useState(true);
 
   useEffect(() => {
-    initializeDatabase();
+    handleInitialize();
   }, [])
+
+  async function handleInitialize() {
+    try {
+      await initializeDatabase();
+      await initializeNotifications();
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsloading(false);
+    }
+
+  }
+
+  async function initializeNotifications() {
+    try {
+      await notifee.requestPermission()
+  
+      const channelId = await notifee.createChannel({
+        id: 'jardimAlerta',
+        name: 'Jardim alerta',
+      });
+
+      
+    } catch (error) {
+      throw new Error(`Could not initialize notifications. ${error.message}`);      
+    }
+  }
 
   async function initializeDatabase() {
     try {
@@ -27,8 +55,6 @@ export default function App() {
       await databaseContext.initialize();
     } catch (error: any) {
       Alert.alert("Could not initialize database", error.message);
-    } finally {
-      setIsloading(false);
     }
   }
 

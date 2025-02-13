@@ -15,6 +15,7 @@ import { EnumButtonVariant } from '../../components/button/@types';
 import * as Yup from "yup";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import notifee from '@notifee/react-native';
 
 const dictDays = {
     [0]: 'D',
@@ -101,8 +102,20 @@ export function PlantSave() {
         setValue('minutes', Number(value));
     }
 
-    function handleSavePlant(values: ISavePlant) {
+    async function handleSavePlant(values: ISavePlant) {
         console.log(values);
+        // Display a notification
+        await notifee.createTriggerNotification({
+            title: 'Notification Title',
+            body: 'Main body content of the notification',
+            android: {
+                channelId,
+                pressAction: {
+                    id: 'default',
+                },
+                
+            },
+        });
     }
 
     if (isLoading) {
