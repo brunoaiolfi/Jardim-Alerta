@@ -1,13 +1,13 @@
 import "reflect-metadata";
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-import { Routes } from './ui/routes';
+import { Routes } from './infra/ui/routes';
 import { ThemeProvider } from 'styled-components/native';
-import { lightTheme } from './ui/themes/lightTheme';
-import { UserProvider } from './ui/contexts/userContext';
+import { lightTheme } from './infra/ui/themes/lightTheme';
+import { UserProvider } from './infra/ui/contexts/userContext';
 import { Alert } from "react-native";
 import { AppDataSource } from "./infra/database";
-import { LoadingView } from "./ui/views/loading";
+import { LoadingView } from "./infra/ui/views/loading";
 import { getDatabaseContextImplementation } from "./infra/implementations/database/context/factory";
 
 export default function App() {

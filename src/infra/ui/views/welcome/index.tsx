@@ -4,7 +4,7 @@ import { EnumTextVariant } from "../../components/text/@types";
 import * as Styles from "./styles";
 import { useUser } from "../../hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
-import { getAplicUser } from "../../../application/applications/user/factory";
+import { getAplicUser } from "../../../../application/applications/user/factory";
 
 export function Welcome() {
     
@@ -33,7 +33,7 @@ export function Welcome() {
                 text={`Gerencie \n suas plantas de \n forma fácil`}
                 variant={EnumTextVariant.Heading}
             />
-            <Styles.Ilustration source={require('../../../assets/imgs/ilustration.png')} />
+            <Styles.Ilustration source={require('../../../../assets/imgs/ilustration.png')} />
             <TextComponent
                 text={`Não esqueça mais de regar suas \n plantas. Nós cuidamos de lembrar você \n sempre que precisar.`}
                 variant={EnumTextVariant.Paragraph}

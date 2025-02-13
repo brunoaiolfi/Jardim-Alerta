@@ -2,7 +2,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Welcome } from "../views/welcome";
 import { UserNameForm } from "../views/userNameForm";
 import { Confirmation } from '../views/confirmation';
-import { AddPlant } from '../views/addPlant';
 import { NavigationContainer } from '@react-navigation/native';
 import { PlantSave } from '../views/plantSave';
 import { DashboardRoutes } from './tabs';
