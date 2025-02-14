@@ -107,12 +107,12 @@ export function PlantSave() {
 
     async function handleSavePlant(values: ISavePlant) {
         try {
-            
+
             const bodyNotification = {
                 title: "Heeey 🌱",
                 body: `Está na hora de cuidar da sua ${plant?.name}! Lembre-se ${plant?.waterTips}!`,
             }
-            
+
             await notificationsImplementation.createTriggerNotification(bodyNotification, values);
 
             Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
@@ -170,6 +170,12 @@ export function PlantSave() {
                 <Styles.Info>
                     <TextComponent
                         text="Escolha o melhor horário para ser lembrado:"
+                        fontWeight='300'
+                        fontSize='14px'
+                        color={"#000000"}
+                    />
+                    <TextComponent
+                        text={`Recomendamos regar ${plant?.frequencyTimes} vezes por ${plant?.water_frequency.frequency}!`}
                         fontWeight='300'
                         fontSize='14px'
                         color={"#000000"}
