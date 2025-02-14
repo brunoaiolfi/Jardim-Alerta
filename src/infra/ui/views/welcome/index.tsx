@@ -33,7 +33,7 @@ export function Welcome() {
                 text={`Gerencie \n suas plantas de \n forma fácil`}
                 variant={EnumTextVariant.Heading}
             />
-            <Styles.Ilustration source={require('../../../../assets/imgs/ilustration.png')} />
+            <Styles.Ilustration source={require('../../../assets/imgs/ilustration.png')} />
             <TextComponent
                 text={`Não esqueça mais de regar suas \n plantas. Nós cuidamos de lembrar você \n sempre que precisar.`}
                 variant={EnumTextVariant.Paragraph}
