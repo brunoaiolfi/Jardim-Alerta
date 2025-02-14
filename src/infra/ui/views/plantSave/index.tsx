@@ -18,6 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import notifee from '@notifee/react-native';
 import { getNotificationImplementation } from '../../../implementations/notifications/factory';
 import { Alert } from 'react-native';
+import { EnumWaterFrequency } from '../../../database/entities/WaterFrequency';
 
 const dictDays = {
     [0]: 'D',
@@ -53,8 +54,13 @@ export function PlantSave() {
 
     const [plant, setPlant] = useState<Plant>()
     const [isLoading, setIsLoading] = useState(true);
-
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
+
+    const dictWaterFrequency = {
+        [EnumWaterFrequency.DAY]: "dia",
+        [EnumWaterFrequency.WEEK]: "semana",
+        [EnumWaterFrequency.MONTH]: "mês",
+    }
 
     useEffect(() => {
         handleGetPlant(params?.id || -1);
@@ -76,6 +82,7 @@ export function PlantSave() {
             where: {
                 id
             },
+            relations: ["water_frequency"]
         });
     }
 
@@ -174,12 +181,14 @@ export function PlantSave() {
                         fontSize='14px'
                         color={"#000000"}
                     />
-                    <TextComponent
-                        text={`Recomendamos regar ${plant?.frequencyTimes} vezes por ${plant?.water_frequency.frequency}!`}
-                        fontWeight='300'
-                        fontSize='14px'
-                        color={"#000000"}
-                    />
+                    {
+                        plant?.water_frequency?.frequency &&
+                        <TextComponent
+                            text={`Recomendamos regar ${plant?.frequencyTimes} vezes por ${dictWaterFrequency[plant?.water_frequency?.frequency]}!`}
+                            fontWeight='300'
+                            fontSize='14px'
+                            color={"#000000"}
+                        />}
                 </Styles.Info>
                 <Styles.Info>
                     <Styles.Wrapper>
