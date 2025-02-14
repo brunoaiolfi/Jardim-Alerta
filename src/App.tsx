@@ -9,11 +9,12 @@ import { Alert } from "react-native";
 import { AppDataSource } from "./infra/database";
 import { LoadingView } from "./infra/ui/views/loading";
 import { getDatabaseContextImplementation } from "./infra/implementations/database/context/factory";
-import notifee from '@notifee/react-native';
+import { getNotificationImplementation } from "./infra/implementations/notifications/factory";
 
 export default function App() {
 
   const databaseContext = getDatabaseContextImplementation();
+  const notificationsImplementation = getNotificationImplementation();
 
   const [isLoading, setIsloading] = useState(true);
 
@@ -35,16 +36,9 @@ export default function App() {
 
   async function initializeNotifications() {
     try {
-      await notifee.requestPermission()
-  
-      const channelId = await notifee.createChannel({
-        id: 'jardimAlerta',
-        name: 'Jardim alerta',
-      });
-
-      
+      await notificationsImplementation.createChannel();
     } catch (error) {
-      throw new Error(`Could not initialize notifications. ${error.message}`);      
+      throw new Error(`Could not initialize notifications. ${error.message}`);
     }
   }
 

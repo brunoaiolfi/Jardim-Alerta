@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import notifee from '@notifee/react-native';
+import { getNotificationImplementation } from '../../../implementations/notifications/factory';
 
 const dictDays = {
     [0]: 'D',
@@ -43,6 +44,7 @@ export function PlantSave() {
     const { params } = useRoute();
     const navigation = useNavigation();
     const aplicPlant = getAplicPlants();
+    const notificationsImplementation = getNotificationImplementation();
 
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<ISavePlant>({
         resolver: yupResolver(schema),
@@ -103,19 +105,17 @@ export function PlantSave() {
     }
 
     async function handleSavePlant(values: ISavePlant) {
-        console.log(values);
-        // Display a notification
-        await notifee.createTriggerNotification({
-            title: 'Notification Title',
-            body: 'Main body content of the notification',
-            android: {
-                channelId,
-                pressAction: {
-                    id: 'default',
-                },
-                
-            },
-        });
+        try {
+            
+            const bodyNotification = {
+                title: "Heeey 🌱",
+                body: `Está na hora de cuidar da sua ${plant?.name}!`,
+            }
+            
+            await notificationsImplementation.createTriggerNotification(bodyNotification, values);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     if (isLoading) {
