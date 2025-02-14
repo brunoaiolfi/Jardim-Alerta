@@ -85,7 +85,7 @@ export class NotificationsImplementation implements INotificationsImplementation
         const now = new Date();
         const currentDay = now.getDay();
 
-        const daysUntil = (dayOfWeek - currentDay + 7) % 7;
+        const daysUntil = (dayOfWeek - currentDay + 7) % 7 || 7;
 
         now.setDate(now.getDate() + daysUntil);
         now.setHours(hour, minutes, 0, 0);

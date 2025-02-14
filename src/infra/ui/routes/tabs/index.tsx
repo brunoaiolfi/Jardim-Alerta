@@ -1,12 +1,13 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AddPlant } from '../../views/addPlant';
+import { MyPlants } from '../../views/myPlants';
 import Ionicons from "react-native-vector-icons/Ionicons"
+import { AddPlant } from '../../views/addPlant';
 const BottomTabsRoutes = createBottomTabNavigator();
 
 export function DashboardRoutes() {
     return (
         <BottomTabsRoutes.Navigator
-            initialRouteName="AddPlant"
+            initialRouteName="MyPlants"
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
@@ -20,7 +21,7 @@ export function DashboardRoutes() {
         >
             <BottomTabsRoutes.Screen
                 name="MyPlants"
-                component={AddPlant}
+                component={MyPlants}
                 options={{
                     tabBarLabel: "Minhas plantas",
                     tabBarIcon: ({ color }) => <Ionicons name='list' color={color} size={20} />,

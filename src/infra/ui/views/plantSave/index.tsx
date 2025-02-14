@@ -17,6 +17,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import notifee from '@notifee/react-native';
 import { getNotificationImplementation } from '../../../implementations/notifications/factory';
+import { Alert } from 'react-native';
 
 const dictDays = {
     [0]: 'D',
@@ -109,12 +110,14 @@ export function PlantSave() {
             
             const bodyNotification = {
                 title: "Heeey 🌱",
-                body: `Está na hora de cuidar da sua ${plant?.name}!`,
+                body: `Está na hora de cuidar da sua ${plant?.name}! Lembre-se ${plant?.waterTips}!`,
             }
             
             await notificationsImplementation.createTriggerNotification(bodyNotification, values);
+
+            Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
         } catch (error) {
-            console.error(error);
+            Alert.alert("Ops!", "Não foi possível salvar o lembrete, tente novamente mais tarde!");
         }
     }
 
