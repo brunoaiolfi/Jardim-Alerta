@@ -1,4 +1,4 @@
-import { Environments } from "../../../infra/database/entities/Environments";
+import { Environments } from "../../entities/Environments";
 import { IRepBase, RepBase } from "../base/RepBase";
 
 export interface IRepEnvironments extends IRepBase<Environments> { }

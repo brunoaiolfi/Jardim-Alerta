@@ -1,4 +1,4 @@
-import { getRepPlants } from "../../repositories/plants/factory";
+import { getRepPlants } from "../../../infra/database/repositories/plants/factory";
 import { AplicPlants } from "./AplicPlants";
 
 export function getAplicPlants() {

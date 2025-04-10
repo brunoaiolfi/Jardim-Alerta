@@ -1,5 +1,5 @@
 import { Plants } from "../../../infra/database/entities/Plants";
-import { IRepPlants } from "../../repositories/plants/RepPlants";
+import { IRepPlants } from "../../../infra/database/repositories/plants/RepPlants";
 import { AplicBase } from "../base/AplicBase";
 
 export class AplicPlants extends AplicBase<Plants> {

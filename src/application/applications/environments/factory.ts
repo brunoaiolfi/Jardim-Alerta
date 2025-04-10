@@ -1,4 +1,4 @@
-import { getRepEnvironments } from "../../repositories/environments/factory";
+import { getRepEnvironments } from "../../../infra/database/repositories/environments/factory";
 import { AplicEnvironments } from "./AplicEnvironments";
 
 export function getAplicEnvironments() {

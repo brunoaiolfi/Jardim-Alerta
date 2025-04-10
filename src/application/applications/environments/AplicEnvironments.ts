@@ -1,6 +1,6 @@
 import { Environments } from "../../../infra/database/entities/Environments";
-import { IEntity } from "../../../infra/implementations/database/repository/DatabaseRepository";
-import { IRepEnvironments } from "../../repositories/environments/RepEnvironments";
+import { IRepEnvironments } from "../../../infra/database/repositories/environments/RepEnvironments";
+import { IEntity } from "../../../infra/implementations/database/DAO/DAO";
 import { AplicBase } from "../base/AplicBase";
 
 export class AplicEnvironments extends AplicBase<Environments>{

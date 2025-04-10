@@ -2,12 +2,12 @@ import { BaseEntity, FindManyOptions, Repository } from "typeorm";
 
 export interface IFindOptions<T> extends FindManyOptions<T> {}
 export interface IEntity extends BaseEntity {}
-export interface IDatabaseRepositoryImplementation<T> {
+export interface IDAOImplementation<T> {
     select: (options?: IFindOptions<T>) => Promise<T[]>;
     insert: (model: T) => Promise<void>;
 }
 
-export class DatabaseRepositoryImplementation<T extends IEntity> implements IDatabaseRepositoryImplementation<T>{
+export class DAOImplementation<T extends IEntity> implements IDAOImplementation<T>{
     private readonly repository: Repository<T>;
 
     constructor(repository: Repository<T>) {

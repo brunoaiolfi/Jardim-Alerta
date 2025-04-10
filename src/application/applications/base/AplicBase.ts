@@ -1,5 +1,5 @@
-import { IFindOptions, IEntity } from "../../../infra/implementations/database/repository/DatabaseRepository";
-import { IRepBase } from "../../repositories/base/RepBase";
+import { IRepBase } from "../../../infra/database/repositories/base/RepBase";
+import { IFindOptions, IEntity } from "../../../infra/implementations/database/DAO/DAO";
 
 interface IAplicBase<T> {
     get: (options?: IFindOptions<T>) => Promise<T[]>;

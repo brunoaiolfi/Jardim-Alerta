@@ -1,4 +1,4 @@
-import { IDatabaseRepositoryImplementation, IFindOptions, IEntity } from "../../../infra/implementations/database/repository/DatabaseRepository";
+import { IDAOImplementation, IFindOptions, IEntity } from './../../../implementations/database/DAO/DAO';
 
 export interface IRepBase<T> {
     select(options?: IFindOptions<T>): Promise<T[]>;
@@ -6,9 +6,9 @@ export interface IRepBase<T> {
 }
 
 export class RepBase<T extends IEntity> implements IRepBase<T> {
-    private readonly _db: IDatabaseRepositoryImplementation<T>;
+    private readonly _db: IDAOImplementation<T>;
 
-    constructor(db: IDatabaseRepositoryImplementation<T>) {
+    constructor(db: IDAOImplementation<T>) {
         this._db = db;
     }
 
