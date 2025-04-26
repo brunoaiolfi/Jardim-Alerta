@@ -19,6 +19,8 @@ import notifee from '@notifee/react-native';
 import { getNotificationImplementation } from '../../../implementations/notifications/factory';
 import { Alert } from 'react-native';
 import { EnumWaterFrequency } from '../../../database/entities/WaterFrequency';
+import { getAplicNotificationTriggers } from '../../../../application/applications/notificationTriggers/factory';
+import { NotificationTrigger } from '../../../database/entities/NotificationTrigger';
 
 const dictDays = {
     [0]: 'D',
@@ -42,10 +44,11 @@ const schema = Yup.object().shape({
     minutes: Yup.number().required().min(0).max(59),
 })
 
-export function PlantSave() {
+export function AlarmSave() {
     const { params } = useRoute();
     const navigation = useNavigation();
     const aplicPlant = getAplicPlants();
+    const aplicNotificationTriggers = getAplicNotificationTriggers();
     const notificationsImplementation = getNotificationImplementation();
 
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<ISavePlant>({
@@ -120,7 +123,16 @@ export function PlantSave() {
                 body: `Está na hora de cuidar da sua ${plant?.name}! Lembre-se ${plant?.waterTips}!`,
             }
 
-            await notificationsImplementation.createTriggerNotification(bodyNotification, values);
+            const ids = await notificationsImplementation.createTriggerNotification(bodyNotification, values);
+
+            const notificationTrigger = new NotificationTrigger();
+            notificationTrigger.plantId = plant.id;
+            notificationTrigger.id = ids[0];
+            notificationTrigger.weekDay = values.days;
+            notificationTrigger.time = `${values.hours}:${values.minutes}`;
+            
+
+            await aplicNotificationTriggers.save(notificationTrigger);
 
             Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
         } catch (error) {

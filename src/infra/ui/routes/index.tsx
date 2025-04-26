@@ -3,7 +3,7 @@ import { Welcome } from "../views/welcome";
 import { UserNameForm } from "../views/userNameForm";
 import { Confirmation } from '../views/confirmation';
 import { NavigationContainer } from '@react-navigation/native';
-import { PlantSave } from '../views/plantSave';
+import { AlarmSave } from '../views/alarmSave';
 import { DashboardRoutes } from './tabs';
 
 const StackRoutes = createStackNavigator();
@@ -38,8 +38,8 @@ export function Routes() {
                 />
                 
                 <StackRoutes.Screen
-                    name="PlantSave"
-                    component={PlantSave}
+                    name="AlarmSave"
+                    component={AlarmSave}
                 />
             </StackRoutes.Navigator>
         </NavigationContainer>

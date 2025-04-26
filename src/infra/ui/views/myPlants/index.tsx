@@ -75,7 +75,7 @@ export function MyPlants() {
     }
 
     async function handleSelectPlant(id: number) {
-        navigation.navigate("PlantSave", {
+        navigation.navigate("AlarmSave", {
             id,
         })
     }

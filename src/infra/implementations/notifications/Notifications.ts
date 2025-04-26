@@ -3,7 +3,7 @@ import notifee, { AlarmType, AndroidNotificationSetting, RepeatFrequency, Trigge
 interface INotificationsImplementation {
     createChannel: () => Promise<void>;
     sendNotification: (bodyNotification: IBodyNotification) => Promise<void>;
-    createTriggerNotification: (bodyNotification: IBodyNotification, when: IWhenTriggerNotification) => Promise<void>;
+    createTriggerNotification: (bodyNotification: IBodyNotification, when: IWhenTriggerNotification) => Promise<string[]>;
 }
 
 interface IBodyNotification {
@@ -62,9 +62,10 @@ export class NotificationsImplementation implements INotificationsImplementation
 
     async createTriggerNotification({ title, body }: IBodyNotification, when: IWhenTriggerNotification) {
         const { days, hours, minutes } = when;
+        const ids: string[] = [];
 
         for (const day of days) {
-            await notifee.createTriggerNotification({
+            const id = await notifee.createTriggerNotification({
                 title,
                 body,
                 android: {
@@ -78,7 +79,11 @@ export class NotificationsImplementation implements INotificationsImplementation
                     type: AlarmType.SET_EXACT_AND_ALLOW_WHILE_IDLE
                 }
             })
+
+            ids.push(id);
         }
+
+        return ids;
     }
 
     private getNextAlarmDate(dayOfWeek: number, hour: number, minutes: number): Date {

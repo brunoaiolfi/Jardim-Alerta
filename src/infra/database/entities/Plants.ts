@@ -1,6 +1,7 @@
 import { Environments } from './Environments';
+import { NotificationTrigger } from './NotificationTrigger';
 import { WaterFrequency } from './WaterFrequency';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, ManyToMany, JoinTable } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, ManyToMany, JoinTable, OneToMany } from "typeorm"
 
 @Entity()
 export class Plants extends BaseEntity {
@@ -37,4 +38,7 @@ export class Plants extends BaseEntity {
         },
     })
     environments: Environments[]
+
+    @OneToMany(() => NotificationTrigger, (notificationTrigger) => notificationTrigger.plant)
+    notificationTriggers: NotificationTrigger[];
 }

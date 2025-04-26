@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MyPlants } from '../../views/myPlants';
 import Ionicons from "react-native-vector-icons/Ionicons"
-import { AddPlant } from '../../views/addPlant';
+import { Alarms } from '../../views/Alarms';
 const BottomTabsRoutes = createBottomTabNavigator();
 
 export function DashboardRoutes() {
@@ -28,11 +28,11 @@ export function DashboardRoutes() {
                 }}
             />
             <BottomTabsRoutes.Screen
-                name="AddPlant"
-                component={AddPlant}
+                name="Alarms"
+                component={Alarms}
                 options={{
-                    tabBarLabel: "Nova planta",
-                    tabBarIcon: ({ color }) => <Ionicons name='add-circle-outline' color={color} size={20} />,
+                    tabBarLabel: "Meus Alarmes",
+                    tabBarIcon: ({ color }) => <></>,
                 }}
             />
         </BottomTabsRoutes.Navigator>
