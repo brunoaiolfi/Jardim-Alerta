@@ -1,6 +1,6 @@
 import { IPlantImage } from "./@types";
 import * as Styles from "./styles"
-export function PlantImage({ name }: IPlantImage) {
+export function PlantImage({ name, ...props }: IPlantImage) {
     const images: Record<string, any> = {
         "Aningapara": require('../../../../assets/imgs/Aningapara.jpg'),
         "Espada São Jorge": require('../../../../assets/imgs/EspadaSaoJorge.jpg'),
@@ -15,5 +15,5 @@ export function PlantImage({ name }: IPlantImage) {
     }
 
 
-    return <Styles.PlantImage source={images[name]} />
+    return <Styles.PlantImage source={images[name]} {...props} />
 }
