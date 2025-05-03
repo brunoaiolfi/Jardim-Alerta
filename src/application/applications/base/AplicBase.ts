@@ -20,4 +20,8 @@ export class AplicBase<T> implements IAplicBase<T> {
     public async save(model: IEntity): Promise<void> {
         await this.repository.insert(model);
     }
+
+    public async delete(model: IEntity): Promise<void> {
+        await this.repository.delete(model);
+    }
 }

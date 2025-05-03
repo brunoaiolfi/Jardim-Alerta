@@ -20,7 +20,7 @@ export const Button = styled.TouchableOpacity<ButtonProps>`
     width: ${({ width }) => width ?? "auto"};
     height: ${({ height }) => height ?? "56px"};
 
-    background: ${({ theme, variant }) => theme.colors[dictBackground[variant]]};
+    background: ${({ theme, variant }) => variant == EnumButtonVariant.Transparent ? "transparent" : theme.colors[dictBackground[variant]]};
 
     justify-content: center;
     align-items: center;

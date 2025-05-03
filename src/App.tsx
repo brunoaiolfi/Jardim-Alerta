@@ -10,6 +10,10 @@ import { AppDataSource } from "./infra/database";
 import { LoadingView } from "./infra/ui/views/loading";
 import { getDatabaseContextImplementation } from "./infra/implementations/database/context/factory";
 import { getNotificationImplementation } from "./infra/implementations/notifications/factory";
+import { LogBox } from 'react-native';
+
+// Ignorar todos os warnings
+LogBox.ignoreAllLogs();
 
 export default function App() {
 

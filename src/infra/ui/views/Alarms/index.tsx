@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getAplicNotificationTriggers } from "../../../../application/applications/notificationTriggers/factory";
 import { TextComponent } from "../../components/text";
 import { NotificationTrigger } from "../../../database/entities/NotificationTrigger";
@@ -11,15 +11,19 @@ import { lightTheme } from "../../themes/lightTheme";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import Feather from "react-native-vector-icons/Feather";
 
 export function Alarms() {
+
     const aplicNotificationTriggers = getAplicNotificationTriggers();
+    const navigation = useNavigation();
 
     const [notificationTriggers, setNotificationTriggers] = useState<NotificationTrigger[]>([]);
 
-    useEffect(() => {
+    useFocusEffect(() => {
         handleGetNotificationTriggers();
-    }, [])
+    })
 
     async function handleGetNotificationTriggers() {
         try {
@@ -46,6 +50,42 @@ export function Alarms() {
                 case 6: return "Sábado";
             }
         }).join(", ");
+
+        function handleEditAlarm(notificationTrigger: NotificationTrigger) {
+            navigation.navigate("AlarmSave", {
+                id: notificationTrigger.plantId,
+            });
+
+        }
+
+        function handleDeleteAlarm(notificationTrigger: NotificationTrigger) {
+            Alert.alert(
+                "Deletar alarme",
+                "Você tem certeza que deseja deletar esse alarme?",
+                [
+                    {
+                        text: "Cancelar",
+                        style: "cancel",
+                    },
+                    {
+                        text: "Deletar",
+                        style: "destructive",
+                        onPress: () => deleteAlarm(notificationTrigger),
+                    },
+                ]
+            );
+        }
+
+        async function deleteAlarm(notificationTrigger: NotificationTrigger) {
+            try {
+                await aplicNotificationTriggers.delete(notificationTrigger);
+                const triggers = [...notificationTriggers].filter((trigger) => trigger.id !== notificationTrigger.id);
+                setNotificationTriggers(triggers);
+            } catch (error: any) {
+                Alert.alert("Erro ao deletar alarme", error.message);
+            }
+        }
+
 
         return <Styles.NotificationCard>
             <PlantImage
@@ -82,17 +122,24 @@ export function Alarms() {
                     />
                 </Styles.AlarmInfoFooter>
             </Styles.AlarmInfos>
-
             <ButtonComponent
-                onPress={() => {}}
-                variant={EnumButtonVariant.Secondary}
-                icon="trash-outline"
+                onPress={() => handleEditAlarm(notificationTrigger)}
+                width="48px"
+                height="48px"
+                padding="0px"
+                variant={EnumButtonVariant.Transparent}
+                icon="form"
                 borderRadius="9999px"
             />
             <ButtonComponent
-                onPress={() => {}}
-                variant={EnumButtonVariant.Secondary}
-                icon="edit-outline"
+                onPress={() => handleDeleteAlarm(notificationTrigger)}
+                width="48px"
+                height="48px"
+                padding="0px"
+                variant={EnumButtonVariant.Transparent}
+                icon="trash-2"
+                iconFamily="Feather"
+                iconColor={lightTheme.colors.danger}
                 borderRadius="9999px"
             />
         </Styles.NotificationCard>
@@ -106,7 +153,12 @@ export function Alarms() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ padding: 20 }}
             ListEmptyComponent={<TextComponent text="Nenhum alarme encontrado" textAlign="center" />}
-            ListHeaderComponent={<TextComponent text="Alarmes" textAlign="center" variant={EnumTextVariant.Heading} fontWeight="bold" />}
+            ListHeaderComponent={() =>
+                <Styles.Header>
+                    <Feather name="bell" size={24} color={lightTheme.colors.textHeading} />
+                    <TextComponent text="Alarmes" textAlign="left" variant={EnumTextVariant.Heading} fontWeight="bold" />
+                </Styles.Header>
+            }
         />
     )
 }

@@ -56,6 +56,7 @@ export function AlarmSave() {
     })
 
     const [plant, setPlant] = useState<Plant>()
+    const [currentNotificationTrigger, setCurrentNotificationTrigger] = useState<NotificationTrigger>();
     const [isLoading, setIsLoading] = useState(true);
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
 
@@ -66,13 +67,23 @@ export function AlarmSave() {
     }
 
     useEffect(() => {
-        handleGetPlant(params?.id || -1);
+        handleGetData(params?.id || -1);
     }, [])
 
-    async function handleGetPlant(id: number) {
+    async function handleGetData(plantId: number) {
         try {
-            const plant = await getPlant(id);
+            const plant = await getPlant(plantId);
+            const notification = await getNotificationByPlantId(plantId);
+
+            if (notification[0]) {
+                setValue('days', notification[0].weekDay);
+                setValue('hours', Number(notification[0].time.split(":")[0]));
+                setValue('minutes', Number(notification[0].time.split(":")[1]));
+                setDatesSelected(notification[0].weekDay);
+            }
+
             setPlant(plant[0]);
+            setCurrentNotificationTrigger(notification[0]);
         } catch (error: any) {
             console.error(error);
         } finally {
@@ -86,6 +97,14 @@ export function AlarmSave() {
                 id
             },
             relations: ["water_frequency"]
+        });
+    }
+
+    async function getNotificationByPlantId(plantId: number) {
+        return await aplicNotificationTriggers.get({
+            where: {
+                plantId
+            }
         });
     }
 
@@ -123,16 +142,21 @@ export function AlarmSave() {
                 body: `Está na hora de cuidar da sua ${plant?.name}! Lembre-se ${plant?.waterTips}!`,
             }
 
-            const ids = await notificationsImplementation.createTriggerNotification(bodyNotification, values);
+            let id: string[] = [];
 
-            const notificationTrigger = new NotificationTrigger();
-            notificationTrigger.plantId = plant.id;
-            notificationTrigger.id = ids[0];
-            notificationTrigger.weekDay = values.days;
-            notificationTrigger.time = `${values.hours}:${values.minutes}`;
-            
+            if (currentNotificationTrigger?.id) {
+                id = await notificationsImplementation.editTriggerNotification(currentNotificationTrigger.id, bodyNotification, values);
+            } else {
+                id = await notificationsImplementation.createTriggerNotification(bodyNotification, values);
+            }
 
-            await aplicNotificationTriggers.save(notificationTrigger);
+            const newNotificationTrigger = new NotificationTrigger();
+            newNotificationTrigger.plantId = plant.id;
+            newNotificationTrigger.id = id[0];
+            newNotificationTrigger.weekDay = values.days;
+            newNotificationTrigger.time = `${values.hours}:${values.minutes}`;
+
+            await aplicNotificationTriggers.save(newNotificationTrigger);
 
             Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
         } catch (error) {

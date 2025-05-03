@@ -1,7 +1,9 @@
 import { getRepNotificationTriggers } from "../../../infra/database/repositories/notificationTriggers/factory";
+import { getNotificationImplementation } from "../../../infra/implementations/notifications/factory";
 import { AplicNotificationTriggers } from "./AplicNotificationTriggers";
 
 export function getAplicNotificationTriggers() {
     const repo = getRepNotificationTriggers();
-    return new AplicNotificationTriggers(repo);
+    const notificationImpl = getNotificationImplementation();
+    return new AplicNotificationTriggers(repo, notificationImpl);
 }

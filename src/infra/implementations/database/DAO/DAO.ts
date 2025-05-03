@@ -5,6 +5,7 @@ export interface IEntity extends BaseEntity {}
 export interface IDAOImplementation<T> {
     select: (options?: IFindOptions<T>) => Promise<T[]>;
     insert: (model: T) => Promise<void>;
+    delete: (model: T) => Promise<void>;
 }
 
 export class DAOImplementation<T extends IEntity> implements IDAOImplementation<T>{
@@ -20,5 +21,9 @@ export class DAOImplementation<T extends IEntity> implements IDAOImplementation<
 
     public async insert(model: T): Promise<void> {
         await this.repository.save(model);
+    }
+
+    public async delete(model: T): Promise<void> {
+        await this.repository.remove(model);
     }
 }

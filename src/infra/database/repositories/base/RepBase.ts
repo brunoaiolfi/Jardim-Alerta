@@ -3,6 +3,7 @@ import { IDAOImplementation, IFindOptions, IEntity } from './../../../implementa
 export interface IRepBase<T> {
     select(options?: IFindOptions<T>): Promise<T[]>;
     insert(model: IEntity): Promise<void>;
+    delete(model: IEntity): Promise<void>;
 }
 
 export class RepBase<T extends IEntity> implements IRepBase<T> {
@@ -18,5 +19,9 @@ export class RepBase<T extends IEntity> implements IRepBase<T> {
 
     public async insert(model: T): Promise<void> {
         await this._db.insert(model);
+    }
+
+    public async delete(model: T): Promise<void> {
+        await this._db.delete(model);
     }
 }

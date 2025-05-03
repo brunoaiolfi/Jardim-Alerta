@@ -19,6 +19,7 @@ export const lightTheme: DefaultTheme = {
         secondary: '#2B7A4B',
         transparent: '#F0F0F0',
         borderColor: "#CFCFCF",
-        greenLight: "#DAF2E4"
+        greenLight: "#DAF2E4",
+        danger: "#FF0000",
     }
 }

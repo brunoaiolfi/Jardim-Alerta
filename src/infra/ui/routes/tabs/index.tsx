@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MyPlants } from '../../views/myPlants';
 import Ionicons from "react-native-vector-icons/Ionicons"
-import { Alarms } from '../../views/Alarms';
+import { Alarms } from '../../views/alarms';
 const BottomTabsRoutes = createBottomTabNavigator();
 
 export function DashboardRoutes() {

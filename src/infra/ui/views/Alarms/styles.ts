@@ -22,3 +22,13 @@ export const AlarmInfoFooter = styled.View`
     align-items: center;
     margin-top: 8px;
 `;
+
+export const Header = styled.View`
+    margin-bottom: 16px;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 8px;
+`;

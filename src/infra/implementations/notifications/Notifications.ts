@@ -1,12 +1,14 @@
 import notifee, { AlarmType, AndroidNotificationSetting, RepeatFrequency, TriggerType } from '@notifee/react-native';
 
-interface INotificationsImplementation {
+export interface INotificationsImplementation {
     createChannel: () => Promise<void>;
     sendNotification: (bodyNotification: IBodyNotification) => Promise<void>;
     createTriggerNotification: (bodyNotification: IBodyNotification, when: IWhenTriggerNotification) => Promise<string[]>;
+    deleteTriggerNotification: (id: string) => Promise<void>;
+    editTriggerNotification: (id: string, bodyNotification: IBodyNotification, when: IWhenTriggerNotification) => Promise<string[]>;
 }
 
-interface IBodyNotification {
+export interface IBodyNotification {
     title: string;
     body: string;
 }
@@ -98,4 +100,36 @@ export class NotificationsImplementation implements INotificationsImplementation
         return now;
     }
 
+    async deleteTriggerNotification(id: string) {
+        await notifee.cancelNotification(id);
+    }
+
+    async editTriggerNotification(id: string, { title, body }: IBodyNotification, when: IWhenTriggerNotification) {
+        const { days, hours, minutes } = when;
+        const ids: string[] = [];
+
+        await this.deleteTriggerNotification(id);
+
+        for (const day of days) {
+            const newId = await notifee.createTriggerNotification({
+                id,                
+                title,
+                body,
+                android: {
+                    channelId: this.channelId,
+                },
+            }, {
+                type: TriggerType.TIMESTAMP,
+                timestamp: this.getNextAlarmDate(day, hours, minutes).getTime(),
+                repeatFrequency: RepeatFrequency.WEEKLY,
+                alarmManager: {
+                    type: AlarmType.SET_EXACT_AND_ALLOW_WHILE_IDLE
+                }
+            })
+
+            ids.push(newId);
+        }
+
+        return ids;
+    }
 }

@@ -3,7 +3,8 @@ import { StyleProp, ViewStyle } from "react-native";
 export enum EnumButtonVariant {
     Primary = 1,
     Secondary = 2,
-    Selected = 3
+    Selected = 3,
+    Transparent = 4
 }
 
 export interface IButtonProps {
@@ -17,4 +18,7 @@ export interface IButtonProps {
     buttonStyle?: StyleProp<ViewStyle>;
     padding?: string;
     borderRadius?: string;
+    iconFamily?: "AntDesign" | "Feather";
+    iconSize?: number;
+    iconColor?: string;
 }
