@@ -13,7 +13,6 @@ import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
 import { useFocusEffect } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
-import notifee from "@notifee/react-native";
 
 export function Alarms() {
 
