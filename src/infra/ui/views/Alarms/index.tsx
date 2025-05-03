@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { getAplicNotificationTriggers } from "../../../../application/applications/notificationTriggers/factory";
 import { TextComponent } from "../../components/text";
 import { NotificationTrigger } from "../../../database/entities/NotificationTrigger";
@@ -11,21 +11,17 @@ import { lightTheme } from "../../themes/lightTheme";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
+import notifee from "@notifee/react-native";
 
 export function Alarms() {
 
     const aplicNotificationTriggers = getAplicNotificationTriggers();
-    const navigation = useNavigation();
 
     const [notificationTriggers, setNotificationTriggers] = useState<NotificationTrigger[]>([]);
 
-    useFocusEffect(() => {
-        handleGetNotificationTriggers();
-    })
-
-    async function handleGetNotificationTriggers() {
+    const handleGetNotificationTriggers = useCallback(async () => {
         try {
             const notificationTriggers = await aplicNotificationTriggers.get({
                 relations: ["plant"],
@@ -34,7 +30,11 @@ export function Alarms() {
         } catch (error: any) {
             Alert.alert("Erro ao buscar alarmes", error.message);
         }
-    }
+    }, []);
+
+    useFocusEffect(useCallback(() => {
+        handleGetNotificationTriggers();
+    }, [handleGetNotificationTriggers]));
 
     function renderAlarme(notificationTrigger: NotificationTrigger) {
         const { weekDay, time, plant } = notificationTrigger;
@@ -50,13 +50,6 @@ export function Alarms() {
                 case 6: return "Sábado";
             }
         }).join(", ");
-
-        function handleEditAlarm(notificationTrigger: NotificationTrigger) {
-            navigation.navigate("AlarmSave", {
-                id: notificationTrigger.plantId,
-            });
-
-        }
 
         function handleDeleteAlarm(notificationTrigger: NotificationTrigger) {
             Alert.alert(
@@ -122,15 +115,6 @@ export function Alarms() {
                     />
                 </Styles.AlarmInfoFooter>
             </Styles.AlarmInfos>
-            <ButtonComponent
-                onPress={() => handleEditAlarm(notificationTrigger)}
-                width="48px"
-                height="48px"
-                padding="0px"
-                variant={EnumButtonVariant.Transparent}
-                icon="form"
-                borderRadius="9999px"
-            />
             <ButtonComponent
                 onPress={() => handleDeleteAlarm(notificationTrigger)}
                 width="48px"

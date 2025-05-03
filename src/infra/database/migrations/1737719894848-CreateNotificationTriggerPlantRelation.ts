@@ -9,12 +9,18 @@ export class CreateNotificationTriggerPlantRelation1737719894848 implements Migr
                 columns: [
                     {
                         name: "id",
-                        type: "varchar",
                         isPrimary: true,
-                        isNullable: false,
+                        isGenerated: true,
+                        generationStrategy: "increment",
+                        type: "integer",
                     },
                     {
                         name: "weekDay",
+                        type: "varchar",
+                        isNullable: false,
+                    },
+                    {
+                        name: "triggersId",
                         type: "varchar",
                         isNullable: false,
                     },

@@ -15,7 +15,6 @@ import { EnumButtonVariant } from '../../components/button/@types';
 import * as Yup from "yup";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import notifee from '@notifee/react-native';
 import { getNotificationImplementation } from '../../../implementations/notifications/factory';
 import { Alert } from 'react-native';
 import { EnumWaterFrequency } from '../../../database/entities/WaterFrequency';
@@ -56,7 +55,6 @@ export function AlarmSave() {
     })
 
     const [plant, setPlant] = useState<Plant>()
-    const [currentNotificationTrigger, setCurrentNotificationTrigger] = useState<NotificationTrigger>();
     const [isLoading, setIsLoading] = useState(true);
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
 
@@ -73,17 +71,7 @@ export function AlarmSave() {
     async function handleGetData(plantId: number) {
         try {
             const plant = await getPlant(plantId);
-            const notification = await getNotificationByPlantId(plantId);
-
-            if (notification[0]) {
-                setValue('days', notification[0].weekDay);
-                setValue('hours', Number(notification[0].time.split(":")[0]));
-                setValue('minutes', Number(notification[0].time.split(":")[1]));
-                setDatesSelected(notification[0].weekDay);
-            }
-
             setPlant(plant[0]);
-            setCurrentNotificationTrigger(notification[0]);
         } catch (error: any) {
             console.error(error);
         } finally {
@@ -97,14 +85,6 @@ export function AlarmSave() {
                 id
             },
             relations: ["water_frequency"]
-        });
-    }
-
-    async function getNotificationByPlantId(plantId: number) {
-        return await aplicNotificationTriggers.get({
-            where: {
-                plantId
-            }
         });
     }
 
@@ -142,17 +122,11 @@ export function AlarmSave() {
                 body: `Está na hora de cuidar da sua ${plant?.name}! Lembre-se ${plant?.waterTips}!`,
             }
 
-            let id: string[] = [];
-
-            if (currentNotificationTrigger?.id) {
-                id = await notificationsImplementation.editTriggerNotification(currentNotificationTrigger.id, bodyNotification, values);
-            } else {
-                id = await notificationsImplementation.createTriggerNotification(bodyNotification, values);
-            }
+            const triggersId = await notificationsImplementation.createTriggerNotification(bodyNotification, values);
 
             const newNotificationTrigger = new NotificationTrigger();
             newNotificationTrigger.plantId = plant.id;
-            newNotificationTrigger.id = id[0];
+            newNotificationTrigger.triggersId = triggersId;
             newNotificationTrigger.weekDay = values.days;
             newNotificationTrigger.time = `${values.hours}:${values.minutes}`;
 

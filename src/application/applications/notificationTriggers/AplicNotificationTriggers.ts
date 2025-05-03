@@ -18,7 +18,9 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> {
     public async delete(model: NotificationTrigger): Promise<void> {
         try {
             await this.repository.delete(model);
-            this.notificationImplementation.deleteTriggerNotification(model.id);
+            for (const triggerId of model.triggersId) {
+                this.notificationImplementation.deleteTriggerNotification(triggerId);
+            }
         } catch (error) {
             throw new Error(error);
         }

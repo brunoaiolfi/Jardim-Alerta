@@ -1,13 +1,16 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, BaseEntity } from "typeorm";
+import { Entity, Column, ManyToOne, BaseEntity, PrimaryGeneratedColumn } from "typeorm";
 import { Plants } from "./Plants";
 
 @Entity()
-export class NotificationTrigger extends BaseEntity{
-    @PrimaryColumn()
-    id: string; // ID da trigger (string gerada pela lib)
+export class NotificationTrigger extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: string;
 
     @Column("simple-array")
     weekDay: number[]; // 0 = Domingo, 1 = Segunda, etc.
+
+    @Column("simple-array")
+    triggersId: string[]; // IDs das triggers (string gerada pela lib)
 
     @Column()
     time: string; // Horário no formato HH:mm (ex: "08:00")
