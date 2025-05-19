@@ -90,13 +90,13 @@ android {
         debug {
             storeFile file('generated.keystore')
             storePassword 'android'
-            keyAlias 'your-key-alias'
+            keyAlias 'jardimAlerta'
             keyPassword 'android'
         } 
         release {
             storeFile file('generated.keystore')
             storePassword 'android'
-            keyAlias 'your-key-alias'
+            keyAlias 'jardimAlerta'
             keyPassword 'android'
         }
     }

@@ -38,11 +38,7 @@ export class NotificationsImplementation implements INotificationsImplementation
 
         await notifee.requestPermission();
 
-        if (settings.android.alarm == AndroidNotificationSetting.ENABLED) {
-            //Create timestamp trigger
-        } else {
-            // Show some user information to educate them on what exact alarm permission is,
-            // and why it is necessary for your app functionality, then send them to system preferences:
+        if (settings.android.alarm !== AndroidNotificationSetting.ENABLED) {
             await notifee.openAlarmPermissionSettings();
         }
 
