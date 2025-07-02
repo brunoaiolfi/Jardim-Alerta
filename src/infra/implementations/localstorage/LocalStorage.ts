@@ -1,9 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export interface ILocalStorageImplementation<T> {
-    getItem: (key: string) => Promise<T | null>;
-    setItem: (key: string, value: T) => Promise<void>;
-}
+import { ILocalStorageImplementation } from './ILocalStorage';
 
 export class LocalStorageImplementation<T> implements ILocalStorageImplementation<T> {
     async getItem(key: string): Promise<T | null> {
@@ -15,5 +11,9 @@ export class LocalStorageImplementation<T> implements ILocalStorageImplementatio
 
     async setItem(key: string, value: T): Promise<void> {
         await AsyncStorage.setItem(key, JSON.stringify(value));
+    }
+
+    async removeItem(key: string): Promise<void> {
+        await AsyncStorage.removeItem(key);
     }
 }

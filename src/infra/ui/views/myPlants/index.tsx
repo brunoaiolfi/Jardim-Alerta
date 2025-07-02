@@ -3,12 +3,12 @@ import { EnumTextVariant } from "../../components/text/@types";
 import * as Styles from "./styles";
 import { useUser } from "../../hooks/useUser";
 import { useEffect, useState } from "react";
-import { Alert, FlatList } from "react-native";
+import { Alert } from "react-native";
 import { Environment } from "../../../../domain/models/Environment";
-import { getAplicEnvironments } from "../../../../application/applications/environments/factory";
+import { getAplicEnvironments } from "../../../../application/environments/factory";
 import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
-import { getAplicPlants } from "../../../../application/applications/plants/factory";
+import { getAplicPlants } from "../../../../application/plants/factory";
 import { Plant } from "../../../../domain/models/Plant";
 import { CardPlant } from "../../components/plants/card";
 import { useNavigation } from "@react-navigation/native";
@@ -127,7 +127,7 @@ export function MyPlants() {
                 )}
             />
 
-            <Styles.PlantsList 
+            <Styles.PlantsList
                 data={plants}
                 numColumns={2}
                 keyExtractor={(item) => item.id.toString()}

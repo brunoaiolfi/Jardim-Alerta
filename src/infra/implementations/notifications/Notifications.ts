@@ -1,23 +1,5 @@
 import notifee, { AlarmType, AndroidNotificationSetting, RepeatFrequency, TriggerType } from '@notifee/react-native';
-
-export interface INotificationsImplementation {
-    createChannel: () => Promise<void>;
-    sendNotification: (bodyNotification: IBodyNotification) => Promise<void>;
-    createTriggerNotification: (bodyNotification: IBodyNotification, when: IWhenTriggerNotification) => Promise<string[]>;
-    deleteTriggerNotification: (id: string) => Promise<void>;
-    editTriggerNotification: (id: string, bodyNotification: IBodyNotification, when: IWhenTriggerNotification) => Promise<string[]>;
-}
-
-export interface IBodyNotification {
-    title: string;
-    body: string;
-}
-
-interface IWhenTriggerNotification {
-    days: number[];
-    hours: number;
-    minutes: number;
-}
+import { IBodyNotification, INotificationsImplementation, IWhenTriggerNotification } from './INotifications';
 
 export class NotificationsImplementation implements INotificationsImplementation {
     private static instance: NotificationsImplementation;

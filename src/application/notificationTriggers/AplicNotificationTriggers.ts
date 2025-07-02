@@ -1,9 +1,10 @@
-import { NotificationTrigger } from "../../../infra/database/entities/NotificationTrigger";
-import { IRepNotificationTriggers } from "../../../infra/database/repositories/notificationTriggers/RepNotificationTriggers";
-import { INotificationsImplementation } from "../../../infra/implementations/notifications/Notifications";
+import { NotificationTrigger } from "../../infra/database/entities/NotificationTrigger";
+import { IRepNotificationTriggers } from "../../infra/database/repositories/notificationTriggers/RepNotificationTriggers";
+import { INotificationsImplementation } from "../../infra/implementations/notifications/Notifications";
 import { AplicBase } from "../base/AplicBase";
+import { IAplicNotificationTriggers } from "./IAplicNotificationTriggers";
 
-export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> {
+export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> implements IAplicNotificationTriggers {
 
     private notificationImplementation: INotificationsImplementation;
 

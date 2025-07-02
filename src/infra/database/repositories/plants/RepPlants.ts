@@ -1,6 +1,5 @@
 import { Plants } from "../../entities/Plants";
-import { IRepBase, RepBase } from "../base/RepBase";
+import { RepBase } from "../base/RepBase";
+import { IRepPlants } from "./IRepPlants";
 
-export interface IRepPlants extends IRepBase<Plants> { }
-
-export class RepPlants extends RepBase<Plants> { }
+export class RepPlants extends RepBase<Plants> implements IRepPlants{ }

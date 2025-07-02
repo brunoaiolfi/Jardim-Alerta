@@ -1,6 +1,5 @@
 import { NotificationTrigger } from "../../entities/NotificationTrigger";
-import { IRepBase, RepBase } from "../base/RepBase";
+import { RepBase } from "../base/RepBase";
+import { IRepNotificationTriggers } from "./IRepNotificationTriggers";
 
-export interface IRepNotificationTriggers extends IRepBase<NotificationTrigger> { }
-
-export class RepNotificationTriggers extends RepBase<NotificationTrigger> { }
+export class RepNotificationTriggers extends RepBase<NotificationTrigger> implements IRepNotificationTriggers { }

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { getAplicNotificationTriggers } from "../../../../application/applications/notificationTriggers/factory";
+import { getAplicNotificationTriggers } from "../../../../application/notificationTriggers/factory";
 import { TextComponent } from "../../components/text";
 import { Alert } from "react-native";
 import { EnumTextVariant } from "../../components/text/@types";

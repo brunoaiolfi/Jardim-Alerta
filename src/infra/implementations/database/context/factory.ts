@@ -1,9 +1,10 @@
-import { DatabaseContextImplementation, IDatabaseImplementation } from "./DatabaseContext";
+import { DatabaseContextImplementation } from "./DatabaseContext";
 import { AppDataSource } from "../../../database";
+import { IDatabaseContext } from "./IDatabaseContext";
 
-let databaseContextImplementationInstance: IDatabaseImplementation | null = null;
-
-export function getDatabaseContextImplementation() {
+export function getDatabaseContextImplementation() : IDatabaseContext {
+    let databaseContextImplementationInstance: IDatabaseContext | null = null;
+    
     if (!databaseContextImplementationInstance) {
         databaseContextImplementationInstance = new DatabaseContextImplementation(AppDataSource);
     }

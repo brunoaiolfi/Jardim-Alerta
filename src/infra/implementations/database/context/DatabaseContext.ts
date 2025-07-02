@@ -1,12 +1,7 @@
 import { DataSource, EntityTarget, Repository } from "typeorm";
+import { IDatabaseContext } from "./IDatabaseContext";
 
-export interface IDatabaseImplementation {
-    initialize: () => Promise<DataSource>;
-    getRepository: (entityTarget: EntityTarget<any>) => Repository<any>;
-}
-
-
-export class DatabaseContextImplementation implements IDatabaseImplementation {
+export class DatabaseContextImplementation implements IDatabaseContext {
 
     private readonly _dataSource: DataSource;
 

@@ -1,10 +1,6 @@
-import { IRepBase } from "../../../infra/database/repositories/base/RepBase";
-import { IFindOptions, IEntity } from "../../../infra/implementations/database/DAO/DAO";
-
-interface IAplicBase<T> {
-    get: (options?: IFindOptions<T>) => Promise<T[]>;
-    save: (model: IEntity) => Promise<void>;
-}
+import { IRepBase } from "../../infra/database/repositories/base/RepBase";
+import { IFindOptions, IEntity } from "../../infra/implementations/database/DAO/DAO";
+import { IAplicBase } from "./IAplicBase";
 
 export class AplicBase<T> implements IAplicBase<T> {
     protected readonly repository: IRepBase<T>;

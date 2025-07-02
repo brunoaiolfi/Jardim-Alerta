@@ -3,7 +3,7 @@ import { PlantImage } from '../../components/plants/image';
 import * as Styles from './styles';
 import { useEffect, useState } from 'react';
 import { Plant } from '../../../../domain/models/Plant';
-import { getAplicPlants } from '../../../../application/applications/plants/factory';
+import { getAplicPlants } from '../../../../application/plants/factory';
 import { LoadingView } from '../loading';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { lightTheme } from '../../themes/lightTheme';
@@ -18,7 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { getNotificationImplementation } from '../../../implementations/notifications/factory';
 import { Alert } from 'react-native';
 import { EnumWaterFrequency } from '../../../database/entities/WaterFrequency';
-import { getAplicNotificationTriggers } from '../../../../application/applications/notificationTriggers/factory';
+import { getAplicNotificationTriggers } from '../../../../application/notificationTriggers/factory';
 import { NotificationTrigger } from '../../../database/entities/NotificationTrigger';
 
 const dictDays = {

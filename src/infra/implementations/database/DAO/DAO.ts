@@ -1,14 +1,7 @@
-import { BaseEntity, FindManyOptions, Repository } from "typeorm";
+import { Repository } from "typeorm";
+import { IDAOImplementation, IEntity, IFindOptions } from "./IDAO";
 
-export interface IFindOptions<T> extends FindManyOptions<T> {}
-export interface IEntity extends BaseEntity {}
-export interface IDAOImplementation<T> {
-    select: (options?: IFindOptions<T>) => Promise<T[]>;
-    insert: (model: T) => Promise<void>;
-    delete: (model: T) => Promise<void>;
-}
-
-export class DAOImplementation<T extends IEntity> implements IDAOImplementation<T>{
+export class DAOImplementation<T extends IEntity> implements IDAOImplementation<T> {
     private readonly repository: Repository<T>;
 
     constructor(repository: Repository<T>) {

@@ -6,7 +6,7 @@ import { TextInputComponent } from "../../components/textInput";
 import * as Styles from "./styles";
 import { useUser } from "../../hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
-import { getAplicUser } from "../../../../application/applications/user/factory";
+import { getAplicUser } from "../../../../application/user/factory";
 
 export function UserNameForm() {
 

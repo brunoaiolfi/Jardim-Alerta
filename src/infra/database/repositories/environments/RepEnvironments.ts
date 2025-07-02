@@ -1,6 +1,5 @@
 import { Environments } from "../../entities/Environments";
-import { IRepBase, RepBase } from "../base/RepBase";
+import { RepBase } from "../base/RepBase";
+import { IRepEnvironments } from "./IRepEnvironments";
 
-export interface IRepEnvironments extends IRepBase<Environments> { }
-
-export class RepEnvironments extends RepBase<Environments> { }
+export class RepEnvironments extends RepBase<Environments> implements IRepEnvironments{ }
