@@ -33,11 +33,11 @@ npm start
 
 ```
 src/
-├── domain/ # Models (entidades e estruturas de dados)
-├── applications/ # Casos de uso, organizados por contexto seguindo o CCP
+├── domain/ # Models e UseCases
+├── applications/
 ├── infra/
-│ ├── database/ # Configuração e entidades do TypeORM
-│ ├── implementations/ # Implementações dos repositórios e serviços
+│ ├── database/ # Configuração e entidades do banco
+│ ├── implementations/ # Implementações dos repositórios, serviços e bibliotecas
 │ ├── ui/ # Componentes visuais e telas
 │ └── assets/ # Imagens, fontes, ícones etc.
 ```
