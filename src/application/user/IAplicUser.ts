@@ -1,4 +1,4 @@
-import { User } from "../../domain/models/User";
+import { User } from "../../domain/users/models/User";
 
 export interface IAplicUser {
     getUser: () => Promise<User | null>;

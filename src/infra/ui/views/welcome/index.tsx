@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getAplicUser } from "../../../../application/user/factory";
 
 export function Welcome() {
-    
+
     const aplicUser = getAplicUser();
     const navigation = useNavigation();
     const { saveUser } = useUser();
@@ -22,13 +22,13 @@ export function Welcome() {
             navigate("UserNameForm");
         }
     }
- 
+
     function navigate(view: "UserNameForm" | "Dashboard") {
         navigation.navigate(view);
     }
-    
+
     return (
-        <Styles.Container>  
+        <Styles.Container>
             <TextComponent
                 text={`Gerencie \n suas plantas de \n forma fácil`}
                 variant={EnumTextVariant.Heading}

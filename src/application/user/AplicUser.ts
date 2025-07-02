@@ -1,5 +1,6 @@
-import { User } from '../../domain/models/User';
-import { ILocalStorageImplementation } from '../../infra/implementations/localstorage/LocalStorage';
+import { User } from '../../domain/users/models/User';
+import { ValidateUserUseCase } from '../../domain/users/useCases/ValidateUser';
+import { ILocalStorageImplementation } from '../../infra/implementations/localstorage/ILocalStorage';
 import { IAplicUser } from './IAplicUser';
 
 export class AplicUser implements IAplicUser {
@@ -11,6 +12,10 @@ export class AplicUser implements IAplicUser {
     }
 
     public async saveUser(user: User): Promise<void> {
+        if (!ValidateUserUseCase.validate(user)) {
+            throw new Error("Usuário inválido.");
+        }
+
         this.localStorage.setItem(this.userKey, user);
     }
 

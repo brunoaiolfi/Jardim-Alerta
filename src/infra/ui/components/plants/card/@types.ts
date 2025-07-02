@@ -1,4 +1,4 @@
-import { Plant } from "../../../../../domain/models/Plant";
+import { Plant } from "../../../../../domain/plants/models/Plant";
 
 export interface ICardPlants {
     plant: Plant,

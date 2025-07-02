@@ -4,12 +4,12 @@ import * as Styles from "./styles";
 import { useUser } from "../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import { Environment } from "../../../../domain/models/Environment";
+import { Environment } from "../../../../domain/plants/models/Environment";
 import { getAplicEnvironments } from "../../../../application/environments/factory";
 import { ButtonComponent } from "../../components/button";
 import { EnumButtonVariant } from "../../components/button/@types";
 import { getAplicPlants } from "../../../../application/plants/factory";
-import { Plant } from "../../../../domain/models/Plant";
+import { Plant } from "../../../../domain/plants/models/Plant";
 import { CardPlant } from "../../components/plants/card";
 import { useNavigation } from "@react-navigation/native";
 

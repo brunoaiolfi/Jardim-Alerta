@@ -1,5 +1,5 @@
 import { Plants } from "../../infra/database/entities/Plants";
-import { IRepPlants } from "../../infra/database/repositories/plants/RepPlants";
+import { IRepPlants } from "../../infra/database/repositories/plants/IRepPlants";
 import { AplicBase } from "../base/AplicBase";
 import { IAplicPlants } from "./IAplicPlants";
 

@@ -1,4 +1,4 @@
-import { IDAOImplementation, IFindOptions, IEntity } from './../../../implementations/database/DAO/DAO';
+import { IDAOImplementation, IEntity, IFindOptions } from '../../../implementations/database/DAO/IDAO';
 import { IRepBase } from './IRepBase';
 
 export class RepBase<T extends IEntity> implements IRepBase<T> {

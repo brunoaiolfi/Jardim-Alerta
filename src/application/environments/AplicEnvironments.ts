@@ -1,6 +1,6 @@
 import { Environments } from "../../infra/database/entities/Environments";
-import { IRepEnvironments } from "../../infra/database/repositories/environments/RepEnvironments";
-import { IEntity } from "../../infra/implementations/database/DAO/DAO";
+import { IRepEnvironments } from "../../infra/database/repositories/environments/IRepEnvironments";
+import { IEntity } from "../../infra/implementations/database/DAO/IDAO";
 import { AplicBase } from "../base/AplicBase";
 import { IAplicEnvironments } from "./IAplicEnvironments";
 

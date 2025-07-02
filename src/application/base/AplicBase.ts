@@ -1,5 +1,5 @@
-import { IRepBase } from "../../infra/database/repositories/base/RepBase";
-import { IFindOptions, IEntity } from "../../infra/implementations/database/DAO/DAO";
+import { IRepBase } from "../../infra/database/repositories/base/IRepBase";
+import { IEntity, IFindOptions } from "../../infra/implementations/database/DAO/IDAO";
 import { IAplicBase } from "./IAplicBase";
 
 export class AplicBase<T> implements IAplicBase<T> {

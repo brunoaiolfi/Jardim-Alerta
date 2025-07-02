@@ -1,4 +1,4 @@
-import { Plant } from "./Plant";
+import { Plant } from "../../plants/models/Plant";
 
 export class NotificationTrigger {
     id: string;

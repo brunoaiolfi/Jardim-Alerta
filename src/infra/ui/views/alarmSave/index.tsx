@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { PlantImage } from '../../components/plants/image';
 import * as Styles from './styles';
 import { useEffect, useState } from 'react';
-import { Plant } from '../../../../domain/models/Plant';
+import { Plant } from '../../../../domain/plants/models/Plant';
 import { getAplicPlants } from '../../../../application/plants/factory';
 import { LoadingView } from '../loading';
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -116,25 +116,18 @@ export function AlarmSave() {
 
     async function handleSavePlant(values: ISavePlant) {
         try {
-
-            const bodyNotification = {
-                title: "Heeey 🌱",
-                body: `Está na hora de cuidar da sua ${plant?.name}! Lembre-se ${plant?.waterTips}!`,
-            }
-
-            const triggersId = await notificationsImplementation.createTriggerNotification(bodyNotification, values);
-
             const newNotificationTrigger = new NotificationTrigger();
+
             newNotificationTrigger.plantId = plant.id;
-            newNotificationTrigger.triggersId = triggersId;
+            newNotificationTrigger.plant = plant;
             newNotificationTrigger.weekDay = values.days;
-            newNotificationTrigger.time = `${values.hours}:${values.minutes}`;
+            newNotificationTrigger.time = `${values.hours.toString().padStart(2, '0')}:${values.minutes.toString().padStart(2, '0')}`;
 
             await aplicNotificationTriggers.save(newNotificationTrigger);
 
             Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
         } catch (error) {
-            Alert.alert("Ops!", "Não foi possível salvar o lembrete, tente novamente mais tarde!");
+            Alert.alert("Ops!", `Não foi possível salvar o lembrete, tente novamente mais tarde! ${error.message}`);
         }
     }
 

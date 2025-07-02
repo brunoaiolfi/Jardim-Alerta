@@ -1,4 +1,4 @@
-import { User } from "../../domain/models/User";
+import { User } from "../../domain/users/models/User";
 import { getLocalStorageImplementation } from "../../infra/implementations/localstorage/factory";
 import { AplicUser } from "./AplicUser";
 
