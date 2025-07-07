@@ -22,10 +22,15 @@ export function Alarms() {
 
     const handleGetNotificationTriggers = useCallback(async () => {
         try {
-            const notificationTriggers = await aplicNotificationTriggers.get({
+            const resNotificationTriggers = await aplicNotificationTriggers.get({
                 relations: ["plant"],
             });
-            setNotificationTriggers(notificationTriggers);
+
+            if (!resNotificationTriggers.Success) {
+                return Alert.alert("Atenção!", `Ocorreu um erro ao recuperar a notificação ${resNotificationTriggers.Message}`)
+            }
+
+            setNotificationTriggers(resNotificationTriggers.Content);
         } catch (error: any) {
             Alert.alert("Erro ao buscar alarmes", error.message);
         }
@@ -70,7 +75,12 @@ export function Alarms() {
 
         async function deleteAlarm(notificationTrigger: NotificationTrigger) {
             try {
-                await aplicNotificationTriggers.delete(notificationTrigger);
+                const res = await aplicNotificationTriggers.delete(notificationTrigger);
+
+                if (!res.Success) {
+                    return Alert.alert("Atenção!", `Ocorreu um erro ao remover o alarme ${res.Message}`)
+                }
+
                 const triggers = [...notificationTriggers].filter((trigger) => trigger.id !== notificationTrigger.id);
                 setNotificationTriggers(triggers);
             } catch (error: any) {

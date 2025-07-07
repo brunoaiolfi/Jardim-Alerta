@@ -17,8 +17,13 @@ export function Login() {
     async function handleLoginWithGoogle() {
         try {
             setIsLoading(true);
-            const user = await AplicAuth.login();
-            saveUser(user);
+            const res = await AplicAuth.login();
+
+            if (!res.Success) {
+                return Alert.alert("Atenção!", `Ocorreu um erro inesperado ${res.Message}`);
+            }
+
+            saveUser(res.Content);
         } catch (error) {
             Alert.alert("Ocorreu um erro ao tentar fazer login", `Por favor, tente novamente mais tarde.`);
         } finally {

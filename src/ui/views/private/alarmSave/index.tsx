@@ -59,23 +59,24 @@ export function AlarmSave() {
         handleGetData(params?.id || -1);
     }, [])
 
-    async function handleGetData(plantId: number) {
+    async function handleGetData(id: number) {
         try {
-            const plant = await getPlant(plantId);
-            setPlant(plant[0]);
+            const res = await aplicPlant.get({
+                where: {
+                    id
+                },
+            });
+
+            if (!res.Success) {
+                return Alert.alert("Atenção!", `Ocorreu um erro inesperado ${res.Message}`);
+            }
+
+            setPlant(res.Content[0]);
         } catch (error: any) {
             console.error(error);
         } finally {
             setIsLoading(false);
         }
-    }
-
-    async function getPlant(id: number) {
-        return await aplicPlant.get({
-            where: {
-                id
-            },
-        });
     }
 
     function handleSelectDate(date: keyof typeof dictDays) {
@@ -113,7 +114,11 @@ export function AlarmSave() {
             newNotificationTrigger.weekDay = values.days;
             newNotificationTrigger.time = `${values.hours.toString().padStart(2, '0')}:${values.minutes.toString().padStart(2, '0')}`;
 
-            await aplicNotificationTriggers.save(newNotificationTrigger);
+            const res = await aplicNotificationTriggers.save(newNotificationTrigger);
+
+            if (!res.Success) {
+                return Alert.alert("Atenção!", `Ocorreu um erro ao salvar o alarme ${res.Message}`)
+            }
 
             Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
         } catch (error) {

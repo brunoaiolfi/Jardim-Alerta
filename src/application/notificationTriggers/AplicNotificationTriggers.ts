@@ -1,4 +1,5 @@
 import { ValidateNotificationTriggerUseCase } from "../../domain/notifications/useCases/ValidateNotificationTrigger";
+import { Result } from "../../domain/result/model/Result";
 import { NotificationTrigger } from "../../infra/database/entities/NotificationTrigger";
 import { IRepNotificationTriggers } from "../../infra/database/repositories/notificationTriggers/IRepNotificationTriggers";
 import { INotificationsImplementation } from "../../infra/implementations/notifications/INotifications";
@@ -17,22 +18,24 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
         this.notificationImplementation = notificationImpl;
     }
 
-    public async delete(entidade: NotificationTrigger): Promise<void> {
+    public async delete(entidade: NotificationTrigger) {
         try {
             await this.repository.delete(entidade);
             for (const triggerId of entidade.triggersId) {
                 this.notificationImplementation.deleteTriggerNotification(triggerId);
             }
+
+            return Result.Ok(null);
         } catch (error) {
-            throw new Error(error);
+            return Result.Fail(error.message)
         }
     }
 
-    public override async save(entidade: NotificationTrigger): Promise<void> {
+    public override async save(entidade: NotificationTrigger): Promise<Result<null>> {
         try {
             const bodyNotification = {
                 title: "Heeey 🌱",
-                body: `Está na hora de cuidar da sua ${entidade.plant?.name}! Lembre-se ${entidade.plant?.waterTips}!`,
+                body: `Está na hora de cuidar da sua ${entidade.plant?.name}!`,
             }
 
             const triggersId = await this.notificationImplementation.createTriggerNotification(bodyNotification, {
@@ -43,19 +46,21 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
 
             entidade.triggersId = triggersId;
 
-            if (!ValidateNotificationTriggerUseCase.validate({
+            const validateResult = ValidateNotificationTriggerUseCase.validate({
                 id: entidade.id,
                 plantId: entidade.plantId,
                 time: entidade.time,
                 triggersId: entidade.triggersId,
                 weekDay: entidade.weekDay
-            })) {
-                throw new Error("Notificação inválida.");
+            });
+
+            if (!validateResult.Success) {
+                throw new Error(validateResult.Message);
             }
 
-            await super.save(entidade);
+            return await super.save(entidade);
         } catch (error) {
-            throw new Error(error);
+            return Result.Fail(error.message)
         }
     }
 }

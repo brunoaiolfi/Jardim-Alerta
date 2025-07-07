@@ -34,16 +34,17 @@ export function MyPlants() {
 
     async function handleGetEnvironments() {
         try {
-            const environments = await getEnvironments();
-            setEnvironments(environments);
-            handleSelectEnvironment(environments[0]);
+            const res = await aplicEnvironments.get();
+
+            if (!res.Success) {
+                Alert.alert("Atenção!", `Ocorreu um erro ao recuperar os dados ${res.Message}`)
+            }
+
+            setEnvironments(res.Content);
+            handleSelectEnvironment(res.Content[0]);
         } catch (error: any) {
             Alert.alert("Erro ao buscar ambientes", error.message);
         }
-    }
-
-    async function getEnvironments(): Promise<Environments[]> {
-        return await aplicEnvironments.get();
     }
 
     function handleSelectEnvironment(environment: Environments) {
@@ -54,27 +55,27 @@ export function MyPlants() {
     async function handleGetPlantsByEnvironment(environment: Environments) {
         try {
             const { id } = environment;
-            const plants = await getPlantsByEnvironment(id);
+            const res = await aplicPlants.get({
+                relations: ["environments"],
+                where: {
+                    environments: {
+                        id: id
+                    }
+                },
+                select: {
+                    name: true,
+                    id: true,
+                }
+            });
 
-            setPlants(plants);
+            if (!res.Success) {
+                return Alert.alert("Atenção!", `Ocorreu ao recuperar os dados! ${res.Message}`);
+            }
+
+            setPlants(res.Content);
         } catch (error: any) {
             Alert.alert("Erro ao buscar plantas", error.message);
         }
-    }
-
-    async function getPlantsByEnvironment(environmentId: number): Promise<Plants[]> {
-        return await aplicPlants.get({
-            relations: ["environments"],
-            where: {
-                environments: {
-                    id: environmentId
-                }
-            },
-            select: {
-                name: true,
-                id: true,
-            }
-        });
     }
 
     async function handleSelectPlant(id: number) {
@@ -85,11 +86,16 @@ export function MyPlants() {
 
     async function handleLogout() {
         try {
-            await aplicAuth.logout();
+            const res = await aplicAuth.logout();
+
+            if (!res.Success) {
+                return Alert.alert("Atenção!", `Ocorreu um erro inesperado ${res.Message}`);
+            }
+
             saveUser(null);
         } catch (error: any) {
             Alert.alert("Erro ao desconectar", error.message);
-        } 
+        }
     }
 
     return (
@@ -108,7 +114,7 @@ export function MyPlants() {
                     />
                 </Styles.HeaderWrapper>
 
-                <ButtonComponent 
+                <ButtonComponent
                     onPress={() => handleLogout()}
                     variant={EnumButtonVariant.Transparent}
                     icon="log-out"
