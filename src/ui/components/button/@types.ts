@@ -21,4 +21,5 @@ export interface IButtonProps {
     iconFamily?: "AntDesign" | "Feather";
     iconSize?: number;
     iconColor?: string;
+    isLoading?: boolean;
 }
