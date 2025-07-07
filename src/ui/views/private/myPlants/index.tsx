@@ -12,7 +12,6 @@ import { getAplicPlants } from "../../../../application/plants/factory";
 import { Plant } from "../../../../domain/plants/models/Plant";
 import { CardPlant } from "../../../components/plants/card";
 import { useNavigation } from "@react-navigation/native";
-import auth from '@react-native-firebase/auth';
 import { getAplicAuth } from "../../../../application/auth/factory";
 
 export function MyPlants() {

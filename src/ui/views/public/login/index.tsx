@@ -41,6 +41,7 @@ export function Login() {
                 text="|   Continuar com o Google"
                 width="300px"
                 isDisabled={isLoading}
+                isLoading={isLoading}
             />
 
         </Styles.Container>
