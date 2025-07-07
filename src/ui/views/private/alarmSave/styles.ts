@@ -3,12 +3,15 @@ import styled from "styled-components/native";
 export const Container = styled.View`
     flex: 1;
 
+    height: 100%;
+    width: 100%;
+
     background-color: #ffffff;
 `;
 
 export const Header = styled.View`
     width: 100%;
-    height: 30%;
+    flex: 3
 `;
 
 export const ReturnButton = styled.TouchableOpacity`
@@ -26,47 +29,28 @@ export const ReturnButton = styled.TouchableOpacity`
     height: 48px;
 `;
 
-export const Content = styled.ScrollView`
+export const Content = styled.View`
     width: 100%;
-    height: 70%;
+    flex: 5;
 
     padding: 22px;
+`;
+
+export const Formulario = styled.View`
+    
+    width: 100%;
+    flex: 5;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible ;
 `;
 
 export const Info = styled.View`
     margin-top: 24px;
     width: inherit;
-`;
-
-export const WaterContainer = styled.View`
-    width: 100%;
-
-    padding: 16px;
-    background-color: #D6EDFF;
-
-    border-radius: 20px;
-
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-`;
-
-export const WaterIconContainer = styled.View`
-    width: 56px;
-    height: 56px;
-
-    border-radius: 56px;
-
-    align-items: center;
-    justify-content: center;
-
-    background-color:rgb(189, 222, 250);
-`;
-
-export const WaterTip = styled.Text`
-    color: #5DADEC;
-    font-size: 16px;
-    width: 70%;
 `;
 
 export const Wrapper = styled.View`

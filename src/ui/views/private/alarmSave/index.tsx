@@ -14,9 +14,7 @@ import { EnumButtonVariant } from '../../../components/button/@types';
 import * as Yup from "yup";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getNotificationImplementation } from '../../../../infra/implementations/notifications/factory';
 import { Alert } from 'react-native';
-import { EnumWaterFrequency } from '../../../../infra/database/entities/WaterFrequency';
 import { getAplicNotificationTriggers } from '../../../../application/notificationTriggers/factory';
 import { NotificationTrigger } from '../../../../infra/database/entities/NotificationTrigger';
 import { Plants } from '../../../../infra/database/entities/Plants';
@@ -48,7 +46,6 @@ export function AlarmSave() {
     const navigation = useNavigation();
     const aplicPlant = getAplicPlants();
     const aplicNotificationTriggers = getAplicNotificationTriggers();
-    const notificationsImplementation = getNotificationImplementation();
 
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<ISavePlant>({
         resolver: yupResolver(schema),
@@ -57,12 +54,6 @@ export function AlarmSave() {
     const [plant, setPlant] = useState<Plants>()
     const [isLoading, setIsLoading] = useState(true);
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
-
-    const dictWaterFrequency = {
-        [EnumWaterFrequency.DAY]: "dia",
-        [EnumWaterFrequency.WEEK]: "semana",
-        [EnumWaterFrequency.MONTH]: "mês",
-    }
 
     useEffect(() => {
         handleGetData(params?.id || -1);
@@ -84,7 +75,6 @@ export function AlarmSave() {
             where: {
                 id
             },
-            relations: ["water_frequency"]
         });
     }
 
@@ -166,89 +156,74 @@ export function AlarmSave() {
                         text={plant?.about || ""}
                     />
                 </Styles.Info>
-                <Styles.Info>
-                    <Styles.WaterContainer>
-                        <Styles.WaterIconContainer>
-                            <MaterialCommunityIcons name="water" size={40} color="#5DADEC" />
-                        </Styles.WaterIconContainer>
 
-                        <Styles.WaterTip>
-                            {plant?.waterTips}
-                        </Styles.WaterTip>
-                    </Styles.WaterContainer>
-                </Styles.Info>
-                <Styles.Info>
-                    <TextComponent
-                        text="Escolha o melhor horário para ser lembrado:"
-                        fontWeight='300'
-                        fontSize='14px'
-                        color={"#000000"}
-                    />
-                    {
-                        plant?.water_frequency?.frequency &&
+                <Styles.Formulario>
+                    <Styles.Info>
                         <TextComponent
-                            text={`Recomendamos regar ${plant?.frequencyTimes} vezes por ${dictWaterFrequency[plant?.water_frequency?.frequency]}!`}
+                            text="Escolha o melhor horário para ser lembrado:"
                             fontWeight='300'
                             fontSize='14px'
                             color={"#000000"}
-                        />}
-                </Styles.Info>
-                <Styles.Info>
-                    <Styles.Wrapper>
-                        {
-                            Object.keys(dictDays).map(key =>
-                                <ButtonComponent
-                                    onPress={() => handleSelectDate(key)}
-                                    text={dictDays[key]}
-                                    width={"40px"}
-                                    height={"40px"}
-                                    variant={datesSelected.find(d => d === key) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
-                                    padding={"0px"}
-                                    borderRadius='999px'
-                                    key={key}
+                        />
+                    </Styles.Info>
+                    <Styles.Info>
+                        <Styles.Wrapper>
+                            {
+                                Object.keys(dictDays).map(key =>
+                                    <ButtonComponent
+                                        onPress={() => handleSelectDate(key)}
+                                        text={dictDays[key]}
+                                        width={"40px"}
+                                        height={"40px"}
+                                        variant={datesSelected.find(d => d === key) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
+                                        padding={"0px"}
+                                        borderRadius='999px'
+                                        key={key}
+                                    />
+                                )
+                            }
+                            {
+                                errors?.days?.message &&
+                                <TextComponent
+                                    text={errors?.days?.message}
+                                    color={"#FF0000"}
                                 />
-                            )
-                        }
-                        {
-                            errors?.days?.message &&
-                            <TextComponent
-                                text={errors?.days?.message}
-                                color={"#FF0000"}
+                            }
+                        </Styles.Wrapper>
+                    </Styles.Info>
+                    <Styles.Info>
+                        <Styles.Wrapper>
+                            <Controller
+                                name="hours"
+                                control={control}
+                                render={({ field: { value } }) => (
+                                    <Styles.InputTime
+                                        value={value?.toString()}
+                                        onChangeText={handleChangeHours}
+                                        maxLength={2}
+                                        hasError={!!errors?.hours?.message}
+                                    />
+                                )}
                             />
-                        }
-                    </Styles.Wrapper>
-                </Styles.Info>
-                <Styles.Info>
-                    <Styles.Wrapper>
-                        <Controller
-                            name="hours"
-                            control={control}
-                            render={({ field: { value } }) => (
-                                <Styles.InputTime
-                                    value={value?.toString()}
-                                    onChangeText={handleChangeHours}
-                                    maxLength={2}
-                                    hasError={!!errors?.hours?.message}
-                                />
-                            )}
-                        />
-                        <TextComponent
-                            text=':'
-                        />
-                        <Controller
-                            name="minutes"
-                            control={control}
-                            render={({ field: { value } }) => (
-                                <Styles.InputTime
-                                    value={value?.toString()}
-                                    onChangeText={handleChangeMinutes}
-                                    maxLength={2}
-                                    hasError={!!errors?.minutes?.message}
-                                />
-                            )}
-                        />
-                    </Styles.Wrapper>
-                </Styles.Info>
+                            <TextComponent
+                                text=':'
+                            />
+                            <Controller
+                                name="minutes"
+                                control={control}
+                                render={({ field: { value } }) => (
+                                    <Styles.InputTime
+                                        value={value?.toString()}
+                                        onChangeText={handleChangeMinutes}
+                                        maxLength={2}
+                                        hasError={!!errors?.minutes?.message}
+                                    />
+                                )}
+                            />
+                        </Styles.Wrapper>
+                    </Styles.Info>
+                </Styles.Formulario>
+
             </Styles.Content>
 
             <Styles.Footer>
