@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import org.jetbrains.annotations.Nullable;
+import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
