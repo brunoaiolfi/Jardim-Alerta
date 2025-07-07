@@ -13,11 +13,11 @@ export class AplicBase<T> implements IAplicBase<T> {
         return await this.repository.select(options);
     }
 
-    public async save(model: IEntity): Promise<void> {
-        await this.repository.insert(model);
+    public async save(entidade: IEntity): Promise<void> {
+        await this.repository.insert(entidade);
     }
 
-    public async delete(model: IEntity): Promise<void> {
-        await this.repository.delete(model);
+    public async delete(entidade: IEntity): Promise<void> {
+        await this.repository.delete(entidade);
     }
 }

@@ -56,7 +56,7 @@ export class NotificationsImplementation implements INotificationsImplementation
                 timestamp: this.getNextAlarmDate(day, hours, minutes).getTime(),
                 repeatFrequency: RepeatFrequency.WEEKLY,
                 alarmManager: {
-                    type: AlarmType.SET_EXACT_AND_ALLOW_WHILE_IDLE
+                    type: AlarmType.SET_EXACT_AND_ALLOW_WHILE_IDLE,
                 }
             })
 
@@ -70,12 +70,18 @@ export class NotificationsImplementation implements INotificationsImplementation
         const now = new Date();
         const currentDay = now.getDay();
 
+        const target = new Date(now);
         const daysUntil = (dayOfWeek - currentDay + 7) % 7;
 
-        now.setDate(now.getDate() + daysUntil);
-        now.setHours(hour, minutes, 0, 0);
+        target.setDate(target.getDate() + daysUntil);
+        target.setHours(hour, minutes, 0, 0);
 
-        return now;
+        if (target <= now) {
+            target.setDate(target.getDate() + 7);
+        }
+
+        return target;
+
     }
 
     async deleteTriggerNotification(id: string) {
@@ -90,7 +96,7 @@ export class NotificationsImplementation implements INotificationsImplementation
 
         for (const day of days) {
             const newId = await notifee.createTriggerNotification({
-                id,                
+                id,
                 title,
                 body,
                 android: {

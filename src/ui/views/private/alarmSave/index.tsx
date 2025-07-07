@@ -2,7 +2,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { PlantImage } from '../../../components/plants/image';
 import * as Styles from './styles';
 import { useEffect, useState } from 'react';
-import { Plant } from '../../../../domain/plants/models/Plant';
 import { getAplicPlants } from '../../../../application/plants/factory';
 import { LoadingView } from '../../public/loading';
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -20,6 +19,7 @@ import { Alert } from 'react-native';
 import { EnumWaterFrequency } from '../../../../infra/database/entities/WaterFrequency';
 import { getAplicNotificationTriggers } from '../../../../application/notificationTriggers/factory';
 import { NotificationTrigger } from '../../../../infra/database/entities/NotificationTrigger';
+import { Plants } from '../../../../infra/database/entities/Plants';
 
 const dictDays = {
     [0]: 'D',
@@ -54,7 +54,7 @@ export function AlarmSave() {
         resolver: yupResolver(schema),
     })
 
-    const [plant, setPlant] = useState<Plant>()
+    const [plant, setPlant] = useState<Plants>()
     const [isLoading, setIsLoading] = useState(true);
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
 

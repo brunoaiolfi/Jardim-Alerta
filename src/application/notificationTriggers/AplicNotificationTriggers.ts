@@ -17,10 +17,10 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
         this.notificationImplementation = notificationImpl;
     }
 
-    public async delete(model: NotificationTrigger): Promise<void> {
+    public async delete(entidade: NotificationTrigger): Promise<void> {
         try {
-            await this.repository.delete(model);
-            for (const triggerId of model.triggersId) {
+            await this.repository.delete(entidade);
+            for (const triggerId of entidade.triggersId) {
                 this.notificationImplementation.deleteTriggerNotification(triggerId);
             }
         } catch (error) {
@@ -28,26 +28,32 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
         }
     }
 
-    public override async save(model: NotificationTrigger): Promise<void> {
+    public override async save(entidade: NotificationTrigger): Promise<void> {
         try {
             const bodyNotification = {
                 title: "Heeey 🌱",
-                body: `Está na hora de cuidar da sua ${model.plant?.name}! Lembre-se ${model.plant?.waterTips}!`,
+                body: `Está na hora de cuidar da sua ${entidade.plant?.name}! Lembre-se ${entidade.plant?.waterTips}!`,
             }
 
             const triggersId = await this.notificationImplementation.createTriggerNotification(bodyNotification, {
-                days: model.weekDay,
-                hours: parseInt(model.time.split(':')[0]),
-                minutes: parseInt(model.time.split(':')[1]),
+                days: entidade.weekDay,
+                hours: parseInt(entidade.time.split(':')[0]),
+                minutes: parseInt(entidade.time.split(':')[1]),
             });
 
-            model.triggersId = triggersId;
-            
-            if (!ValidateNotificationTriggerUseCase.validate(model)) {
+            entidade.triggersId = triggersId;
+
+            if (!ValidateNotificationTriggerUseCase.validate({
+                id: entidade.id,
+                plantId: entidade.plantId,
+                time: entidade.time,
+                triggersId: entidade.triggersId,
+                weekDay: entidade.weekDay
+            })) {
                 throw new Error("Notificação inválida.");
             }
 
-            await super.save(model);
+            await super.save(entidade);
         } catch (error) {
             throw new Error(error);
         }

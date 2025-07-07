@@ -4,15 +4,15 @@ import * as Styles from "./styles";
 import { useUser } from "../../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import { Environment } from "../../../../domain/plants/models/Environment";
 import { getAplicEnvironments } from "../../../../application/environments/factory";
 import { ButtonComponent } from "../../../components/button";
 import { EnumButtonVariant } from "../../../components/button/@types";
 import { getAplicPlants } from "../../../../application/plants/factory";
-import { Plant } from "../../../../domain/plants/models/Plant";
 import { CardPlant } from "../../../components/plants/card";
 import { useNavigation } from "@react-navigation/native";
 import { getAplicAuth } from "../../../../application/auth/factory";
+import { Environments } from "../../../../infra/database/entities/Environments";
+import { Plants } from "../../../../infra/database/entities/Plants";
 
 export function MyPlants() {
     const { user, saveUser } = useUser();
@@ -23,10 +23,10 @@ export function MyPlants() {
     const aplicEnvironments = getAplicEnvironments();
     const aplicPlants = getAplicPlants();
 
-    const [environments, setEnvironments] = useState<Environment[]>([]);
-    const [environmentSelected, setEnvironmentSelected] = useState<Environment>();
+    const [environments, setEnvironments] = useState<Environments[]>([]);
+    const [environmentSelected, setEnvironmentSelected] = useState<Environments>();
 
-    const [plants, setPlants] = useState<Plant[]>([]);
+    const [plants, setPlants] = useState<Plants[]>([]);
 
     useEffect(() => {
         handleGetEnvironments();
@@ -42,16 +42,16 @@ export function MyPlants() {
         }
     }
 
-    async function getEnvironments(): Promise<Environment[]> {
+    async function getEnvironments(): Promise<Environments[]> {
         return await aplicEnvironments.get();
     }
 
-    function handleSelectEnvironment(environment: Environment) {
+    function handleSelectEnvironment(environment: Environments) {
         setEnvironmentSelected(environment);
         handleGetPlantsByEnvironment(environment);
     }
 
-    async function handleGetPlantsByEnvironment(environment: Environment) {
+    async function handleGetPlantsByEnvironment(environment: Environments) {
         try {
             const { id } = environment;
             const plants = await getPlantsByEnvironment(id);
@@ -62,7 +62,7 @@ export function MyPlants() {
         }
     }
 
-    async function getPlantsByEnvironment(environmentId: number): Promise<Plant[]> {
+    async function getPlantsByEnvironment(environmentId: number): Promise<Plants[]> {
         return await aplicPlants.get({
             relations: ["environments"],
             where: {
