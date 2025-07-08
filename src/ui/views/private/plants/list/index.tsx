@@ -2,14 +2,14 @@ import { TextComponent } from "../../../../components/text";
 import { EnumTextVariant } from "../../../../components/text/@types";
 import * as Styles from "./styles";
 import { useUser } from "../../../../hooks/useUser";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Alert } from "react-native";
 import { getAplicEnvironments } from "../../../../../application/environments/factory";
 import { ButtonComponent } from "../../../../components/button";
 import { EnumButtonVariant } from "../../../../components/button/@types";
 import { getAplicPlants } from "../../../../../application/plants/factory";
 import { CardPlant } from "../../../../components/plants/card";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { getAplicAuth } from "../../../../../application/auth/factory";
 import { Environments } from "../../../../../infra/database/entities/Environments";
 import { Plants } from "../../../../../infra/database/entities/Plants";
@@ -28,9 +28,11 @@ export function PlantsList() {
 
     const [plants, setPlants] = useState<Plants[]>([]);
 
-    useEffect(() => {
-        handleGetEnvironments();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            handleGetEnvironments();
+        }, [])
+    );
 
     async function handleGetEnvironments() {
         try {
@@ -64,6 +66,7 @@ export function PlantsList() {
                 },
                 select: {
                     name: true,
+                    imageUri: true,
                     id: true,
                 }
             });
@@ -168,10 +171,10 @@ export function PlantsList() {
                         onPress={handleCreateEnvironment}
                         variant={EnumButtonVariant.Selected}
                         height="40px"
+                        icon="plus"
                         buttonStyle={{
                             marginRight: 10,
                         }}
-                        icon="plus"
                     />
                 )}
             />
@@ -192,8 +195,9 @@ export function PlantsList() {
                         variant={EnumButtonVariant.Selected}
                         height="150px"
                         width="45%"
+                        borderRadius="20px"
                         buttonStyle={{
-                            marginRight: 10,
+                            margin: 10,
                         }}
                         icon="plus"
                         iconSize={28}

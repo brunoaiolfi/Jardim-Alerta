@@ -12,6 +12,9 @@ export class Plants extends BaseEntity {
 
     @Column()
     about: string
+    
+    @Column()
+    imageUri: string
 
     @ManyToMany(() => Environments, (environments) => environments.plants)
     @JoinTable({

@@ -1,5 +1,5 @@
 export interface IPlantImage {
-    name: string;
+    imageUri: string;
 
     width?: string;
     height?: string;

@@ -6695,13 +6695,6 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-pkg-dir@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/pkg-dir/-/pkg-dir-5.0.0.tgz"
-  integrity sha512-NPE8TDbzl/3YQYY7CSS228s3g2ollTFnc+Qi3tqmqJp9Vg2ovUpixcJEo2HJScN2Ez+kEaal6y70c0ehqJBJeA==
-  dependencies:
-    find-up "^5.0.0"
-
 plist@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/plist/-/plist-3.1.0.tgz"
@@ -6993,10 +6986,10 @@ react-native-gesture-handler@^2.12.0, "react-native-gesture-handler@>= 1.0.0":
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-image-picker@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-7.0.2.tgz"
-  integrity sha512-2Y+TMzv2l32IikqYpj4WOqkYvv42SXkSvL9zAo0XdhA3Rbe3lc0Oz12KlR6M2bGh8RxXz5lUrs+9mxy/GpcLIg==
+react-native-image-picker@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-5.7.0.tgz"
+  integrity sha512-LGBrFQzKEAt/u4z+IcY7COZA7N6lCeLQ2dMu1PubK10+d9YBRS8n/ABNj48CJhEpUhcRPt7H3iWbwIuOlcZrDA==
 
 react-native-image-resizer@^1.4.5:
   version "1.4.5"
@@ -7033,13 +7026,10 @@ react-native-paper@^5.9.1:
     patch-package "^7.0.0"
     use-latest-callback "^0.1.5"
 
-react-native-permissions@^3.8.4:
-  version "3.8.4"
-  resolved "https://registry.npmjs.org/react-native-permissions/-/react-native-permissions-3.8.4.tgz"
-  integrity sha512-tJq+5eNqu8Y1PpmuSVMjQtW8E7YJbQ0LSbZ1o9KjgF7etgYmBSZeCR138x715vyZUAtwuecV+ybEM9z8dDs76Q==
-  dependencies:
-    picocolors "^1.0.0"
-    pkg-dir "^5.0.0"
+react-native-permissions@^3.10.1:
+  version "3.10.1"
+  resolved "https://registry.npmjs.org/react-native-permissions/-/react-native-permissions-3.10.1.tgz"
+  integrity sha512-Gc5BxxpjZn4QNUDiVeHOO0vXh3AH7ToolmwTJozqC6DsxV7NAf3ttap+8BSmzDR8WxuAM3Cror+YNiBhHJx7/w==
 
 react-native-push-notification@^8.1.1:
   version "8.1.1"

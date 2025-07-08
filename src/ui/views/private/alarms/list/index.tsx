@@ -91,7 +91,7 @@ export function AlarmsList() {
 
         return <Styles.NotificationCard>
             <PlantImage
-                name={notificationTrigger.plant.name}
+                imageUri={notificationTrigger.plant.name}
                 width="64px"
                 height="64px"
                 borderRadius={9999}

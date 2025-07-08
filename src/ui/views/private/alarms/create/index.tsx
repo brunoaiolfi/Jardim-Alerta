@@ -147,7 +147,7 @@ export function AlarmCreate() {
                         color={lightTheme.colors.secondary}
                     />
                 </Styles.ReturnButton>
-                <PlantImage name={plant?.name || ""} />
+                <PlantImage imageUri={plant?.name || ""} />
             </Styles.Header>
 
             <Styles.Content>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, TouchableOpacity } from "react-native";
+import { Alert, PermissionsAndroid, Platform, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -15,17 +15,21 @@ import { EnumTextVariant } from "../../../../components/text/@types";
 import { EnumButtonVariant } from "../../../../components/button/@types";
 import * as Styles from "./styles";
 import { Plants } from "../../../../../infra/database/entities/Plants";
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
 
 interface ICreatePlantForm {
   name: string;
   about: string;
-  environments?: Environments[];
+  environments: Environments[];
+  imageUri: string;
 }
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Informe o nome da planta"),
   about: Yup.string().required("Informe a descrição"),
   environments: Yup.array().of(Yup.object()).min(1, "Selecione pelo menos um ambiente"),
+  imageUri: Yup.string().required("A imagem da planta é obrigatória"),
 });
 
 export function PlantCreate() {
@@ -42,8 +46,6 @@ export function PlantCreate() {
 
   const [environments, setEnvironments] = useState<Environments[]>([]);
   const [selectedEnvironments, setSelectedEnvironments] = useState<Environments[]>([]);
-  const [imageUri, setImageUri] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
     fetchEnvironments();
@@ -71,15 +73,115 @@ export function PlantCreate() {
     });
   }
 
+  async function requestCameraPermission() {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: 'Permissão para usar a câmera',
+        message: 'O app precisa acessar sua câmera',
+        buttonNeutral: 'Pergunte-me depois',
+        buttonNegative: 'Cancelar',
+        buttonPositive: 'OK',
+      }
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+
+  }
+
+  async function requestGalleryPermission() {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES, // ou READ_EXTERNAL_STORAGE para API < 33
+      {
+        title: 'Permissão para acessar a galeria',
+        message: 'O app precisa acessar suas fotos',
+        buttonNeutral: 'Pergunte-me depois',
+        buttonNegative: 'Cancelar',
+        buttonPositive: 'OK',
+      }
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+
+  }
+
+
   function handlePickImage() {
-    // ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //   quality: 1,
-    // }).then((res) => {
-    //   if (!res.canceled) {
-    //     setImageUri(res.assets[0].uri);
-    //   }
-    // });
+    Alert.alert(
+      "Selecionar imagem",
+      "Escolha uma opção:",
+      [
+        {
+          text: "Câmera",
+          onPress: async () => {
+            const hasPermission = await requestCameraPermission();
+            if (!hasPermission) {
+              Alert.alert('Permissão negada', 'Você precisa permitir o uso da câmera');
+              return;
+            }
+
+            launchCamera(
+              {
+                mediaType: 'photo',
+                quality: 1,
+                includeBase64: false,
+                saveToPhotos: true,
+              },
+              (response) => {
+                if (response.didCancel) return;
+
+                if (response.errorCode) {
+                  Alert.alert("Erro ao usar câmera", response.errorMessage || "Tente novamente.");
+                  return;
+                }
+
+                if (response.assets && response.assets.length > 0) {
+                  const photo = response.assets[0];
+                  if (photo.uri) {
+                    setValue("imageUri", photo.uri);
+                  }
+                }
+              }
+            );
+          },
+        },
+        {
+          text: "Galeria",
+          onPress: async () => {
+            const hasPermission = await requestGalleryPermission();
+            if (!hasPermission) {
+              Alert.alert('Permissão negada', 'Você precisa permitir acesso à galeria');
+              return;
+            }
+
+            launchImageLibrary(
+              {
+                mediaType: 'photo',
+                quality: 1,
+                includeBase64: false,
+              },
+              (response) => {
+                if (response.didCancel) return;
+
+                if (response.errorCode) {
+                  Alert.alert("Erro ao acessar galeria", response.errorMessage || "Tente novamente.");
+                  return;
+                }
+
+                if (response.assets && response.assets.length > 0) {
+                  const selectedImage = response.assets[0];
+                  if (selectedImage.uri) {
+                    setValue("imageUri", selectedImage.uri);
+                  }
+                }
+              }
+            );
+          },
+        },
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+      ]
+    );
   }
 
   async function onSubmit(values: ICreatePlantForm) {
@@ -89,6 +191,7 @@ export function PlantCreate() {
       plant.name = values.name
       plant.about = values.about
       plant.environments = values.environments
+      plant.imageUri = values.imageUri
 
       const res = await aplicPlants.save(plant);
 
@@ -106,9 +209,10 @@ export function PlantCreate() {
   // Calcula o progresso do formulário
   const getProgress = () => {
     let progress = 0;
-    if (watchedFields.name && watchedFields.name.trim()) progress += 33;
-    if (watchedFields.about && watchedFields.about.trim()) progress += 33;
-    if (selectedEnvironments.length > 0) progress += 34;
+    if (watchedFields.name && watchedFields.name.trim()) progress += 25;
+    if (watchedFields.about && watchedFields.about.trim()) progress += 25;
+    if (watchedFields.imageUri && watchedFields.imageUri.trim()) progress += 25;
+    if (selectedEnvironments.length > 0) progress += 25;
     return progress;
   };
 
@@ -215,7 +319,7 @@ export function PlantCreate() {
                 <Styles.Label>
                   <TextComponent
                     text={`${selectedEnvironments.length} ambiente(s) selecionado(s)`}
-                    variant={EnumTextVariant.Small}
+                    variant={EnumTextVariant.Paragraph}
                     color="#4CAF50"
                   />
                 </Styles.Label>
@@ -234,14 +338,14 @@ export function PlantCreate() {
               <Styles.ImagePickerButton onPress={handlePickImage}>
                 <TextComponent text="📷" variant={EnumTextVariant.Paragraph} />
                 <Styles.ImagePickerText>
-                  {imageUri ? "Alterar foto" : "Adicionar foto (opcional)"}
+                  {watch("imageUri") ? "Alterar foto" : "Adicionar foto (opcional)"}
                 </Styles.ImagePickerText>
               </Styles.ImagePickerButton>
 
-              {imageUri && (
+              {watch("imageUri") && (
                 <Styles.ImagePreview>
                   <Styles.ImagePreviewImage
-                    source={{ uri: imageUri }}
+                    source={{ uri: watch("imageUri") }}
                     resizeMode="cover"
                   />
                 </Styles.ImagePreview>

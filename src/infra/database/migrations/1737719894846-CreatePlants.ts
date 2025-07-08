@@ -17,12 +17,15 @@ export class CreatePlants1737719894846 implements MigrationInterface {
                     {
                         name: "name",
                         type: "varchar",
-                        isUnique: true
                     },
                     {
                         name: "about",
-                        type: "text",
+                        type: "varchar",
                     },
+                    {
+                        name: 'imageUri',
+                        type: 'varchar',
+                    }
                 ]
             }));
     }
