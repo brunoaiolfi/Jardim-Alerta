@@ -1,4 +1,6 @@
-export interface ITextProps {
+import { TextProps } from "react-native";
+
+export interface ITextProps extends TextProps{
     text: string;
     variant?: EnumTextVariant;
     textAlign?: string;

@@ -1,23 +1,22 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { PlantImage } from '../../../components/plants/image';
+import { PlantImage } from '../../../../components/plants/image';
 import * as Styles from './styles';
 import { useEffect, useState } from 'react';
-import { getAplicPlants } from '../../../../application/plants/factory';
-import { LoadingView } from '../../public/loading';
+import { getAplicPlants } from '../../../../../application/plants/factory';
+import { LoadingView } from '../../../public/loading';
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { lightTheme } from '../../../themes/lightTheme';
-import { TextComponent } from '../../../components/text';
-import { EnumTextVariant } from '../../../components/text/@types';
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { ButtonComponent } from '../../../components/button';
-import { EnumButtonVariant } from '../../../components/button/@types';
+import { lightTheme } from '../../../../themes/lightTheme';
+import { TextComponent } from '../../../../components/text';
+import { EnumTextVariant } from '../../../../components/text/@types';
+import { ButtonComponent } from '../../../../components/button';
+import { EnumButtonVariant } from '../../../../components/button/@types';
 import * as Yup from "yup";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert } from 'react-native';
-import { getAplicNotificationTriggers } from '../../../../application/notificationTriggers/factory';
-import { NotificationTrigger } from '../../../../infra/database/entities/NotificationTrigger';
-import { Plants } from '../../../../infra/database/entities/Plants';
+import { getAplicNotificationTriggers } from '../../../../../application/notificationTriggers/factory';
+import { NotificationTrigger } from '../../../../../infra/database/entities/NotificationTrigger';
+import { Plants } from '../../../../../infra/database/entities/Plants';
 
 const dictDays = {
     [0]: 'D',
@@ -41,7 +40,7 @@ const schema = Yup.object().shape({
     minutes: Yup.number().required().min(0).max(59),
 })
 
-export function AlarmSave() {
+export function AlarmCreate() {
     const { params } = useRoute();
     const navigation = useNavigation();
     const aplicPlant = getAplicPlants();

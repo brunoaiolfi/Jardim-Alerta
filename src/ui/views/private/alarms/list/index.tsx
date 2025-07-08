@@ -1,20 +1,20 @@
 import { useCallback, useState } from "react";
-import { getAplicNotificationTriggers } from "../../../../application/notificationTriggers/factory";
-import { TextComponent } from "../../../components/text";
+import { getAplicNotificationTriggers } from "../../../../../application/notificationTriggers/factory";
+import { TextComponent } from "../../../../components/text";
 import { Alert } from "react-native";
-import { EnumTextVariant } from "../../../components/text/@types";
+import { EnumTextVariant } from "../../../../components/text/@types";
 import { FlatList } from "react-native";
 import * as Styles from "./styles";
-import { PlantImage } from "../../../components/plants/image";
-import { lightTheme } from "../../../themes/lightTheme";
+import { PlantImage } from "../../../../components/plants/image";
+import { lightTheme } from "../../../../themes/lightTheme";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { ButtonComponent } from "../../../components/button";
-import { EnumButtonVariant } from "../../../components/button/@types";
+import { ButtonComponent } from "../../../../components/button";
+import { EnumButtonVariant } from "../../../../components/button/@types";
 import { useFocusEffect } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
-import { NotificationTrigger } from "../../../../infra/database/entities/NotificationTrigger";
+import { NotificationTrigger } from "../../../../../infra/database/entities/NotificationTrigger";
 
-export function Alarms() {
+export function AlarmsList() {
 
     const aplicNotificationTriggers = getAplicNotificationTriggers();
 

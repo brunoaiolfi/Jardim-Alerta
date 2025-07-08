@@ -1,20 +1,20 @@
-import { TextComponent } from "../../../components/text";
-import { EnumTextVariant } from "../../../components/text/@types";
+import { TextComponent } from "../../../../components/text";
+import { EnumTextVariant } from "../../../../components/text/@types";
 import * as Styles from "./styles";
-import { useUser } from "../../../hooks/useUser";
+import { useUser } from "../../../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import { getAplicEnvironments } from "../../../../application/environments/factory";
-import { ButtonComponent } from "../../../components/button";
-import { EnumButtonVariant } from "../../../components/button/@types";
-import { getAplicPlants } from "../../../../application/plants/factory";
-import { CardPlant } from "../../../components/plants/card";
+import { getAplicEnvironments } from "../../../../../application/environments/factory";
+import { ButtonComponent } from "../../../../components/button";
+import { EnumButtonVariant } from "../../../../components/button/@types";
+import { getAplicPlants } from "../../../../../application/plants/factory";
+import { CardPlant } from "../../../../components/plants/card";
 import { useNavigation } from "@react-navigation/native";
-import { getAplicAuth } from "../../../../application/auth/factory";
-import { Environments } from "../../../../infra/database/entities/Environments";
-import { Plants } from "../../../../infra/database/entities/Plants";
+import { getAplicAuth } from "../../../../../application/auth/factory";
+import { Environments } from "../../../../../infra/database/entities/Environments";
+import { Plants } from "../../../../../infra/database/entities/Plants";
 
-export function MyPlants() {
+export function PlantsList() {
     const { user, saveUser } = useUser();
     const aplicAuth = getAplicAuth();
 
@@ -81,7 +81,7 @@ export function MyPlants() {
     async function handleSelectPlant(id: number) {
         navigation.navigate("AlarmSave", {
             id,
-        })
+        });
     }
 
     async function handleLogout() {
@@ -98,6 +98,14 @@ export function MyPlants() {
         }
     }
 
+    function handleCreateEnvironment() {
+
+    }
+
+    function handleCreatePlant() {
+        navigation.navigate("PlantCreate");
+    }
+
     return (
         <Styles.Container>
 
@@ -111,6 +119,8 @@ export function MyPlants() {
                     <TextComponent
                         text={user?.name ?? "Usuário"}
                         variant={EnumTextVariant.Heading}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
                     />
                 </Styles.HeaderWrapper>
 
@@ -153,6 +163,17 @@ export function MyPlants() {
                         }}
                     />
                 )}
+                ListHeaderComponent={() => (
+                    <ButtonComponent
+                        onPress={handleCreateEnvironment}
+                        variant={EnumButtonVariant.Selected}
+                        height="40px"
+                        buttonStyle={{
+                            marginRight: 10,
+                        }}
+                        icon="plus"
+                    />
+                )}
             />
 
             <Styles.PlantsList
@@ -163,6 +184,19 @@ export function MyPlants() {
                     <CardPlant
                         plant={item}
                         onSelectPlant={handleSelectPlant}
+                    />
+                )}
+                ListFooterComponent={() => (
+                    <ButtonComponent
+                        onPress={handleCreatePlant}
+                        variant={EnumButtonVariant.Selected}
+                        height="150px"
+                        width="45%"
+                        buttonStyle={{
+                            marginRight: 10,
+                        }}
+                        icon="plus"
+                        iconSize={28}
                     />
                 )}
             />

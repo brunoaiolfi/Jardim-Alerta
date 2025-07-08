@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MyPlants } from '../../../views/private/myPlants';
+import { PlantsList } from '../../../views/private/plants/list';
 import Ionicons from "react-native-vector-icons/Ionicons"
-import { Alarms } from '../../../views/private/alarms';
+import { AlarmsList } from '../../../views/private/alarms/list';
 import Feather from "react-native-vector-icons/Feather";
 
 const BottomTabsRoutes = createBottomTabNavigator();
@@ -9,7 +9,7 @@ const BottomTabsRoutes = createBottomTabNavigator();
 export function DashboardRoutes() {
     return (
         <BottomTabsRoutes.Navigator
-            initialRouteName="MyPlants"
+            initialRouteName="PlantsList"
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
@@ -22,8 +22,8 @@ export function DashboardRoutes() {
             }}
         >
             <BottomTabsRoutes.Screen
-                name="MyPlants"
-                component={MyPlants}
+                name="PlantsList"
+                component={PlantsList}
                 options={{
                     tabBarLabel: "Minhas plantas",
                     tabBarIcon: ({ color }) => <Ionicons name='list' color={color} size={20} />,
@@ -31,7 +31,7 @@ export function DashboardRoutes() {
             />
             <BottomTabsRoutes.Screen
                 name="Alarms"
-                component={Alarms}
+                component={AlarmsList}
                 options={{
                     tabBarLabel: "Meus Alarmes",
                     tabBarIcon: ({ color }) => <Feather name="bell" size={20} color={color} />

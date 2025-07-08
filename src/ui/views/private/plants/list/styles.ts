@@ -16,6 +16,8 @@ export const Header = styled.View`
 
 export const HeaderWrapper = styled.View`
     align-items: flex-start;
+    overflow: hidden;
+    width: 70%;
     `;
 
 export const Subheading = styled.View`
