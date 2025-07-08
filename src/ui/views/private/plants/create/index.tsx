@@ -16,7 +16,8 @@ import { EnumButtonVariant } from "../../../../components/button/@types";
 import * as Styles from "./styles";
 import { Plants } from "../../../../../infra/database/entities/Plants";
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
+import { GetImagePickerImplementation } from "../../../../../infra/implementations/imagePicker/factory";
+import { ImagePickMethod } from "../../../../../infra/implementations/imagePicker/IImagePicker";
 
 interface ICreatePlantForm {
   name: string;
@@ -37,6 +38,7 @@ export function PlantCreate() {
 
   const aplicPlants = getAplicPlants();
   const aplicEnvironments = getAplicEnvironments();
+  const imagePickerImplementation = GetImagePickerImplementation();
 
   const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<ICreatePlantForm>({
     resolver: yupResolver(schema),
@@ -48,10 +50,10 @@ export function PlantCreate() {
   const [selectedEnvironments, setSelectedEnvironments] = useState<Environments[]>([]);
 
   useEffect(() => {
-    fetchEnvironments();
+    getEnvironments();
   }, []);
 
-  async function fetchEnvironments() {
+  async function getEnvironments() {
     try {
       const res = await aplicEnvironments.get();
       if (!res.Success) return Alert.alert("Erro", res.Message);
@@ -69,40 +71,10 @@ export function PlantCreate() {
         : [...prev, env];
 
       setValue("environments", newSelected);
+
       return newSelected;
     });
   }
-
-  async function requestCameraPermission() {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      {
-        title: 'Permissão para usar a câmera',
-        message: 'O app precisa acessar sua câmera',
-        buttonNeutral: 'Pergunte-me depois',
-        buttonNegative: 'Cancelar',
-        buttonPositive: 'OK',
-      }
-    );
-    return granted === PermissionsAndroid.RESULTS.GRANTED;
-
-  }
-
-  async function requestGalleryPermission() {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES, // ou READ_EXTERNAL_STORAGE para API < 33
-      {
-        title: 'Permissão para acessar a galeria',
-        message: 'O app precisa acessar suas fotos',
-        buttonNeutral: 'Pergunte-me depois',
-        buttonNegative: 'Cancelar',
-        buttonPositive: 'OK',
-      }
-    );
-    return granted === PermissionsAndroid.RESULTS.GRANTED;
-
-  }
-
 
   function handlePickImage() {
     Alert.alert(
@@ -112,68 +84,25 @@ export function PlantCreate() {
         {
           text: "Câmera",
           onPress: async () => {
-            const hasPermission = await requestCameraPermission();
-            if (!hasPermission) {
-              Alert.alert('Permissão negada', 'Você precisa permitir o uso da câmera');
-              return;
+            const res = await imagePickerImplementation.pickImage(ImagePickMethod.CAMERA);
+
+            if (!res.Success) {
+              return Alert.alert("Atenção!", res.Message);
             }
 
-            launchCamera(
-              {
-                mediaType: 'photo',
-                quality: 1,
-                includeBase64: false,
-                saveToPhotos: true,
-              },
-              (response) => {
-                if (response.didCancel) return;
-
-                if (response.errorCode) {
-                  Alert.alert("Erro ao usar câmera", response.errorMessage || "Tente novamente.");
-                  return;
-                }
-
-                if (response.assets && response.assets.length > 0) {
-                  const photo = response.assets[0];
-                  if (photo.uri) {
-                    setValue("imageUri", photo.uri);
-                  }
-                }
-              }
-            );
+            setValue("imageUri", res.Content);
           },
         },
         {
           text: "Galeria",
           onPress: async () => {
-            const hasPermission = await requestGalleryPermission();
-            if (!hasPermission) {
-              Alert.alert('Permissão negada', 'Você precisa permitir acesso à galeria');
-              return;
+            const res = await imagePickerImplementation.pickImage(ImagePickMethod.GALLERY);
+
+            if (!res.Success) {
+              return Alert.alert("Atenção!", res.Message);
             }
 
-            launchImageLibrary(
-              {
-                mediaType: 'photo',
-                quality: 1,
-                includeBase64: false,
-              },
-              (response) => {
-                if (response.didCancel) return;
-
-                if (response.errorCode) {
-                  Alert.alert("Erro ao acessar galeria", response.errorMessage || "Tente novamente.");
-                  return;
-                }
-
-                if (response.assets && response.assets.length > 0) {
-                  const selectedImage = response.assets[0];
-                  if (selectedImage.uri) {
-                    setValue("imageUri", selectedImage.uri);
-                  }
-                }
-              }
-            );
+            setValue("imageUri", res.Content);
           },
         },
         {
@@ -206,7 +135,6 @@ export function PlantCreate() {
     }
   }
 
-  // Calcula o progresso do formulário
   const getProgress = () => {
     let progress = 0;
     if (watchedFields.name && watchedFields.name.trim()) progress += 25;
@@ -242,7 +170,6 @@ export function PlantCreate() {
         <Styles.FloatingCard>
           <Styles.Formulario>
 
-            {/* Nome da Planta */}
             <Styles.InputGroup>
               <Styles.Label>
                 <TextComponent text="Nome da planta" variant={EnumTextVariant.Paragraph} />
