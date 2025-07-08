@@ -40,26 +40,6 @@ export class CreatePlantsEnvironmentsRelation1737719894847 implements MigrationI
                 onDelete: "CASCADE",
             })
         );
-
-        await queryRunner.query(`
-            INSERT INTO plants_environments_environments (plantId, environmentId) VALUES 
-            (1, 1), 
-            (1, 3), 
-            (2, 1), 
-            (2, 2), 
-            (3, 2), 
-            (4, 2), 
-            (4, 1), 
-            (5, 1), 
-            (5, 2), 
-            (6, 3), 
-            (6, 2), 
-            (7, 3), 
-            (7, 1), 
-            (8, 4), 
-            (9, 4), 
-            (10, 4)
-        `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
