@@ -63,11 +63,6 @@ export function PlantsList() {
                     environments: {
                         id: id
                     }
-                },
-                select: {
-                    name: true,
-                    imageUri: true,
-                    id: true,
                 }
             });
 
@@ -81,9 +76,9 @@ export function PlantsList() {
         }
     }
 
-    async function handleSelectPlant(id: number) {
-        navigation.navigate("AlarmSave", {
-            id,
+    async function handleSelectPlant(plant: Plants) {
+        navigation.navigate("PlantCreate", {
+            plant,
         });
     }
 
@@ -182,8 +177,8 @@ export function PlantsList() {
             <Styles.PlantsList
                 data={plants}
                 numColumns={2}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
+                keyExtractor={(item: Plants) => item.id.toString()}
+                renderItem={({ item }: { item: Plants }) => (
                     <CardPlant
                         plant={item}
                         onSelectPlant={handleSelectPlant}

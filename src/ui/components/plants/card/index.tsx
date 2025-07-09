@@ -7,7 +7,7 @@ export function CardPlant({ plant, onSelectPlant }: ICardPlants) {
     return (
         <Styles.Container
             activeOpacity={0.7}
-            onPress={() => onSelectPlant(plant.id)}
+            onPress={() => onSelectPlant(plant)}
         >
             <PlantImage imageUri={plant.imageUri} />
             <Styles.Footer>

@@ -74,5 +74,5 @@ export function Routes() {
         return <LoadingView />
     }
 
-    return !!!user?.id ? <PrivateRoutes /> : <PublicRoutes />;
+    return !!user?.id ? <PrivateRoutes /> : <PublicRoutes />;
 }

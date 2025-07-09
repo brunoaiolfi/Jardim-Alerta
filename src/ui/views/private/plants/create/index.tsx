@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, PermissionsAndroid, Platform, TouchableOpacity } from "react-native";
+import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -15,9 +15,9 @@ import { EnumTextVariant } from "../../../../components/text/@types";
 import { EnumButtonVariant } from "../../../../components/button/@types";
 import * as Styles from "./styles";
 import { Plants } from "../../../../../infra/database/entities/Plants";
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { GetImagePickerImplementation } from "../../../../../infra/implementations/imagePicker/factory";
 import { ImagePickMethod } from "../../../../../infra/implementations/imagePicker/IImagePicker";
+import { useRoute } from "@react-navigation/native";
 
 interface ICreatePlantForm {
   name: string;
@@ -33,12 +33,18 @@ const schema = Yup.object().shape({
   imageUri: Yup.string().required("A imagem da planta é obrigatória"),
 });
 
+type RouteParams = {
+  plant?: Plants;
+};
+
 export function PlantCreate() {
   const navigation = useNavigation();
 
   const aplicPlants = getAplicPlants();
   const aplicEnvironments = getAplicEnvironments();
   const imagePickerImplementation = GetImagePickerImplementation();
+
+  const route = useRoute();
 
   const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<ICreatePlantForm>({
     resolver: yupResolver(schema),
@@ -47,9 +53,22 @@ export function PlantCreate() {
   const watchedFields = watch();
 
   const [environments, setEnvironments] = useState<Environments[]>([]);
-  const [selectedEnvironments, setSelectedEnvironments] = useState<Environments[]>([]);
 
   useEffect(() => {
+    const params = route.params as RouteParams;
+
+    if (params?.plant) {
+      const { plant } = params;
+
+      console.log("plant");
+      console.log(plant);
+
+      setValue("name", plant.name);
+      setValue("about", plant.about);
+      setValue("environments", plant.environments);
+      setValue("imageUri", plant.imageUri);
+    }
+
     getEnvironments();
   }, []);
 
@@ -57,7 +76,8 @@ export function PlantCreate() {
     try {
       const res = await aplicEnvironments.get();
       if (!res.Success) return Alert.alert("Erro", res.Message);
-
+      console.log("res.Content");
+      console.log(res.Content);
       setEnvironments(res.Content);
     } catch (error: any) {
       Alert.alert("Erro", error.message);
@@ -65,15 +85,18 @@ export function PlantCreate() {
   }
 
   function handleSelectEnvironment(env: Environments) {
-    setSelectedEnvironments(prev => {
-      const newSelected = prev.includes(env)
-        ? prev.filter(envId => envId !== env)
-        : [...prev, env];
+    try {
+      const environmentsSelected = watch("environments") as Environments[];
 
-      setValue("environments", newSelected);
+      if (environmentsSelected.some((e) => e.id === env.id)) {
+        setValue("environments", environmentsSelected?.filter((e) => e.id !== env.id));
+      } else {
+        setValue("environments", [...environmentsSelected, env]);
+      }
 
-      return newSelected;
-    });
+    } catch (error) {
+      Alert.alert("Erro", error.message);
+    }
   }
 
   function handlePickImage() {
@@ -115,6 +138,8 @@ export function PlantCreate() {
 
   async function onSubmit(values: ICreatePlantForm) {
     try {
+      const params = route.params as RouteParams;
+
       const plant = new Plants();
 
       plant.name = values.name
@@ -122,13 +147,17 @@ export function PlantCreate() {
       plant.environments = values.environments
       plant.imageUri = values.imageUri
 
+      if (params?.plant) {
+        plant.id = params.plant.id;
+      }
+
       const res = await aplicPlants.save(plant);
 
       if (!res.Success) {
         return Alert.alert("Erro ao salvar", res.Message);
       }
 
-      Alert.alert("Sucesso", "Planta cadastrada com sucesso!");
+      Alert.alert("Sucesso", "Planta salva com sucesso!");
       navigation.goBack();
     } catch (error: any) {
       Alert.alert("Erro", error.message);
@@ -140,7 +169,7 @@ export function PlantCreate() {
     if (watchedFields.name && watchedFields.name.trim()) progress += 25;
     if (watchedFields.about && watchedFields.about.trim()) progress += 25;
     if (watchedFields.imageUri && watchedFields.imageUri.trim()) progress += 25;
-    if (selectedEnvironments.length > 0) progress += 25;
+    if (watchedFields.environments?.length > 0) progress += 25;
     return progress;
   };
 
@@ -226,7 +255,7 @@ export function PlantCreate() {
                     key={env.id}
                     text={env.name}
                     onPress={() => handleSelectEnvironment(env)}
-                    variant={selectedEnvironments.includes(env) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
+                    variant={watch("environments")?.some((e: Environments) => e.id === env.id) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
                     padding="12px 16px"
                     height="44px"
                     buttonStyle={{
@@ -242,10 +271,10 @@ export function PlantCreate() {
                   />
                 ))}
               </Styles.EnvironmentGrid>
-              {selectedEnvironments.length > 0 && (
+              {watchedFields.environments?.length > 0 && (
                 <Styles.Label>
                   <TextComponent
-                    text={`${selectedEnvironments.length} ambiente(s) selecionado(s)`}
+                    text={`${watchedFields.environments?.length} ambiente(s) selecionado(s)`}
                     variant={EnumTextVariant.Paragraph}
                     color="#4CAF50"
                   />
@@ -268,6 +297,12 @@ export function PlantCreate() {
                   {watch("imageUri") ? "Alterar foto" : "Adicionar foto (opcional)"}
                 </Styles.ImagePickerText>
               </Styles.ImagePickerButton>
+
+              {
+                errors.imageUri?.message && (
+                  <Styles.ErrorText>{errors.imageUri.message}</Styles.ErrorText>
+                )
+              }
 
               {watch("imageUri") && (
                 <Styles.ImagePreview>
