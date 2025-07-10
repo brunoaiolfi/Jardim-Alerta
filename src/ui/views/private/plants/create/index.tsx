@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert } from "react-native";
+import { ActivityIndicator, Alert, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -18,6 +18,7 @@ import { Plants } from "../../../../../infra/database/entities/Plants";
 import { GetImagePickerImplementation } from "../../../../../infra/implementations/imagePicker/factory";
 import { ImagePickMethod } from "../../../../../infra/implementations/imagePicker/IImagePicker";
 import { useRoute } from "@react-navigation/native";
+import { lightTheme } from "../../../../themes/lightTheme";
 
 interface ICreatePlantForm {
   name: string;
@@ -34,7 +35,7 @@ const schema = Yup.object().shape({
 });
 
 type RouteParams = {
-  plant?: Plants;
+  plantId?: number;
 };
 
 export function PlantCreate() {
@@ -53,31 +54,46 @@ export function PlantCreate() {
   const watchedFields = watch();
 
   const [environments, setEnvironments] = useState<Environments[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    getPlant();
+    getEnvironments();
+  }, []);
+
+  async function getPlant() {
+    setIsLoading(true);
     const params = route.params as RouteParams;
 
-    if (params?.plant) {
-      const { plant } = params;
+    if (params?.plantId) {
+      const { plantId } = params;
 
-      console.log("plant");
-      console.log(plant);
+      const res = await aplicPlants.get({
+        relations: ["environments"],
+        where: {
+          id: plantId
+        }
+      });
+
+      if (!res.Success) {
+        return Alert.alert("Erro", res.Message);
+      }
+
+      const plant = res.Content[0];
 
       setValue("name", plant.name);
       setValue("about", plant.about);
       setValue("environments", plant.environments);
-      setValue("imageUri", plant.imageUri);
+      setValue("imageUri", plant.imageUri || "");
     }
 
-    getEnvironments();
-  }, []);
+    setIsLoading(false);
+  }
 
   async function getEnvironments() {
     try {
       const res = await aplicEnvironments.get();
       if (!res.Success) return Alert.alert("Erro", res.Message);
-      console.log("res.Content");
-      console.log(res.Content);
       setEnvironments(res.Content);
     } catch (error: any) {
       Alert.alert("Erro", error.message);
@@ -86,9 +102,9 @@ export function PlantCreate() {
 
   function handleSelectEnvironment(env: Environments) {
     try {
-      const environmentsSelected = watch("environments") as Environments[];
+      const environmentsSelected = watch("environments") as Environments[] || [];
 
-      if (environmentsSelected.some((e) => e.id === env.id)) {
+      if (environmentsSelected?.some((e) => e.id === env.id)) {
         setValue("environments", environmentsSelected?.filter((e) => e.id !== env.id));
       } else {
         setValue("environments", [...environmentsSelected, env]);
@@ -144,11 +160,11 @@ export function PlantCreate() {
 
       plant.name = values.name
       plant.about = values.about
-      plant.environments = values.environments
+      plant.environments = values.environments as Environments[]
       plant.imageUri = values.imageUri
 
-      if (params?.plant) {
-        plant.id = params.plant.id;
+      if (params?.plantId) {
+        plant.id = params.plantId;
       }
 
       const res = await aplicPlants.save(plant);
@@ -175,6 +191,11 @@ export function PlantCreate() {
 
   return (
     <Styles.Container>
+      {isLoading && (
+        <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.5)", zIndex: 1000 }}>
+          <ActivityIndicator size="large" color={lightTheme.colors.primary} />
+        </View>
+      )}
 
       <Styles.Header>
         <Styles.TitleSection>

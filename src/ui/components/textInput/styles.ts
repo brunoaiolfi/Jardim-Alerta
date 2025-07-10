@@ -11,7 +11,7 @@ export const TexInput = styled.TextInput<TextInputProps>`
     border: ${({ theme }) => `0px solid ${theme.colors.borderColor}`}; 
     border-bottom-width: 1px;
 
-    text-align: center;
+    text-align: start;
 
     font-size: ${({ theme }) => theme.fontSize.small};
     color: ${({ theme }) => theme.colors.textParagraph};

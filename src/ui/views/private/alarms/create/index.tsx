@@ -147,7 +147,7 @@ export function AlarmCreate() {
                         color={lightTheme.colors.secondary}
                     />
                 </Styles.ReturnButton>
-                <PlantImage imageUri={plant?.name || ""} />
+                <PlantImage imageUri={plant?.imageUri || ""} />
             </Styles.Header>
 
             <Styles.Content>
@@ -155,12 +155,6 @@ export function AlarmCreate() {
                     text={plant?.name || ""}
                     variant={EnumTextVariant.Subheading}
                 />
-                <Styles.Info>
-                    <TextComponent
-                        text={plant?.about || ""}
-                    />
-                </Styles.Info>
-
                 <Styles.Formulario>
                     <Styles.Info>
                         <TextComponent

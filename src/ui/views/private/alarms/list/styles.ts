@@ -32,3 +32,7 @@ export const Header = styled.View`
 
     gap: 8px;
 `;
+
+export const Container = styled.View`
+    flex: 1;
+`;

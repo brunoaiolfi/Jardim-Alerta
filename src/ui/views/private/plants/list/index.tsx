@@ -78,7 +78,7 @@ export function PlantsList() {
 
     async function handleSelectPlant(plant: Plants) {
         navigation.navigate("PlantCreate", {
-            plant,
+            plantId: plant.id,
         });
     }
 

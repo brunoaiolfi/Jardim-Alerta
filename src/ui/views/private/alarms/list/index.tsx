@@ -10,15 +10,19 @@ import { lightTheme } from "../../../../themes/lightTheme";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ButtonComponent } from "../../../../components/button";
 import { EnumButtonVariant } from "../../../../components/button/@types";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
 import { NotificationTrigger } from "../../../../../infra/database/entities/NotificationTrigger";
+import { PlantSearchfield } from "../../../../components/plants/searchfield";
+import { Plants } from "../../../../../infra/database/entities/Plants";
 
 export function AlarmsList() {
 
     const aplicNotificationTriggers = getAplicNotificationTriggers();
+    const navigation = useNavigation();
 
     const [notificationTriggers, setNotificationTriggers] = useState<NotificationTrigger[]>([]);
+    const [isSearchfieldPlantsOpened, setIsSearchfieldPlantsOpened] = useState(false);
 
     const handleGetNotificationTriggers = useCallback(async () => {
         try {
@@ -39,6 +43,12 @@ export function AlarmsList() {
     useFocusEffect(useCallback(() => {
         handleGetNotificationTriggers();
     }, [handleGetNotificationTriggers]));
+
+    async function handleSelectPlant(plant: Plants) {
+        navigation.navigate("AlarmCreate", {
+            id: plant.id
+        })
+    }
 
     function renderAlarme(notificationTrigger: NotificationTrigger) {
         const { weekDay, time, plant } = notificationTrigger;
@@ -91,7 +101,7 @@ export function AlarmsList() {
 
         return <Styles.NotificationCard>
             <PlantImage
-                imageUri={notificationTrigger.plant.name}
+                imageUri={notificationTrigger.plant.imageUri}
                 width="64px"
                 height="64px"
                 borderRadius={9999}
@@ -139,19 +149,32 @@ export function AlarmsList() {
     }
 
     return (
-        <FlatList
-            data={notificationTriggers}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={(not) => renderAlarme(not.item)}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ padding: 20 }}
-            ListEmptyComponent={<TextComponent text="Nenhum alarme encontrado" textAlign="center" />}
-            ListHeaderComponent={() =>
-                <Styles.Header>
-                    <Feather name="bell" size={24} color={lightTheme.colors.textHeading} />
-                    <TextComponent text="Alarmes" textAlign="left" variant={EnumTextVariant.Heading} fontWeight="bold" />
-                </Styles.Header>
-            }
-        />
+        <Styles.Container>
+            <PlantSearchfield
+                OnClose={() => setIsSearchfieldPlantsOpened(false)}
+                OnSelected={handleSelectPlant}
+                IsOpen={isSearchfieldPlantsOpened}
+            />
+            <FlatList
+                data={notificationTriggers}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={(not) => renderAlarme(not.item)}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ padding: 20 }}
+                ListEmptyComponent={<TextComponent text="Nenhum alarme encontrado" textAlign="center" />}
+                ListHeaderComponent={() =>
+                    <Styles.Header>
+                        <Feather name="bell" size={24} color={lightTheme.colors.textHeading} />
+                        <TextComponent text="Alarmes" textAlign="left" variant={EnumTextVariant.Heading} fontWeight="bold" />
+                    </Styles.Header>
+                }
+            />
+
+            <ButtonComponent
+                onPress={() => setIsSearchfieldPlantsOpened(true)}
+                text="Cadastrar novo alarme"
+                buttonStyle={{ margin: 16 }}
+            />
+        </Styles.Container>
     )
 }

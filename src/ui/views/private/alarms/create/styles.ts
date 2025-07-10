@@ -39,7 +39,6 @@ export const Content = styled.View`
 export const Formulario = styled.View`
     
     width: 100%;
-    flex: 5;
     display: flex;
 
     align-items: center;
