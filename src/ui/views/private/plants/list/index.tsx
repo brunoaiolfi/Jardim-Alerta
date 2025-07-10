@@ -161,17 +161,17 @@ export function PlantsList() {
                         }}
                     />
                 )}
-                ListHeaderComponent={() => (
-                    <ButtonComponent
-                        onPress={handleCreateEnvironment}
-                        variant={EnumButtonVariant.Selected}
-                        height="40px"
-                        icon="plus"
-                        buttonStyle={{
-                            marginRight: 10,
-                        }}
-                    />
-                )}
+                // ListHeaderComponent={() => (
+                //     <ButtonComponent
+                //         onPress={handleCreateEnvironment}
+                //         variant={EnumButtonVariant.Selected}
+                //         height="40px"
+                //         icon="plus"
+                //         buttonStyle={{
+                //             marginRight: 10,
+                //         }}
+                //     />
+                // )}
             />
 
             <Styles.PlantsList
