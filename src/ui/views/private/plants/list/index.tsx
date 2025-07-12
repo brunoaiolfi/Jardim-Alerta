@@ -7,12 +7,13 @@ import { Alert } from "react-native";
 import { getAplicEnvironments } from "../../../../../application/environments/factory";
 import { ButtonComponent } from "../../../../components/button";
 import { EnumButtonVariant } from "../../../../components/button/@types";
-import { getAplicPlants } from "../../../../../application/plants/factory";
 import { CardPlant } from "../../../../components/plants/card";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { getAplicAuth } from "../../../../../application/auth/factory";
 import { Environments } from "../../../../../infra/database/entities/Environments";
 import { Plants } from "../../../../../infra/database/entities/Plants";
+import { usePlantsByEnvironment } from "../../../../hooks/queries/plants/usePlants";
+import { ActivityIndicator, View } from "react-native";
 
 export function PlantsList() {
     const { user, saveUser } = useUser();
@@ -21,12 +22,14 @@ export function PlantsList() {
     const navigation = useNavigation();
 
     const aplicEnvironments = getAplicEnvironments();
-    const aplicPlants = getAplicPlants();
 
     const [environments, setEnvironments] = useState<Environments[]>([]);
     const [environmentSelected, setEnvironmentSelected] = useState<Environments>();
 
-    const [plants, setPlants] = useState<Plants[]>([]);
+    // Usando o hook do TanStack Query
+    const { data: plantsResult, isLoading, error } = usePlantsByEnvironment(
+        environmentSelected?.id
+    );
 
     useFocusEffect(
         useCallback(() => {
@@ -51,35 +54,14 @@ export function PlantsList() {
 
     function handleSelectEnvironment(environment: Environments) {
         setEnvironmentSelected(environment);
-        handleGetPlantsByEnvironment(environment);
-    }
-
-    async function handleGetPlantsByEnvironment(environment: Environments) {
-        try {
-            const { id } = environment;
-            const res = await aplicPlants.get({
-                relations: ["environments"],
-                where: {
-                    environments: {
-                        id: id
-                    }
-                }
-            });
-
-            if (!res.Success) {
-                return Alert.alert("Atenção!", `Ocorreu ao recuperar os dados! ${res.Message}`);
-            }
-
-            setPlants(res.Content);
-        } catch (error: any) {
-            Alert.alert("Erro ao buscar plantas", error.message);
-        }
+        // Não precisa mais chamar handleGetPlantsByEnvironment manualmente
+        // O TanStack Query vai fazer isso automaticamente
     }
 
     async function handleSelectPlant(plant: Plants) {
-        navigation.navigate("PlantCreate", {
+        navigation.navigate("PlantCreate" as any, {
             plantId: plant.id,
-        });
+        } as any);
     }
 
     async function handleLogout() {
@@ -101,8 +83,31 @@ export function PlantsList() {
     }
 
     function handleCreatePlant() {
-        navigation.navigate("PlantCreate");
+        navigation.navigate("PlantCreate" as any);
     }
+
+    // Loading state
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#52665A" />
+            </View>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TextComponent 
+                    text="Erro ao carregar plantas" 
+                    variant={EnumTextVariant.Heading} 
+                />
+            </View>
+        );
+    }
+
+    const plants = plantsResult?.Content || [];
 
     return (
         <Styles.Container>
@@ -149,8 +154,8 @@ export function PlantsList() {
                 data={environments}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
+                keyExtractor={(item: any) => item.id.toString()}
+                renderItem={({ item }: { item: any }) => (
                     <ButtonComponent
                         onPress={() => handleSelectEnvironment(item)}
                         text={`${item.name}`}
@@ -161,24 +166,13 @@ export function PlantsList() {
                         }}
                     />
                 )}
-                // ListHeaderComponent={() => (
-                //     <ButtonComponent
-                //         onPress={handleCreateEnvironment}
-                //         variant={EnumButtonVariant.Selected}
-                //         height="40px"
-                //         icon="plus"
-                //         buttonStyle={{
-                //             marginRight: 10,
-                //         }}
-                //     />
-                // )}
             />
 
             <Styles.PlantsList
                 data={plants}
                 numColumns={2}
-                keyExtractor={(item: Plants) => item.id.toString()}
-                renderItem={({ item }: { item: Plants }) => (
+                keyExtractor={(item: any) => item.id.toString()}
+                renderItem={({ item }: { item: any }) => (
                     <CardPlant
                         plant={item}
                         onSelectPlant={handleSelectPlant}
