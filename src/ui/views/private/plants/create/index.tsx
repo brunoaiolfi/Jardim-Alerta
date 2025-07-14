@@ -19,6 +19,7 @@ import { GetImagePickerImplementation } from "../../../../../infra/implementatio
 import { ImagePickMethod } from "../../../../../infra/implementations/imagePicker/IImagePicker";
 import { useRoute } from "@react-navigation/native";
 import { lightTheme } from "../../../../themes/lightTheme";
+import { useNewPlantMutation } from "../../../../hooks/mutations/plants/useNewPlant";
 
 interface ICreatePlantForm {
   name: string;
@@ -50,6 +51,8 @@ export function PlantCreate() {
   const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<ICreatePlantForm>({
     resolver: yupResolver(schema),
   });
+
+  const savePlantMutation = useNewPlantMutation();
 
   const watchedFields = watch();
 
@@ -167,14 +170,16 @@ export function PlantCreate() {
         plant.id = params.plantId;
       }
 
-      const res = await aplicPlants.save(plant);
+      savePlantMutation.mutate(plant, {
+        onSuccess: () => {
+          Alert.alert("Sucesso", "Planta salva com sucesso!");
+          navigation.goBack();
+        },
+        onError: (error) => {
+          Alert.alert("Erro", error.message);
+        }
+      })
 
-      if (!res.Success) {
-        return Alert.alert("Erro ao salvar", res.Message);
-      }
-
-      Alert.alert("Sucesso", "Planta salva com sucesso!");
-      navigation.goBack();
     } catch (error: any) {
       Alert.alert("Erro", error.message);
     }

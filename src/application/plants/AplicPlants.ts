@@ -11,6 +11,10 @@ export class AplicPlants extends AplicBase<Plants> implements IAplicPlants {
 
     public async getByEnvironments(environmentId: number): Promise<Result<Plants[]>> {
         try {
+            if (!environmentId) {
+                return Result.Fail("Por favor, informe o ambiente.");
+            }
+
             const plants = await this.repository.select({
                 relations: ["environments"],
                 where: {

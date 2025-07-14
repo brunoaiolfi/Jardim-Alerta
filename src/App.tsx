@@ -6,9 +6,6 @@ import { lightTheme } from './ui/themes/lightTheme';
 import { UserProvider } from './ui/contexts/userContext';
 import { LogBox } from 'react-native';
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
@@ -17,7 +14,16 @@ import {
 LogBox.ignoreAllLogs();
 
 export default function App() {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 5, // 5 minutos
+        gcTime: 1000 * 60 * 10,   // 10 minutos
+        retry: 2,
+        refetchOnWindowFocus: false,
+      },
+    }
+  })
 
   return (
     <ThemeProvider theme={lightTheme}>

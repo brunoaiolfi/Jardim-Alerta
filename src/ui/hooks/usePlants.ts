@@ -1,1 +1,0 @@
-export { usePlantsByEnvironment } from './queries/plants/usePlants'; 
