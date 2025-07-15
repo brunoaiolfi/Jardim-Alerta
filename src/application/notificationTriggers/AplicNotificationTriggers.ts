@@ -18,6 +18,19 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
         this.notificationImplementation = notificationImpl;
     }
 
+    public async getNotificationsWithPlants(): Promise<Result<NotificationTrigger[]>> {
+        try {
+            const notificationTriggers = await this.repository.select({
+                relations: ["plant"],
+            });
+
+            return Result.Ok(notificationTriggers);
+        }
+        catch (error) {
+            return Result.Fail(error.message);
+        }
+    }
+
     public async delete(entidade: NotificationTrigger) {
         try {
             await this.repository.delete(entidade);
