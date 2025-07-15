@@ -19,7 +19,8 @@ import { GetImagePickerImplementation } from "../../../../../infra/implementatio
 import { ImagePickMethod } from "../../../../../infra/implementations/imagePicker/IImagePicker";
 import { useRoute } from "@react-navigation/native";
 import { lightTheme } from "../../../../themes/lightTheme";
-import { useNewPlantMutation } from "../../../../hooks/mutations/plants/useNewPlant";
+import { useNewPlantMutation } from "../../../../hooks/mutations/plants/useNewPlantMutation";
+import { useEnvironmentsQuery } from "../../../../hooks/queries/environments/useEnvironmentsQuery";
 
 interface ICreatePlantForm {
   name: string;
@@ -40,28 +41,27 @@ type RouteParams = {
 };
 
 export function PlantCreate() {
+
   const navigation = useNavigation();
+  const route = useRoute();
 
   const aplicPlants = getAplicPlants();
-  const aplicEnvironments = getAplicEnvironments();
-  const imagePickerImplementation = GetImagePickerImplementation();
 
-  const route = useRoute();
+  const imagePickerImplementation = GetImagePickerImplementation();
 
   const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<ICreatePlantForm>({
     resolver: yupResolver(schema),
   });
 
-  const savePlantMutation = useNewPlantMutation();
-
   const watchedFields = watch();
 
-  const [environments, setEnvironments] = useState<Environments[]>([]);
+  const { data: environments, isLoading: isLoadingEnvironments } = useEnvironmentsQuery();
+  const savePlantMutation = useNewPlantMutation();
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getPlant();
-    getEnvironments();
   }, []);
 
   async function getPlant() {
@@ -91,16 +91,6 @@ export function PlantCreate() {
     }
 
     setIsLoading(false);
-  }
-
-  async function getEnvironments() {
-    try {
-      const res = await aplicEnvironments.get();
-      if (!res.Success) return Alert.alert("Erro", res.Message);
-      setEnvironments(res.Content);
-    } catch (error: any) {
-      Alert.alert("Erro", error.message);
-    }
   }
 
   function handleSelectEnvironment(env: Environments) {
@@ -276,27 +266,33 @@ export function PlantCreate() {
                 <TextComponent text="Ambientes ideais" variant={EnumTextVariant.Paragraph} />
               </Styles.SectionTitle>
               <Styles.EnvironmentGrid>
-                {environments.map((env) => (
-                  <ButtonComponent
-                    key={env.id}
-                    text={env.name}
-                    onPress={() => handleSelectEnvironment(env)}
-                    variant={watch("environments")?.some((e: Environments) => e.id === env.id) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
-                    padding="12px 16px"
-                    height="44px"
-                    buttonStyle={{
-                      marginRight: 8,
-                      marginBottom: 8,
-                      borderRadius: 22,
-                      shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.1,
-                      shadowRadius: 4,
-                      elevation: 2,
-                    }}
-                  />
-                ))}
+                {
+                  isLoadingEnvironments ? (
+                    <ActivityIndicator size="small" color={lightTheme.colors.primary} />
+                  ) : (
+                    environments.Content?.map((env) => (
+                      <ButtonComponent
+                        key={env.id}
+                        text={env.name}
+                        onPress={() => handleSelectEnvironment(env)}
+                        variant={watch("environments")?.some((e: Environments) => e.id === env.id) ? EnumButtonVariant.Primary : EnumButtonVariant.Secondary}
+                        padding="12px 16px"
+                        height="44px"
+                        buttonStyle={{
+                          marginRight: 8,
+                          marginBottom: 8,
+                          borderRadius: 22,
+                          shadowColor: '#000',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.1,
+                          shadowRadius: 4,
+                          elevation: 2,
+                        }}
+                      />
+                    ))
+                  )}
               </Styles.EnvironmentGrid>
+
               {watchedFields.environments?.length > 0 && (
                 <Styles.Label>
                   <TextComponent
@@ -311,7 +307,6 @@ export function PlantCreate() {
               )}
             </Styles.InputGroup>
 
-            {/* Seleção de Imagem */}
             <Styles.InputGroup>
               <Styles.SectionTitle>
                 <TextComponent text="Foto da planta" variant={EnumTextVariant.Paragraph} />

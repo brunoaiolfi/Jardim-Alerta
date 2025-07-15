@@ -33,3 +33,11 @@ export const PlantsList = styled.FlatList`
     margin-top: 20px;
     height: 100%;
     `;
+
+export const LoadingEnvironments = styled.View`
+    width: 100%;
+    height: 64px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    `;

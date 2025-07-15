@@ -2,65 +2,45 @@ import { TextComponent } from "../../../../components/text";
 import { EnumTextVariant } from "../../../../components/text/@types";
 import * as Styles from "./styles";
 import { useUser } from "../../../../hooks/useUser";
-import { useCallback, useState } from "react";
-import { Alert } from "react-native";
-import { getAplicEnvironments } from "../../../../../application/environments/factory";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert } from "react-native";
 import { ButtonComponent } from "../../../../components/button";
 import { EnumButtonVariant } from "../../../../components/button/@types";
 import { CardPlant } from "../../../../components/plants/card";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { getAplicAuth } from "../../../../../application/auth/factory";
 import { Environments } from "../../../../../infra/database/entities/Environments";
 import { Plants } from "../../../../../infra/database/entities/Plants";
-import { usePlantsByEnvironmentQuery } from "../../../../hooks/queries/plants/usePlantsByEnvironment";
+import { usePlantsByEnvironmentQuery } from "../../../../hooks/queries/plants/usePlantsByEnvironmentQuery";
 import { View } from "react-native";
+import { useEnvironmentsQuery } from "../../../../hooks/queries/environments/useEnvironmentsQuery";
+import { lightTheme } from "../../../../themes/lightTheme";
 
 export function PlantsList() {
+    
     const { user, saveUser } = useUser();
     const aplicAuth = getAplicAuth();
 
     const navigation = useNavigation();
 
-    const aplicEnvironments = getAplicEnvironments();
-
-    const [environments, setEnvironments] = useState<Environments[]>([]);
     const [environmentSelected, setEnvironmentSelected] = useState<Environments>();
 
-    // Usando o hook do TanStack Query
-    const { data: plantsResult, isLoading, error } = usePlantsByEnvironmentQuery(
+    const { data: plantsResult, isLoading: isLoadingPlants, error: plantsError } = usePlantsByEnvironmentQuery(
         environmentSelected?.id
     );
 
-    useFocusEffect(
-        useCallback(() => {
-            handleGetEnvironments();
-        }, [])
-    );
+    const { data: environmentsResult, isLoading: isLoadingEnvironments, error: environmentsError } = useEnvironmentsQuery();
 
-    async function handleGetEnvironments() {
-        try {
-            const res = await aplicEnvironments.get();
-
-            if (!res.Success) {
-                Alert.alert("Atenção!", `Ocorreu um erro ao recuperar os dados ${res.Message}`)
-            }
-
-            setEnvironments(res.Content);
-            handleSelectEnvironment(res.Content[0]);
-        } catch (error: any) {
-            Alert.alert("Erro ao buscar ambientes", error.message);
+    useEffect(() => {
+        if (environmentsResult?.Content.length > 0) {
+            handleSelectEnvironment(environmentsResult.Content[0]);
         }
-    }
+    }, [environmentsResult])
 
     function handleSelectEnvironment(environment: Environments) {
         setEnvironmentSelected(environment);
     }
 
-    async function handleSelectPlant(plant: Plants) {
-        navigation.navigate("PlantCreate", {
-            plantId: plant.id,
-        });
-    }
 
     async function handleLogout() {
         try {
@@ -80,22 +60,29 @@ export function PlantsList() {
 
     }
 
+    async function handleSelectPlant(plant: Plants) {
+        navigation.navigate("PlantCreate", {
+            plantId: plant.id,
+        });
+    }
+
     function handleCreatePlant() {
         navigation.navigate("PlantCreate");
     }
 
-    if (error) {
+    if (plantsError || environmentsError) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <TextComponent 
-                    text="Erro ao carregar plantas" 
-                    variant={EnumTextVariant.Heading} 
+                <TextComponent
+                    text="Erro ao carregar plantas"
+                    variant={EnumTextVariant.Heading}
                 />
             </View>
         );
     }
 
     const plants = plantsResult?.Content || [];
+    const environments = environmentsResult?.Content || [];
 
     return (
         <Styles.Container>
@@ -138,6 +125,14 @@ export function PlantsList() {
                 />
             </Styles.Subheading>
 
+            {
+                isLoadingEnvironments && (
+                    <Styles.LoadingEnvironments>
+                        <ActivityIndicator size="small" color={lightTheme.colors.primary} />
+                    </Styles.LoadingEnvironments>
+                )
+            }
+
             <Styles.EnvironmentsList
                 data={environments}
                 horizontal={true}
@@ -156,10 +151,17 @@ export function PlantsList() {
                 )}
             />
 
+            {
+                isLoadingPlants && (
+                    <Styles.LoadingEnvironments>
+                        <ActivityIndicator size="small" color={lightTheme.colors.primary} />
+                    </Styles.LoadingEnvironments>
+                )
+            }
+
             <Styles.PlantsList
                 data={plants}
                 numColumns={2}
-                refreshing={isLoading}
                 keyExtractor={(item: any) => item.id.toString()}
                 renderItem={({ item }: { item: any }) => (
                     <CardPlant
@@ -167,7 +169,7 @@ export function PlantsList() {
                         onSelectPlant={handleSelectPlant}
                     />
                 )}
-                ListFooterComponent={() => (
+                ListFooterComponent={() => !isLoadingPlants && (
                     <ButtonComponent
                         onPress={handleCreatePlant}
                         variant={EnumButtonVariant.Selected}
