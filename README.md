@@ -4,14 +4,64 @@
 
 ## ✨ Funcionalidades
 
-- Selecionar uma planta já cadastrada.
+- Cadastrar uma planta.
 - Agendar notificações para lembrar de regar a planta.
 - Escolher os dias da semana e o horário para cada notificação.
 
-## 🧱 Tecnologias e Arquitetura
+## 🏗️ Arquitetura
 
-- **Clean Architecture** — Separação clara entre camadas de domínio, dados, apresentação e infraestrutura.
-- **TypeORM** — ORM utilizado para persistência local de dados.
+O projeto segue o padrão **Clean Architecture**, promovendo uma separação clara de responsabilidades e facilitando a manutenção e escalabilidade do código. As principais camadas são:
+
+- **Domain**: Modelos de negócio e regras de domínio (entidades, use cases, validações).
+- **Application**: Orquestração de casos de uso, lógica de aplicação e coordenação entre domínio e infraestrutura.
+- **Infra**: Implementações concretas de repositórios, serviços, banco de dados, integrações externas, etc.
+- **UI**: Componentes visuais, telas, hooks, rotas e temas.
+
+## 📁 Organização das Pastas
+
+```
+src/
+├── application/           # Orquestração da infra e domain
+├── common/                # DTOs, enums e utilitários compartilhados
+├── domain/                # Modelos e use cases do domínio
+├── infra/                 # Implementações técnicas
+│   ├── database/          # Entidades, repositórios e migrações do banco
+│   ├── implementations/   # Serviços concretos (notificações, storage, etc)
+├── ui/                    # Interface do usuário
+│   ├── assets/            # Imagens e recursos visuais
+│   ├── components/        # Componentes reutilizáveis
+│   ├── contexts/          # Contextos React
+│   ├── hooks/             # Hooks customizados (queries, mutations)
+│   ├── routes/            # Rotas públicas e privadas
+│   ├── themes/            # Temas de UI
+│   └── views/             # Telas (públicas e privadas)
+```
+
+## ⚙️ Configuração de Ambiente (.env)
+
+O projeto utiliza variáveis de ambiente para armazenar informações sensíveis e configurações específicas de cada ambiente (ex: chaves de API, endpoints, etc).
+
+- Crie um arquivo `.env` na raiz do projeto.
+- O arquivo `.env` está listado no `.gitignore` e **não deve ser versionado**.
+- Exemplo de conteúdo:
+
+```
+CLIENT_ID_FIREBASE=xxxxx
+```
+
+## 🔥 Configuração do Firebase (google-services.json)
+
+Para que funcionalidades como notificações push e autenticação funcionem corretamente, é necessário configurar o Firebase:
+
+### Android
+1. No [console do Firebase](https://console.firebase.google.com/), crie um projeto e registre o app Android.
+2. Baixe o arquivo `google-services.json`.
+3. Coloque o arquivo em `android/app/google-services.json`.
+4. O arquivo está listado no `.gitignore` e **não deve ser versionado**.
+
+### iOS
+- Caso deseje usar Firebase no iOS, será necessário baixar o arquivo `GoogleService-Info.plist` e colocá-lo em `ios/entrega_mobile/`.
+- No momento, o projeto não inclui esse arquivo por padrão.
 
 ## 🚀 Como executar o projeto
 
@@ -27,19 +77,6 @@ npm install
 
 # Execute o projeto
 npm start
-````
-
-## 📁 Estrutura do Projeto
-
-```
-src/
-├── domain/ # Models e UseCases
-├── applications/
-├── infra/
-│ ├── database/ # Configuração e entidades do banco
-│ ├── implementations/ # Implementações dos repositórios, serviços e bibliotecas
-│ ├── ui/ # Componentes visuais e telas
-│ └── assets/ # Imagens, fontes, ícones etc.
 ```
 
 ## 📌 Sobre o projeto
