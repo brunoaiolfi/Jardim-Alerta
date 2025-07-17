@@ -41,8 +41,9 @@ export function Routes() {
         try {
             setIsLoading(true);
 
-            const currentUser = await aplicAuth.getUser();
-            saveUser(currentUser);
+            const res = await aplicAuth.getUser();
+
+            saveUser(res.Content);
         } catch (error: any) {
             console.error("Error checking user:", error.message);
         } finally {

@@ -1,6 +1,6 @@
-import { Plant } from "../../../../domain/plants/models/Plant";
+import { Plants } from "../../../../infra/database/entities/Plants";
 
 export interface ICardPlants {
-    plant: Plant,
-    onSelectPlant: (id: number) => void
+    plant: Plants,
+    onSelectPlant: (plant: Plants) => void
 }

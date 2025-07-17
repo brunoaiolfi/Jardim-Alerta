@@ -1,7 +1,6 @@
 import { Environments } from './Environments';
 import { NotificationTrigger } from './NotificationTrigger';
-import { WaterFrequency } from './WaterFrequency';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, ManyToMany, JoinTable, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, OneToMany } from "typeorm"
 
 @Entity()
 export class Plants extends BaseEntity {
@@ -13,18 +12,9 @@ export class Plants extends BaseEntity {
 
     @Column()
     about: string
-
+    
     @Column()
-    waterTips: string
-
-    @Column()
-    frequencyTimes: number
-
-    @ManyToOne(() => WaterFrequency, (waterFrequency) => waterFrequency.plants)
-    water_frequency: WaterFrequency
-
-    @Column()
-    waterFrequencyId: number
+    imageUri: string
 
     @ManyToMany(() => Environments, (environments) => environments.plants)
     @JoinTable({

@@ -10,7 +10,6 @@ export class GoogleAuth implements ISocialAuth {
         GoogleSignin.configure({
             webClientId: Config.CLIENT_ID_FIREBASE,
         });
-        console.log('GoogleAuth initialized with webClientId:', Config.CLIENT_ID_FIREBASE);
     }
 
     async login(): Promise<CommonUserDTO> {

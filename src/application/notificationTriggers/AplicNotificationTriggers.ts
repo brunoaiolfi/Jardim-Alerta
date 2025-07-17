@@ -1,4 +1,5 @@
 import { ValidateNotificationTriggerUseCase } from "../../domain/notifications/useCases/ValidateNotificationTrigger";
+import { Result } from "../../domain/result/model/Result";
 import { NotificationTrigger } from "../../infra/database/entities/NotificationTrigger";
 import { IRepNotificationTriggers } from "../../infra/database/repositories/notificationTriggers/IRepNotificationTriggers";
 import { INotificationsImplementation } from "../../infra/implementations/notifications/INotifications";
@@ -17,39 +18,62 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
         this.notificationImplementation = notificationImpl;
     }
 
-    public async delete(model: NotificationTrigger): Promise<void> {
+    public async getNotificationsWithPlants(): Promise<Result<NotificationTrigger[]>> {
         try {
-            await this.repository.delete(model);
-            for (const triggerId of model.triggersId) {
-                this.notificationImplementation.deleteTriggerNotification(triggerId);
-            }
-        } catch (error) {
-            throw new Error(error);
+            const notificationTriggers = await this.repository.select({
+                relations: ["plant"],
+            });
+
+            return Result.Ok(notificationTriggers);
+        }
+        catch (error) {
+            return Result.Fail(error.message);
         }
     }
 
-    public override async save(model: NotificationTrigger): Promise<void> {
+    public async delete(entidade: NotificationTrigger) {
+        try {
+            await this.repository.delete(entidade);
+            for (const triggerId of entidade.triggersId) {
+                this.notificationImplementation.deleteTriggerNotification(triggerId);
+            }
+
+            return Result.Ok(null);
+        } catch (error) {
+            return Result.Fail(error.message)
+        }
+    }
+
+    public override async save(entidade: NotificationTrigger): Promise<Result<null>> {
         try {
             const bodyNotification = {
                 title: "Heeey 🌱",
-                body: `Está na hora de cuidar da sua ${model.plant?.name}! Lembre-se ${model.plant?.waterTips}!`,
+                body: `Está na hora de cuidar da sua ${entidade.plant?.name}!`,
             }
 
             const triggersId = await this.notificationImplementation.createTriggerNotification(bodyNotification, {
-                days: model.weekDay,
-                hours: parseInt(model.time.split(':')[0]),
-                minutes: parseInt(model.time.split(':')[1]),
+                days: entidade.weekDay,
+                hours: parseInt(entidade.time.split(':')[0]),
+                minutes: parseInt(entidade.time.split(':')[1]),
             });
 
-            model.triggersId = triggersId;
-            
-            if (!ValidateNotificationTriggerUseCase.validate(model)) {
-                throw new Error("Notificação inválida.");
+            entidade.triggersId = triggersId;
+
+            const validateResult = ValidateNotificationTriggerUseCase.validate({
+                id: entidade.id,
+                plantId: entidade.plantId,
+                time: entidade.time,
+                triggersId: entidade.triggersId,
+                weekDay: entidade.weekDay
+            });
+
+            if (!validateResult.Success) {
+                throw new Error(validateResult.Message);
             }
 
-            await super.save(model);
+            return await super.save(entidade);
         } catch (error) {
-            throw new Error(error);
+            return Result.Fail(error.message)
         }
     }
 }

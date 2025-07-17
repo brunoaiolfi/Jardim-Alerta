@@ -1,7 +1,8 @@
 import { CommonUserDTO } from "../../common/DTOs/CommonUserDTO";
+import { Result } from "../../domain/result/model/Result";
 
 export interface IAplicAuth {
-    login: () => Promise<CommonUserDTO>;
-    logout: () => Promise<void>;
-    getUser: () => Promise<CommonUserDTO | null>;
+    login: () => Promise<Result<CommonUserDTO>>;
+    logout: () => Promise<Result<null>>;
+    getUser: () => Promise<Result<CommonUserDTO | null>>;
 }
