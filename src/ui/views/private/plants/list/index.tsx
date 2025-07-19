@@ -15,9 +15,10 @@ import { usePlantsByEnvironmentQuery } from "../../../../hooks/queries/plants/us
 import { View } from "react-native";
 import { useEnvironmentsQuery } from "../../../../hooks/queries/environments/useEnvironmentsQuery";
 import { lightTheme } from "../../../../themes/lightTheme";
+import firestore from '@react-native-firebase/firestore';
 
 export function PlantsList() {
-    
+
     const { user, saveUser } = useUser();
     const aplicAuth = getAplicAuth();
 
@@ -56,7 +57,20 @@ export function PlantsList() {
         }
     }
 
-    function handleCreateEnvironment() {
+    async function handleCreateEnvironment() {
+        try {
+            const result = await firestore()
+                .collection('Environments')
+                .add({
+                    id: "" + new Date().getTime().toString(),
+                    userId: user?.id,
+                    name: "Novo Ambiente 3",
+                });
+
+            console.log(result);
+        } catch (error) {
+            console.error('Erro ao adicionar ambiente:', error);
+        }
 
     }
 
@@ -143,6 +157,17 @@ export function PlantsList() {
                         onPress={() => handleSelectEnvironment(item)}
                         text={`${item.name}`}
                         variant={item.id === environmentSelected?.id ? EnumButtonVariant.Selected : EnumButtonVariant.Secondary}
+                        height="40px"
+                        buttonStyle={{
+                            marginRight: 10,
+                        }}
+                    />
+                )}
+                ListHeaderComponent={() => (
+                    <ButtonComponent
+                        onPress={() => handleCreateEnvironment()}
+                        icon="plus"
+                        variant={EnumButtonVariant.Selected}
                         height="40px"
                         buttonStyle={{
                             marginRight: 10,
