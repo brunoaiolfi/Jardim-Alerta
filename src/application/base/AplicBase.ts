@@ -1,6 +1,6 @@
 import { Result } from "../../domain/result/model/Result";
 import { IRepBase } from "../../infra/database/repositories/base/IRepBase";
-import { IEntity, IFindOptions } from "../../infra/implementations/database/DAO/IDAO";
+import { IEntity, IFindOptions } from "../../infra/database/DAO/IDAO";
 import { IAplicBase } from "./IAplicBase";
 
 export class AplicBase<T> implements IAplicBase<T> {

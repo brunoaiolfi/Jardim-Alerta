@@ -1,12 +1,12 @@
 
-import { getDatabaseContextImplementation } from "../../../implementations/database/context/factory";
-import { getDAOImplementation } from "../../../implementations/database/DAO/factory";
+import { getDatabaseContext } from "../../context/factory";
+import { getDAO } from "../../DAO/factory";
 import { Plants } from "../../entities/Plants";
 import { IRepPlants } from "./IRepPlants";
 import { RepPlants } from "./RepPlants";
 
 export function getRepPlants() : IRepPlants {
-    const repository = getDatabaseContextImplementation().getRepository(Plants);
-    const _db = getDAOImplementation<Plants>(repository);
+    const repository = getDatabaseContext().getRepository(Plants);
+    const _db = getDAO<Plants>(repository);
     return new RepPlants(_db);
 }

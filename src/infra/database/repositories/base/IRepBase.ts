@@ -1,4 +1,4 @@
-import { IEntity, IFindOptions } from "../../../implementations/database/DAO/IDAO";
+import { IEntity, IFindOptions } from "../../DAO/IDAO";
 
 export interface IRepBase<T> {
     select(options?: IFindOptions<T>): Promise<T[]>;

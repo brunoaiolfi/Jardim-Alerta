@@ -1,12 +1,12 @@
 
-import { getDatabaseContextImplementation } from "../../../implementations/database/context/factory";
-import { getDAOImplementation } from "../../../implementations/database/DAO/factory";
+import { getDatabaseContext } from "../../context/factory";
+import { getDAO } from "../../DAO/factory";
 import { NotificationTrigger } from "../../entities/NotificationTrigger";
 import { IRepNotificationTriggers } from "./IRepNotificationTriggers";
 import { RepNotificationTriggers } from "./RepNotificationTriggers";
 
 export function getRepNotificationTriggers() : IRepNotificationTriggers {
-    const repository = getDatabaseContextImplementation().getRepository(NotificationTrigger);
-    const _db = getDAOImplementation<NotificationTrigger>(repository);
+    const repository = getDatabaseContext().getRepository(NotificationTrigger);
+    const _db = getDAO<NotificationTrigger>(repository);
     return new RepNotificationTriggers(_db);
 }

@@ -2342,6 +2342,11 @@
   dependencies:
     plist "^3.1.0"
 
+"@react-native-firebase/firestore@^22.2.1":
+  version "22.2.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-22.2.1.tgz"
+  integrity sha512-QM5r9QN45Adn/N2BkbuQNlTiTwWlHsILIrL73psOyyyAihtQpig4bAJKVhNJdUthmR0PapI/xHG9+/1D1d6Czg==
+
 "@react-native-google-signin/google-signin@^15.0.0":
   version "15.0.0"
   resolved "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-15.0.0.tgz"

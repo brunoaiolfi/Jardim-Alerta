@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
-import { IDAOImplementation, IEntity, IFindOptions } from "./IDAO";
+import { IDAO, IEntity, IFindOptions } from "./IDAO";
 
-export class DAOImplementation<T extends IEntity> implements IDAOImplementation<T> {
+export class DAO<T extends IEntity> implements IDAO<T> {
     private readonly repository: Repository<T>;
 
     constructor(repository: Repository<T>) {

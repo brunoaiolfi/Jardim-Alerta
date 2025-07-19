@@ -1,5 +1,5 @@
 import { Result } from "../../domain/result/model/Result";
-import { IEntity, IFindOptions } from "../../infra/implementations/database/DAO/IDAO";
+import { IEntity, IFindOptions } from "../../infra/database/DAO/IDAO";
 
 export interface IAplicBase<T> {
     get: (options?: IFindOptions<T>) => Promise<Result<T[]>>;

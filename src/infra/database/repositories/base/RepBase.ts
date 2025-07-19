@@ -1,10 +1,10 @@
-import { IDAOImplementation, IEntity, IFindOptions } from '../../../implementations/database/DAO/IDAO';
+import { IDAO, IEntity, IFindOptions } from '../../DAO/IDAO';
 import { IRepBase } from './IRepBase';
 
 export class RepBase<T extends IEntity> implements IRepBase<T> {
-    private readonly _db: IDAOImplementation<T>;
+    private readonly _db: IDAO<T>;
 
-    constructor(db: IDAOImplementation<T>) {
+    constructor(db: IDAO<T>) {
         this._db = db;
     }
 
