@@ -6,7 +6,7 @@ import { getAplicAuth } from '../../application/auth/factory';
 import { LoadingView } from '../views/public/loading';
 import { getDatabaseContext } from '../../infra/database/context/factory';
 import { getNotificationImplementation } from '../../infra/implementations/notifications/factory';
-import { AppDataSource } from '../../infra/database/DataSource/DataSource';
+import { AppDataSource } from '../../infra/database/dataSource/DataSource';
 import { Alert } from 'react-native';
 
 

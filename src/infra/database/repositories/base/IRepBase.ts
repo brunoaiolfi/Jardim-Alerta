@@ -1,4 +1,7 @@
-import { IEntity, IFindOptions } from "../../DAO/IDAO";
+import { BaseEntity, FindManyOptions } from "typeorm";
+
+export interface IFindOptions<T> extends FindManyOptions<T> { }
+export interface IEntity extends BaseEntity { }
 
 export interface IRepBase<T> {
     select(options?: IFindOptions<T>): Promise<T[]>;
