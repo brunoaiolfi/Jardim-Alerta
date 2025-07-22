@@ -59,10 +59,6 @@ Para que funcionalidades como notificações push e autenticação funcionem cor
 3. Coloque o arquivo em `android/app/google-services.json`.
 4. O arquivo está listado no `.gitignore` e **não deve ser versionado**.
 
-### iOS
-- Caso deseje usar Firebase no iOS, será necessário baixar o arquivo `GoogleService-Info.plist` e colocá-lo em `ios/entrega_mobile/`.
-- No momento, o projeto não inclui esse arquivo por padrão.
-
 ## 🚀 Como executar o projeto
 
 ```bash

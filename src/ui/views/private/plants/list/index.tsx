@@ -57,23 +57,6 @@ export function PlantsList() {
         }
     }
 
-    async function handleCreateEnvironment() {
-        try {
-            const result = await firestore()
-                .collection('Environments')
-                .add({
-                    id: "" + new Date().getTime().toString(),
-                    userId: user?.id,
-                    name: "Novo Ambiente 3",
-                });
-
-            console.log(result);
-        } catch (error) {
-            console.error('Erro ao adicionar ambiente:', error);
-        }
-
-    }
-
     async function handleSelectPlant(plant: Plants) {
         navigation.navigate("PlantCreate", {
             plantId: plant.id,
@@ -157,17 +140,6 @@ export function PlantsList() {
                         onPress={() => handleSelectEnvironment(item)}
                         text={`${item.name}`}
                         variant={item.id === environmentSelected?.id ? EnumButtonVariant.Selected : EnumButtonVariant.Secondary}
-                        height="40px"
-                        buttonStyle={{
-                            marginRight: 10,
-                        }}
-                    />
-                )}
-                ListHeaderComponent={() => (
-                    <ButtonComponent
-                        onPress={() => handleCreateEnvironment()}
-                        icon="plus"
-                        variant={EnumButtonVariant.Selected}
                         height="40px"
                         buttonStyle={{
                             marginRight: 10,
