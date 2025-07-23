@@ -1,18 +1,17 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class CreatePendingRequests1737719894849 implements MigrationInterface {
-
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "pending_requests",
+                name: "PendingRequests",
                 columns: [
                     {
                         name: "id",
+                        type: "integer",
                         isPrimary: true,
                         isGenerated: true,
                         generationStrategy: "increment",
-                        type: "integer",
                     },
                     {
                         name: "method",
@@ -21,13 +20,13 @@ export class CreatePendingRequests1737719894849 implements MigrationInterface {
                     },
                     {
                         name: "DTO",
-                        type: "varchar",
+                        type: "text",
                         isNullable: true,
                     },
                     {
                         name: "createdAt",
-                        type: "timestamp",
-                        default: "CURRENT_TIMESTAMP"
+                        type: "datetime",
+                        default: "CURRENT_TIMESTAMP",
                     },
                 ],
             })
@@ -35,6 +34,6 @@ export class CreatePendingRequests1737719894849 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DELETE FROM pending_requests`);
+        await queryRunner.dropTable("PendingRequests");
     }
 }

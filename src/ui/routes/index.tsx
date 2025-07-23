@@ -31,7 +31,7 @@ export function Routes() {
             await initializeNotifications();
             await checkUser();
         } catch (error) {
-            console.log(error.message);
+            Alert.alert("Atenção!", `Ocorreu um erro na inicialização do aplicativo, ${error.message}!`);
         } finally {
             setIsLoading(false);
         }

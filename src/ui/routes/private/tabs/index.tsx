@@ -3,6 +3,7 @@ import { PlantsList } from '../../../views/private/plants/list';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { AlarmsList } from '../../../views/private/alarms/list';
 import Feather from "react-native-vector-icons/Feather";
+import { PendingRequestsTestScreen } from '../../../views/private/pendingRequests';
 
 const BottomTabsRoutes = createBottomTabNavigator();
 
@@ -35,6 +36,15 @@ export function DashboardRoutes() {
                 options={{
                     tabBarLabel: "Meus Alarmes",
                     tabBarIcon: ({ color }) => <Feather name="bell" size={20} color={color} />
+                }}
+            />
+
+            <BottomTabsRoutes.Screen
+                name="PendingRequestsTests"
+                component={PendingRequestsTestScreen}
+                options={{
+                    tabBarLabel: "Testes",
+                    tabBarIcon: ({ color }) => <Feather name="allert" size={20} color={color} />
                 }}
             />
         </BottomTabsRoutes.Navigator>

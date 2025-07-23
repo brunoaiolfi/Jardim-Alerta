@@ -1,21 +1,27 @@
 import { ValidateNotificationTriggerUseCase } from "../../domain/notifications/useCases/ValidateNotificationTrigger";
 import { Result } from "../../domain/result/model/Result";
 import { NotificationTrigger } from "../../infra/database/entities/NotificationTrigger";
+import { PendingMethod, PendingRequests } from "../../infra/database/entities/PendingRequests";
 import { IRepNotificationTriggers } from "../../infra/database/repositories/notificationTriggers/IRepNotificationTriggers";
 import { INotificationsImplementation } from "../../infra/implementations/notifications/INotifications";
 import { AplicBase } from "../base/AplicBase";
+import { IAplicPendingRequests } from "../pendingRequests/IAplicPendingRequests";
 import { IAplicNotificationTriggers } from "./IAplicNotificationTriggers";
 
 export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> implements IAplicNotificationTriggers {
 
-    private notificationImplementation: INotificationsImplementation;
+    private readonly _notificationImplementation: INotificationsImplementation;
+    private readonly _aplicPendingRequests: IAplicPendingRequests;
+ 
 
     constructor(
         rep: IRepNotificationTriggers,
-        notificationImpl: INotificationsImplementation
+        notificationImpl: INotificationsImplementation,
+        aplicPendingRequests: IAplicPendingRequests
     ) {
         super(rep);
-        this.notificationImplementation = notificationImpl;
+        this._aplicPendingRequests = aplicPendingRequests;
+        this._notificationImplementation = notificationImpl;
     }
 
     public async getNotificationsWithPlants(): Promise<Result<NotificationTrigger[]>> {
@@ -34,9 +40,17 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
     public async delete(entidade: NotificationTrigger) {
         try {
             await this.repository.delete(entidade);
+
             for (const triggerId of entidade.triggersId) {
-                this.notificationImplementation.deleteTriggerNotification(triggerId);
+                this._notificationImplementation.deleteTriggerNotification(triggerId);
             }
+
+            const pendingRequest = new PendingRequests();
+
+            pendingRequest.DTO = JSON.stringify(entidade);
+            pendingRequest.method = PendingMethod.DeleteNotificationTrigger;
+
+            await this._aplicPendingRequests.save(pendingRequest);
 
             return Result.Ok(null);
         } catch (error) {
@@ -51,7 +65,7 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
                 body: `Está na hora de cuidar da sua ${entidade.plant?.name}!`,
             }
 
-            const triggersId = await this.notificationImplementation.createTriggerNotification(bodyNotification, {
+            const triggersId = await this._notificationImplementation.createTriggerNotification(bodyNotification, {
                 days: entidade.weekDay,
                 hours: parseInt(entidade.time.split(':')[0]),
                 minutes: parseInt(entidade.time.split(':')[1]),
@@ -71,7 +85,16 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
                 throw new Error(validateResult.Message);
             }
 
-            return await super.save(entidade);
+            await super.save(entidade);
+
+            const pendingRequest = new PendingRequests();
+
+            pendingRequest.DTO = JSON.stringify(entidade);
+            pendingRequest.method = PendingMethod.CreateNotificationTrigger;
+
+            await this._aplicPendingRequests.save(pendingRequest);
+
+            return Result.Ok(null);
         } catch (error) {
             return Result.Fail(error.message)
         }
