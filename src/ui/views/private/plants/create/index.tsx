@@ -149,18 +149,13 @@ export function PlantCreate() {
     try {
       const params = route.params as RouteParams;
 
-      const plant = new Plants();
-
-      plant.name = values.name
-      plant.about = values.about
-      plant.environments = values.environments as Environments[]
-      plant.imageUri = values.imageUri
-
-      if (params?.plantId) {
-        plant.id = params.plantId;
-      }
-
-      savePlantMutation.mutate(plant, {
+      savePlantMutation.mutate({
+        name: values.name,
+        about: values.about,
+        environments: values.environments as Environments[],
+        imageUri: values.imageUri,
+        id: params.plantId
+      } as Plants, {
         onSuccess: () => {
           Alert.alert("Sucesso", "Planta salva com sucesso!");
           navigation.goBack();
