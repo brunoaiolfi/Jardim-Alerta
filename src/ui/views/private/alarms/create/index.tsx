@@ -105,7 +105,7 @@ export function AlarmCreate() {
         setValue('minutes', Number(value));
     }
 
-    async function handleSavePlant(values: ISavePlant) {
+    async function handleSaveNotificationTrigger(values: ISavePlant) {
         try {
             saveNotificationTriggerMutation.mutate({
                 plantId: plant.id,
@@ -227,7 +227,7 @@ export function AlarmCreate() {
 
             <Styles.Footer>
                 <ButtonComponent
-                    onPress={handleSubmit(handleSavePlant)}
+                    onPress={handleSubmit(handleSaveNotificationTrigger)}
                     text="Salvar lembrete"
                     variant={EnumButtonVariant.Primary}
                 />
