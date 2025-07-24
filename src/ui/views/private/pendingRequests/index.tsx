@@ -4,6 +4,7 @@ import { PendingMethod, PendingRequests } from "../../../../infra/database/entit
 import { getPendingRequestsAplic } from "../../../../application/pendingRequests/factory";
 import { TextComponent } from "../../../components/text";
 import { useFocusEffect } from "@react-navigation/native";
+import { ButtonComponent } from "../../../components/button";
 
 
 export function PendingRequestsTestScreen() {
@@ -18,8 +19,18 @@ export function PendingRequestsTestScreen() {
     )
 
     async function getAll() {
-        const data = await aplic.get();
+        const data = await aplic.get({
+            order: {
+                createdAt: "ASC"
+            }
+        });
         setPendingRequests(data?.Content ?? [])
+    }
+
+    async function sincPendingRequests() {
+        const result = await aplic.SyncPendingRequests();
+        console.log("Result")
+        console.log(result)
     }
 
     const PendingMethodTitles: Record<PendingMethod, string> = {
@@ -31,16 +42,25 @@ export function PendingRequestsTestScreen() {
     };
 
     return (
-        <FlatList
-            data={pendingRequests}
-            renderItem={(item) => {
+        <>
+            <FlatList
+                data={pendingRequests}
+                renderItem={(item) => {
 
-                return <>
-                    <TextComponent
-                        text={PendingMethodTitles[item.item.method]}
-                    />
-                </>
-            }}
-        />
+                    return <>
+                        <TextComponent
+                            text={PendingMethodTitles[item.item.method]}
+                        />
+                         <TextComponent
+                            text={item.item.createdAt.toString()}
+                        />
+                    </>
+                }}
+            />
+            <ButtonComponent
+                onPress={sincPendingRequests}
+                text="Sincronizar"
+            />
+        </>
     )
 }
