@@ -11,8 +11,8 @@ export class CreatePlants1737719894846 implements MigrationInterface {
                         name: "id",
                         isPrimary: true,
                         isGenerated: true,
-                        generationStrategy: "increment",
-                        type: "integer",
+                        generationStrategy: "uuid",
+                        type: "uuid",
                     },
                     {
                         name: "name",

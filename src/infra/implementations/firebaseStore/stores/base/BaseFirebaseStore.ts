@@ -1,7 +1,7 @@
 import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
-import { IBaseFirebaseStore } from "./IBaseFirebaseStore";
+import { IBaseFirebaseStoreImplementation as IBaseFirebaseStoreImplementation } from "./IBaseFirebaseStore";
 
-export class BaseFirebaseStore<T> implements IBaseFirebaseStore<T> {
+export class BaseFirebaseStoreImplementation<T> implements IBaseFirebaseStoreImplementation<T> {
 
     private readonly _collectionName: string;
 

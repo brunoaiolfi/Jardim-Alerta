@@ -1,9 +1,9 @@
 import { NotificationTriggerDTO } from "../../../../apis/notificationTriggers/DTOs/NotificationTriggerDTO";
-import { BaseFirebaseStore } from "../base/BaseFirebaseStore";
+import { BaseFirebaseStoreImplementation } from "../base/BaseFirebaseStore";
 import { INotificationTriggersFirebaseStore } from "./INotificationTriggersFirebaseStore";
 
-export class NotificationTriggersFirebaseStore extends BaseFirebaseStore<NotificationTriggerDTO> implements INotificationTriggersFirebaseStore {
+export class NotificationTriggersFirebaseStore extends BaseFirebaseStoreImplementation<NotificationTriggerDTO> implements INotificationTriggersFirebaseStore {
     public constructor() {
-        super("notificationTriggers");
+        super("NotificationTriggers");
     }
 }

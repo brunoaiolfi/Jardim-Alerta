@@ -3,6 +3,8 @@ export type PlantsDTO = {
     name: string;
     about: string;
     imageUri: string;
-    environments: number[];
-    notificationTriggers: number[]
+    environments: string[];
+    notificationTriggers: string[]
+
+    userId: string;
 }

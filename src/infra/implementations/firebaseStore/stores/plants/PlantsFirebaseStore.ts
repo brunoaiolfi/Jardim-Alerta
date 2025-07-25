@@ -1,9 +1,9 @@
 import { PlantsDTO } from '../../../../apis/plants/DTOs/PlantsDTO';
-import { BaseFirebaseStore } from '../base/BaseFirebaseStore';
+import { BaseFirebaseStoreImplementation } from '../base/BaseFirebaseStore';
 import { IPlantsFirebaseStore } from './IPlantsFirebaseStore';
 
-export class PlantsFirebaseStore extends BaseFirebaseStore<PlantsDTO> implements IPlantsFirebaseStore {
+export class PlantsFirebaseStore extends BaseFirebaseStoreImplementation<PlantsDTO> implements IPlantsFirebaseStore {
     constructor() {
-        super("plants");
+        super("Plants");
     }
 }

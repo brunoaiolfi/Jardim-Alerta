@@ -9,7 +9,7 @@ import { IAplicPlants } from "./IAplicPlants";
 export class AplicPlants extends AplicBase<Plants> implements IAplicPlants {
     private readonly _aplicPendingRequests: IAplicPendingRequests;
 
-    constructor(repPlants: IRepPlants, aplicPendingRequests: IAplicPendingRequests) {
+    constructor(repPlants: IRepPlants, aplicPendingRequests: IAplicPendingRequests, ) {
         super(repPlants);
 
         this._aplicPendingRequests = aplicPendingRequests;
@@ -32,7 +32,7 @@ export class AplicPlants extends AplicBase<Plants> implements IAplicPlants {
         }
     }
 
-    public async getByEnvironments(environmentId: number): Promise<Result<Plants[]>> {
+    public async getByEnvironments(environmentId: string): Promise<Result<Plants[]>> {
         try {
             if (!environmentId) {
                 return Result.Fail("Por favor, informe o ambiente.");
@@ -50,6 +50,29 @@ export class AplicPlants extends AplicBase<Plants> implements IAplicPlants {
             return Result.Ok(plants);
         } catch (error) {
             return Result.Fail(error.message)
+        }
+    }
+
+    public async getById(id: string): Promise<Result<Plants>> {
+        try {
+            if (!id) {
+                return Result.Fail("Por favor, informe o id da planta.");
+            }
+
+            const plants = await this.repository.select({
+                relations: ["environments"],
+                where: {
+                    id: id
+                }
+            });
+
+            if (!plants) {
+                return Result.Fail("Planta não encontrada.");
+            }
+
+            return Result.Ok(plants[0]);
+        } catch (error) {
+            return Result.Fail(error.message);
         }
     }
 }

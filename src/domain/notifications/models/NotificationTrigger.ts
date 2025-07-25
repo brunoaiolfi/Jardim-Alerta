@@ -3,5 +3,5 @@ export class NotificationTrigger {
     weekDay: number[];
     triggersId: string[];
     time: string;
-    plantId: number;
+    plantId: string;
 }

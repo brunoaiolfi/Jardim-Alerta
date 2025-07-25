@@ -1,22 +1,27 @@
-import { IAplicPlants } from './../plants/IAplicPlants';
 import { Result } from "../../domain/result/model/Result";
 import { PendingMethod, PendingRequests } from "../../infra/database/entities/PendingRequests";
 import { Plants } from "../../infra/database/entities/Plants";
 import { IRepPendingRequests } from "../../infra/database/repositories/pendingRequests/IRepPendingRequests";
 import { AplicBase } from "../base/AplicBase";
 import { IAplicPendingRequests } from "./IAplicPendingRequests";
-import { IAplicNotificationTriggers } from '../notificationTriggers/IAplicNotificationTriggers';
+import { IAplicAuth } from '../auth/IAplicAuth';
+import { PlantsDTO } from '../../infra/apis/plants/DTOs/PlantsDTO';
+import { IServPlants } from '../../infra/apis/plants/services/IServPlants';
+import { NotificationTriggerDTO } from "../../infra/apis/notificationTriggers/DTOs/NotificationTriggerDTO";
+import { IServNotificationTriggers } from "../../infra/apis/notificationTriggers/service/IServNotificationTriggers";
 
 export class AplicPendingRequests extends AplicBase<PendingRequests> implements IAplicPendingRequests {
 
-    private readonly _aplicPlants: IAplicPlants;
-    private readonly _aplicNotificationTriggers: IAplicNotificationTriggers;
 
-    constructor(repEnvironments: IRepPendingRequests, aplicPlants: IAplicPlants, aplicNotificationTriggers: IAplicNotificationTriggers) {
+    private readonly _aplicAuth: IAplicAuth;
+    private readonly _servPlants: IServPlants;
+    private readonly _servNotificationTriggers: IServNotificationTriggers;
+
+    constructor(repEnvironments: IRepPendingRequests, aplicAuth: IAplicAuth, servPlants: IServPlants, servNotificationTriggers: IServNotificationTriggers) {
         super(repEnvironments);
-
-        this._aplicPlants = aplicPlants;
-        this._aplicNotificationTriggers = aplicNotificationTriggers;
+        this._aplicAuth = aplicAuth;
+        this._servPlants = servPlants;
+        this._servNotificationTriggers = servNotificationTriggers;
     }
 
     private readonly dictMethod = {
@@ -37,7 +42,9 @@ export class AplicPendingRequests extends AplicBase<PendingRequests> implements 
             if (!PendingRequests || PendingRequests.length === 0) return Result.Ok(null);
 
             for (const request of PendingRequests) {
-                const result = await this.dictMethod[request.method](request.DTO);
+                const result = await this.dictMethod[request.method](
+                    JSON.parse(request.DTO)
+                );
 
                 if (!result.Success) break;
 
@@ -51,23 +58,94 @@ export class AplicPendingRequests extends AplicBase<PendingRequests> implements 
         }
     }
 
-    private async proccessCreatePlant(dto: Plants): Promise<Result<null>> {
-        console.log("proccessCreatePlant");
-        return Result.Ok(null);
+    private async proccessCreatePlant(plant: Plants): Promise<Result<void>> {
+        try {
+            const resUser = await this._aplicAuth.getUser();
+
+            if (!resUser?.Success || !resUser.Content) {
+                return Result.Fail("Usuário não autenticado.");
+            }
+
+            const dto: PlantsDTO = {
+                id: plant.id,
+                name: plant.name,
+                about: plant.about,
+                environments: plant.environments.map(env => env.id),
+                imageUri: plant.imageUri,
+                notificationTriggers: plant?.notificationTriggers?.map(trigger => trigger.id) ?? [],
+                userId: resUser.Content.id
+            };
+
+            await this._servPlants.createPlant(dto);
+            return Result.Ok(null);
+        } catch (error) {
+            return Result.Fail(error.message);
+        }
     }
 
-    private async proccessEditPlant(dto: Plants): Promise<Result<null>> {
-        console.log("proccessEditPlant");
-        return Result.Ok(null);
+    private async proccessEditPlant(plant: Plants): Promise<Result<void>> {
+        try {
+            const resUser = await this._aplicAuth.getUser();
+
+            if (!resUser?.Success || !resUser.Content) {
+                return Result.Fail("Usuário não autenticado.");
+            }
+
+            const dto: PlantsDTO = {
+                id: plant.id,
+                name: plant.name,
+                about: plant.about,
+                environments: plant.environments.map(env => env.id),
+                imageUri: plant.imageUri,
+                notificationTriggers: plant?.notificationTriggers?.map(trigger => trigger.id) ?? [],
+                userId: resUser.Content.id
+            };
+
+            await this._servPlants.updatePlant(plant.id, dto);
+            return Result.Ok(null);
+        } catch (error) {
+            return Result.Fail(error.message);
+        }
     }
 
-    private async proccessCreateNotificationTrigger(dto: any): Promise<Result<null>> {
-        console.log("proccessCreateNotificationTrigger");
-        return Result.Ok(null);
+    private async proccessCreateNotificationTrigger(notificationTrigger: any): Promise<Result<void>> {
+        try {
+            const resUser = await this._aplicAuth.getUser();
+
+            if (!resUser.Success || !resUser.Content?.id) {
+                return Result.Fail("Usuário não autenticado.");
+            }
+
+            const dto: NotificationTriggerDTO = {
+                id: notificationTrigger.id,
+                plantId: notificationTrigger.plantId,
+                time: notificationTrigger.time,
+                weekDay: notificationTrigger.weekDay,
+                triggersId: notificationTrigger.triggersId,
+                userId: resUser.Content.id
+            };
+
+            await this._servNotificationTriggers.createTrigger(dto);
+
+            return Result.Ok(null);
+        } catch (error) {
+            return Result.Fail(error.message);
+        }
     }
 
-    private async proccessDeleteNotificationTrigger(dto: any): Promise<Result<null>> {
-        console.log("proccessDeleteNotificationTrigger");
-        return Result.Ok(null);
+    private async proccessDeleteNotificationTrigger(notificationTrigger: any): Promise<Result<void>> {
+        try {
+            const resUser = await this._aplicAuth.getUser();
+
+            if (!resUser.Success || !resUser.Content?.id) {
+                return Result.Fail("Usuário não autenticado.");
+            }
+
+            await this._servNotificationTriggers.deleteTrigger(notificationTrigger.id);
+
+            return Result.Ok(null);
+        } catch (error) {
+            return Result.Fail(error.message);
+        }
     }
 }

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAplicPlants } from '../../../../application/plants/factory';
 import { plantsQueryKeys } from '../keys/plants.keys';
 
-export function usePlantsByEnvironmentQuery(environmentId?: number) {
+export function usePlantsByEnvironmentQuery(environmentId?: string) {
   const aplicPlants = getAplicPlants();
 
   return useQuery({

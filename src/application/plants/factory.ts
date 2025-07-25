@@ -6,5 +6,6 @@ import { IAplicPlants } from "./IAplicPlants";
 export function getAplicPlants() : IAplicPlants {
     const repo = getRepPlants();
     const pendingRequestsAplic = getPendingRequestsAplic();
+
     return new AplicPlants(repo, pendingRequestsAplic);
 }

@@ -1,4 +1,4 @@
 import { NotificationTriggerDTO } from "../../../../apis/notificationTriggers/DTOs/NotificationTriggerDTO";
-import { IBaseFirebaseStore } from "../base/IBaseFirebaseStore";
+import { IBaseFirebaseStoreImplementation } from "../base/IBaseFirebaseStore";
 
-export interface INotificationTriggersFirebaseStore extends IBaseFirebaseStore<NotificationTriggerDTO> { }
+export interface INotificationTriggersFirebaseStore extends IBaseFirebaseStoreImplementation<NotificationTriggerDTO> { }

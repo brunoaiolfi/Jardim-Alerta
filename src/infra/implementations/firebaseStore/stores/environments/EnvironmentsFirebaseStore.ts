@@ -1,9 +1,9 @@
 import { EnvironmentsDTO } from "../../../../apis/environments/DTOs/EnvironmentsDTO";
-import { BaseFirebaseStore } from "../base/BaseFirebaseStore";
+import { BaseFirebaseStoreImplementation } from "../base/BaseFirebaseStore";
 import { IEnvironmentsFirebaseStore } from "./IEnvironmentsFirebaseStore";
 
-export class EnvironmentsFirebaseStore extends BaseFirebaseStore<EnvironmentsDTO> implements IEnvironmentsFirebaseStore {
+export class EnvironmentsFirebaseStore extends BaseFirebaseStoreImplementation<EnvironmentsDTO> implements IEnvironmentsFirebaseStore {
     constructor() {
-        super("environments");
+        super("Environments");
     }
 }

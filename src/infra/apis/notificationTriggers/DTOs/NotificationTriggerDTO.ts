@@ -4,4 +4,5 @@ export type NotificationTriggerDTO = {
     triggersId: string[];
     time: string;
     plantId: string;
+    userId: string;
 }
