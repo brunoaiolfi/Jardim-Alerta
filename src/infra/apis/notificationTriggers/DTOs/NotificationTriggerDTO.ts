@@ -1,0 +1,7 @@
+export type NotificationTriggerDTO = {
+    id: string;
+    weekDay: number[];
+    triggersId: string[];
+    time: string;
+    plantId: string;
+}
