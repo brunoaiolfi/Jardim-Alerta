@@ -42,10 +42,18 @@ export class BaseFirebaseStoreImplementation<T> implements IBaseFirebaseStoreImp
     }
 
     async delete(id: string): Promise<void> {
-        await firebase
+        const snapshot = await firebase
             .firestore()
             .collection(this._collectionName)
-            .doc(id)
-            .delete();
+            .where("id", "==", id)
+            .get();
+
+        const batch = firebase.firestore().batch();
+
+        snapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
     }
 }

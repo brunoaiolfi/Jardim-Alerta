@@ -4,7 +4,5 @@ export type PlantsDTO = {
     about: string;
     imageUri: string;
     environments: string[];
-    notificationTriggers: string[]
-
     userId: string;
 }

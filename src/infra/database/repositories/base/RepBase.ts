@@ -12,8 +12,8 @@ export class RepBase<T extends IEntity> implements IRepBase<T> {
         return await this.repository.find(options);
     }
 
-    public async insert(model: T): Promise<void> {
-        await this.repository.save(model);
+    public async insert(model: T): Promise<T> {
+       return await this.repository.save(model);
     }
 
     public async delete(model: T): Promise<void> {

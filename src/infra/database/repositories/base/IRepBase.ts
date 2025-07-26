@@ -5,6 +5,6 @@ export interface IEntity extends BaseEntity { }
 
 export interface IRepBase<T> {
     select(options?: IFindOptions<T>): Promise<T[]>;
-    insert(model: IEntity): Promise<void>;
+    insert(model: IEntity): Promise<T>;
     delete(model: IEntity): Promise<void>;
 }

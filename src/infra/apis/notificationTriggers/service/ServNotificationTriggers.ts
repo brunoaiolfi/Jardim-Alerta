@@ -13,7 +13,7 @@ export class ServNotificationTriggers implements IServNotificationTriggers {
     public async createTrigger(data: NotificationTriggerDTO): Promise<NotificationTriggerDTO> {
         const trigger = await this.notificationTriggersStore.create(data);
 
-        if (trigger.id) {
+        if (trigger?.id) {
             data.id = trigger.id;
         }
         

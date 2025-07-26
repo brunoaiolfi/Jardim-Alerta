@@ -50,9 +50,13 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
 
             await this._createAndAttachNotificationTrigger(entidade);
 
-            await super.save(entidade);
+            const resultNewNotificationTrigger = await super.save(entidade);
 
-            await this._createPendingRequestsForSave(entidade);
+            if (!resultNewNotificationTrigger.Success || !resultNewNotificationTrigger?.Content) {
+                return Result.Fail("Ocorreu um erro ao salvar o lembrete!");
+            }
+
+            await this._createPendingRequestsForSave(resultNewNotificationTrigger.Content);
 
             return Result.Ok(null);
         } catch (error) {
@@ -62,7 +66,11 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
 
     public async delete(entidade: NotificationTrigger): Promise<Result<null>> {
         try {
+            const id = entidade.id;
+
             await this.repository.delete(entidade);
+
+            entidade.id = id; // devolvo o id
 
             await this._deleteNotificationTriggers(entidade.triggersId);
 
@@ -93,26 +101,10 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
     }
 
     private async _createPendingRequestsForSave(entidade: NotificationTrigger): Promise<void> {
-        // Pending para NotificationTrigger
         const pendingRequestCreateNT = new PendingRequests();
         pendingRequestCreateNT.DTO = JSON.stringify(entidade);
         pendingRequestCreateNT.method = PendingMethod.CreateNotificationTrigger;
         await this._aplicPendingRequests.save(pendingRequestCreateNT);
-
-        // Pending para Plant
-        if (entidade.plant) {
-            const plant = entidade.plant; // guarda a planta antes
-            delete entidade.plant;        // remove para evitar ciclo
-
-            plant.notificationTriggers = plant.notificationTriggers
-                ? [...plant.notificationTriggers, entidade]
-                : [entidade];
-
-            const pendingRequestUpdatePlant = new PendingRequests();
-            pendingRequestUpdatePlant.DTO = JSON.stringify(plant);
-            pendingRequestUpdatePlant.method = PendingMethod.EditPlant;
-            await this._aplicPendingRequests.save(pendingRequestUpdatePlant);
-        }
     }
 
     private async _deleteNotificationTriggers(triggersId: string[]): Promise<void> {
@@ -127,16 +119,5 @@ export class AplicNotificationTriggers extends AplicBase<NotificationTrigger> im
         pendingRequestDeleteNT.DTO = JSON.stringify(entidade);
         pendingRequestDeleteNT.method = PendingMethod.DeleteNotificationTrigger;
         await this._aplicPendingRequests.save(pendingRequestDeleteNT);
-
-        // Pending para atualizar Plant (removendo trigger)
-        if (entidade.plant) {
-            entidade.plant.notificationTriggers = entidade.plant?.notificationTriggers?.filter(n => n.id !== entidade.id);
-
-            const pendingRequestUpdatePlant = new PendingRequests();
-            pendingRequestUpdatePlant.DTO = JSON.stringify(entidade.plant);
-            pendingRequestUpdatePlant.method = PendingMethod.EditPlant;
-            await this._aplicPendingRequests.save(pendingRequestUpdatePlant);
-        }
     }
-
 }
