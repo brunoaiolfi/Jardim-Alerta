@@ -60,7 +60,7 @@ export class AplicPlants extends AplicBase<Plants> implements IAplicPlants {
             }
 
             const plants = await this.repository.select({
-                relations: ["environments"],
+                relations: ["environments", "notificationTriggers"],
                 where: {
                     id: id
                 }

@@ -56,22 +56,18 @@ export function AlarmCreate() {
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
 
     useEffect(() => {
-        handleGetData(params?.id || -1);
+        handleGetData(params?.id || "");
     }, [])
 
-    async function handleGetData(id: number) {
+    async function handleGetData(id: string) {
         try {
-            const res = await aplicPlant.get({
-                where: {
-                    id
-                },
-            });
+            const res = await aplicPlant.getById(id);
 
             if (!res.Success) {
                 return Alert.alert("Atenção!", `Ocorreu um erro inesperado ${res.Message}`);
             }
 
-            setPlant(res.Content[0]);
+            setPlant(res.Content);
         } catch (error: any) {
             console.error(error);
         } finally {

@@ -3,7 +3,7 @@ import { PlantsDTO } from '../DTOs/plantsDTO';
 import { IServPlants } from './IServPlants';
 
 export class ServPlants implements IServPlants {
-    public constructor(private plantsStore: IPlantsFirebaseStore) {}
+    public constructor(private plantsStore: IPlantsFirebaseStore) { }
 
     public async getPlants(userId: string): Promise<PlantsDTO[]> {
         const plants = await this.plantsStore.read(userId);
