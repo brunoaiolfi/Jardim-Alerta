@@ -72,7 +72,6 @@ export class AplicPendingRequests extends AplicBase<PendingRequests> implements 
                 about: plant.about,
                 environments: plant.environments.map(env => env.id),
                 imageUri: plant.imageUri,
-                notificationTriggers: plant?.notificationTriggers?.map(trigger => trigger.id) ?? [],
                 userId: resUser.Content.id
             };
 
