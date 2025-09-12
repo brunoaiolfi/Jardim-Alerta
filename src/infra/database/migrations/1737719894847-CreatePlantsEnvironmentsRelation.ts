@@ -9,12 +9,12 @@ export class CreatePlantsEnvironmentsRelation1737719894847 implements MigrationI
                 columns: [
                     {
                         name: "plantId",
-                        type: "int",
+                        type: "uuid",
                         isPrimary: true,
                     },
                     {
                         name: "environmentId",
-                        type: "int",
+                        type: "uuid",
                         isPrimary: true,
                     },
                 ],

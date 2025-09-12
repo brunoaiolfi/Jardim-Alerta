@@ -11,8 +11,8 @@ export class CreateNotificationTriggerPlantRelation1737719894848 implements Migr
                         name: "id",
                         isPrimary: true,
                         isGenerated: true,
-                        generationStrategy: "increment",
-                        type: "integer",
+                        generationStrategy: "uuid",
+                        type: "uuid",
                     },
                     {
                         name: "weekDay",

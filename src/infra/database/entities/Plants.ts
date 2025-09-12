@@ -4,8 +4,8 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTab
 
 @Entity()
 export class Plants extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryGeneratedColumn("uuid")
+    id: string
 
     @Column()
     name: string

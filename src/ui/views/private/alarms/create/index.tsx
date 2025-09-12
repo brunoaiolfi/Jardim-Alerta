@@ -14,9 +14,9 @@ import * as Yup from "yup";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert } from 'react-native';
-import { getAplicNotificationTriggers } from '../../../../../application/notificationTriggers/factory';
 import { NotificationTrigger } from '../../../../../infra/database/entities/NotificationTrigger';
 import { Plants } from '../../../../../infra/database/entities/Plants';
+import { useNewNotificationTrigger } from '../../../../hooks/mutations/notificationTrigger/useNewNotificationTrigger';
 
 const dictDays = {
     [0]: 'D',
@@ -44,7 +44,8 @@ export function AlarmCreate() {
     const { params } = useRoute();
     const navigation = useNavigation();
     const aplicPlant = getAplicPlants();
-    const aplicNotificationTriggers = getAplicNotificationTriggers();
+
+    const saveNotificationTriggerMutation = useNewNotificationTrigger();
 
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<ISavePlant>({
         resolver: yupResolver(schema),
@@ -55,22 +56,18 @@ export function AlarmCreate() {
     const [datesSelected, setDatesSelected] = useState<number[]>([]);
 
     useEffect(() => {
-        handleGetData(params?.id || -1);
+        handleGetData(params?.id || "");
     }, [])
 
-    async function handleGetData(id: number) {
+    async function handleGetData(id: string) {
         try {
-            const res = await aplicPlant.get({
-                where: {
-                    id
-                },
-            });
+            const res = await aplicPlant.getById(id);
 
             if (!res.Success) {
                 return Alert.alert("Atenção!", `Ocorreu um erro inesperado ${res.Message}`);
             }
 
-            setPlant(res.Content[0]);
+            setPlant(res.Content);
         } catch (error: any) {
             console.error(error);
         } finally {
@@ -104,22 +101,22 @@ export function AlarmCreate() {
         setValue('minutes', Number(value));
     }
 
-    async function handleSavePlant(values: ISavePlant) {
+    async function handleSaveNotificationTrigger(values: ISavePlant) {
         try {
-            const newNotificationTrigger = new NotificationTrigger();
-
-            newNotificationTrigger.plantId = plant.id;
-            newNotificationTrigger.plant = plant;
-            newNotificationTrigger.weekDay = values.days;
-            newNotificationTrigger.time = `${values.hours.toString().padStart(2, '0')}:${values.minutes.toString().padStart(2, '0')}`;
-
-            const res = await aplicNotificationTriggers.save(newNotificationTrigger);
-
-            if (!res.Success) {
-                return Alert.alert("Atenção!", `Ocorreu um erro ao salvar o alarme ${res.Message}`)
-            }
-
-            Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
+            saveNotificationTriggerMutation.mutate({
+                plantId: plant.id,
+                plant: plant,
+                weekDay: values.days,
+                time: `${values.hours.toString().padStart(2, '0')}:${values.minutes.toString().padStart(2, '0')}`,
+            } as NotificationTrigger, {
+                onSuccess: () => {
+                    Alert.alert("Sucesso!", "Lembrete salvo com sucesso!");
+                    navigation.goBack();
+                },
+                onError: (error) => {
+                    Alert.alert("Erro", error.message);
+                }
+            });
         } catch (error) {
             Alert.alert("Ops!", `Não foi possível salvar o lembrete, tente novamente mais tarde! ${error.message}`);
         }
@@ -226,7 +223,7 @@ export function AlarmCreate() {
 
             <Styles.Footer>
                 <ButtonComponent
-                    onPress={handleSubmit(handleSavePlant)}
+                    onPress={handleSubmit(handleSaveNotificationTrigger)}
                     text="Salvar lembrete"
                     variant={EnumButtonVariant.Primary}
                 />

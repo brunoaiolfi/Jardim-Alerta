@@ -15,10 +15,6 @@ export class ValidateNotificationTriggerUseCase {
             return Result.Fail("O horário da notificação deve estar no formato HH:mm.");
         }
 
-        if (!trigger.triggersId || trigger.triggersId.length === 0) {
-            return Result.Fail("A notificação deve ter pelo menos um ID de trigger definido.");
-        }
-
         return Result.Ok(true);
     }
 }

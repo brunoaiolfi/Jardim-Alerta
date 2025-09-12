@@ -3,7 +3,7 @@ import { Plants } from "./Plants";
 
 @Entity()
 export class NotificationTrigger extends BaseEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: string;
 
     @Column("simple-array")
@@ -19,5 +19,5 @@ export class NotificationTrigger extends BaseEntity {
     plant: Plants;
 
     @Column()
-    plantId: number; // FK explícita para a planta
+    plantId: string; // FK explícita para a planta
 }

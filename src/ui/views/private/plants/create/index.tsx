@@ -22,6 +22,8 @@ import { lightTheme } from "../../../../themes/lightTheme";
 import { useNewPlantMutation } from "../../../../hooks/mutations/plants/useNewPlantMutation";
 import { useEnvironmentsQuery } from "../../../../hooks/queries/environments/useEnvironmentsQuery";
 
+import uuid from 'react-native-uuid';
+
 interface ICreatePlantForm {
   name: string;
   about: string;
@@ -37,7 +39,7 @@ const schema = Yup.object().shape({
 });
 
 type RouteParams = {
-  plantId?: number;
+  plantId?: string;
 };
 
 export function PlantCreate() {
@@ -71,18 +73,13 @@ export function PlantCreate() {
     if (params?.plantId) {
       const { plantId } = params;
 
-      const res = await aplicPlants.get({
-        relations: ["environments"],
-        where: {
-          id: plantId
-        }
-      });
+      const res = await aplicPlants.getById(plantId);
 
       if (!res.Success) {
         return Alert.alert("Erro", res.Message);
       }
 
-      const plant = res.Content[0];
+      const plant = res.Content;
 
       setValue("name", plant.name);
       setValue("about", plant.about);
@@ -149,18 +146,13 @@ export function PlantCreate() {
     try {
       const params = route.params as RouteParams;
 
-      const plant = new Plants();
-
-      plant.name = values.name
-      plant.about = values.about
-      plant.environments = values.environments as Environments[]
-      plant.imageUri = values.imageUri
-
-      if (params?.plantId) {
-        plant.id = params.plantId;
-      }
-
-      savePlantMutation.mutate(plant, {
+      savePlantMutation.mutate({
+        name: values.name,
+        about: values.about,
+        environments: values.environments as Environments[],
+        imageUri: values.imageUri,
+        id: params?.plantId ?? uuid.v4()
+      } as Plants, {
         onSuccess: () => {
           Alert.alert("Sucesso", "Planta salva com sucesso!");
           navigation.goBack();

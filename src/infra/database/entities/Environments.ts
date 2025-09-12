@@ -3,8 +3,8 @@ import { Plants } from "./Plants"
 
 @Entity()
 export class Environments extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryGeneratedColumn("uuid")
+    id: string
 
     @Column({
         unique: true,

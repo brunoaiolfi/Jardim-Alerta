@@ -1,6 +1,5 @@
 import { Result } from "../../domain/result/model/Result";
-import { IRepBase } from "../../infra/database/repositories/base/IRepBase";
-import { IEntity, IFindOptions } from "../../infra/database/DAO/IDAO";
+import { IEntity, IFindOptions, IRepBase } from "../../infra/database/repositories/base/IRepBase";
 import { IAplicBase } from "./IAplicBase";
 
 export class AplicBase<T> implements IAplicBase<T> {
@@ -19,10 +18,10 @@ export class AplicBase<T> implements IAplicBase<T> {
         }
     }
 
-    public async save(entidade: IEntity): Promise<Result<null>> {
+    public async save(entidade: IEntity): Promise<Result<T>> {
         try {
-            await this.repository.insert(entidade);
-            return Result.Ok(null);
+            const newRegister = await this.repository.insert(entidade);
+            return Result.Ok(newRegister as T);
         } catch (e) {
             return Result.Fail(e.message);
         }
